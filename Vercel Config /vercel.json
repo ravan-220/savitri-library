@@ -1,0 +1,193 @@
+// Data aur State Management
+let students = [
+    { id: 'LIB-1001', name: 'Jitendra Meghwal', seat: '12', phone: '9462376154', amount: '3000', status: 'Pending' },
+    { id: 'LIB-1002', name: 'Vikas Sankhla', seat: '05', phone: '9588811700', amount: '2500', status: 'Paid' }
+];
+
+let attendance = [];
+let totalSeats = 50;
+const whatsappNo = "7023909061";
+
+// Login Logic
+window.handleLogin = () => {
+    const user = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+    
+    // Admin Login
+    if(user === 'admin' && pass === '1234') {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('dashboardMain').classList.remove('hidden');
+        renderAdminDashboard();
+    } 
+    // Student Login (Checking via Unique ID)
+    else if(students.find(s => s.id === user)) {
+        const student = students.find(s => s.id === user);
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('dashboardMain').classList.remove('hidden');
+        renderStudentDashboard(student);
+    }
+    else {
+        document.getElementById('loginError').classList.remove('hidden');
+    }
+};
+
+// Admin Dashboard Render
+window.renderAdminDashboard = () => {
+    const main = document.getElementById('mainContent');
+    const totalRevenue = students.reduce((sum, s) => sum + Number(s.amount), 0);
+    
+    main.innerHTML = `
+        <!-- Dashboard Stats -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="glass-card p-6 text-center border-l-4 border-indigo-500">
+                <p class="text-[10px] font-bold text-gray-500 uppercase">Total Students</p>
+                <h3 class="text-2xl font-black">${students.length}</h3>
+            </div>
+            <div class="glass-card p-6 text-center border-l-4 border-emerald-500">
+                <p class="text-[10px] font-bold text-gray-500 uppercase">Total Revenue</p>
+                <h3 class="text-2xl font-black text-emerald-400">₹${totalRevenue}</h3>
+            </div>
+        </div>
+
+        <!-- Quick Actions (iPhone Style Icons) -->
+        <div class="grid grid-cols-4 gap-3 mb-8">
+            <div onclick="showAddStudent()" class="glass-card aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-indigo-600 group transition-all">
+                <i class="fas fa-user-plus text-indigo-400 group-hover:text-white mb-2"></i>
+                <span class="text-[8px] font-bold uppercase">Add</span>
+            </div>
+            <div onclick="showSeatMatrix()" class="glass-card aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-amber-600 group transition-all">
+                <i class="fas fa-th text-amber-400 group-hover:text-white mb-2"></i>
+                <span class="text-[8px] font-bold uppercase">Seats</span>
+            </div>
+            <div onclick="renderAdminDashboard()" class="glass-card aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-600 group transition-all">
+                <i class="fas fa-wallet text-emerald-400 group-hover:text-white mb-2"></i>
+                <span class="text-[8px] font-bold uppercase">Fees</span>
+            </div>
+            <div onclick="showAttendanceLogs()" class="glass-card aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-blue-600 group transition-all">
+                <i class="fas fa-clipboard-list text-blue-400 group-hover:text-white mb-2"></i>
+                <span class="text-[8px] font-bold uppercase">Logs</span>
+            </div>
+        </div>
+
+        <!-- Student List -->
+        <div id="dynamicSection" class="space-y-4">
+            <h4 class="text-xs font-black uppercase text-gray-500 tracking-widest px-2">Registered Students</h4>
+            ${students.map(s => `
+                <div class="glass-card p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-black italic text-white">${s.name}</h4>
+                            <p class="text-[10px] text-gray-500 uppercase font-bold tracking-tighter">
+                                ID: <span class="text-indigo-400">${s.id}</span> | Seat: ${s.seat}
+                            </p>
+                        </div>
+                        <span class="id-badge ${s.status === 'Paid' ? 'text-emerald-400 border-emerald-500/30' : 'text-rose-400 border-rose-500/30'}">${s.status}</span>
+                    </div>
+                    <div class="flex gap-2 mt-4">
+                        <button onclick="window.open('https://wa.me/91${s.phone}')" class="flex-1 bg-emerald-600/10 text-emerald-500 py-3 rounded-xl text-[9px] font-black uppercase">Message</button>
+                        <button onclick="removeStudent('${s.id}')" class="bg-rose-600/10 text-rose-500 px-4 py-3 rounded-xl text-[9px] font-black uppercase">Remove</button>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+};
+
+// Feature: Add Student with Unique ID
+window.showAddStudent = () => {
+    const section = document.getElementById('dynamicSection');
+    const newId = "LIB-" + Math.floor(1000 + Math.random() * 9000);
+    section.innerHTML = `
+        <div class="glass-card p-6 animate-in slide-in-from-bottom duration-300">
+            <h3 class="text-lg font-black italic uppercase mb-4">New Admission</h3>
+            <div class="space-y-4">
+                <input type="text" id="newName" placeholder="Student Name" class="w-full">
+                <input type="text" id="newPhone" placeholder="Phone Number" class="w-full">
+                <input type="number" id="newSeat" placeholder="Seat Number (1-50)" class="w-full">
+                <input type="number" id="newAmount" placeholder="Monthly Fee" class="w-full">
+                <div class="p-4 bg-indigo-500/5 border border-indigo-500/20 rounded-xl">
+                    <p class="text-[9px] font-bold text-indigo-400 uppercase mb-1">Generated ID</p>
+                    <p class="text-xl font-black text-white">${newId}</p>
+                </div>
+                <button onclick="saveStudent('${newId}')" class="btn-primary w-full py-4 mt-2">Confirm Registration</button>
+                <button onclick="renderAdminDashboard()" class="w-full text-gray-500 text-xs font-bold uppercase py-2">Cancel</button>
+            </div>
+        </div>
+    `;
+};
+
+window.saveStudent = (id) => {
+    const name = document.getElementById('newName').value;
+    const phone = document.getElementById('newPhone').value;
+    const seat = document.getElementById('newSeat').value;
+    const amount = document.getElementById('newAmount').value;
+
+    if(!name || !phone || !seat) return alert('Sari details bharein!');
+
+    students.push({ id, name, phone, seat, amount, status: 'Pending' });
+    alert('Student Added Successfully! ID: ' + id);
+    renderAdminDashboard();
+};
+
+// Feature: Seat Matrix
+window.showSeatMatrix = () => {
+    const section = document.getElementById('dynamicSection');
+    let seatHtml = '<div class="grid grid-cols-5 gap-3">';
+    
+    for(let i=1; i<=totalSeats; i++) {
+        const occupied = students.find(s => Number(s.seat) === i);
+        seatHtml += `
+            <div class="aspect-square rounded-xl border-2 flex flex-col items-center justify-center text-[10px] font-bold
+                ${occupied ? 'bg-rose-500/10 border-rose-500/30 text-rose-400' : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'}">
+                ${i}
+                <span class="text-[7px] uppercase opacity-60">${occupied ? 'Full' : 'Open'}</span>
+            </div>
+        `;
+    }
+    seatHtml += '</div><button onclick="renderAdminDashboard()" class="btn-primary w-full py-4 mt-6">Back to Dashboard</button>';
+    section.innerHTML = `<h3 class="text-lg font-black italic uppercase mb-4 px-2">Seat Matrix</h3>` + seatHtml;
+};
+
+// Feature: Student Panel
+window.renderStudentDashboard = (student) => {
+    const main = document.getElementById('mainContent');
+    main.innerHTML = `
+        <div class="glass-card p-8 text-center mb-8 relative overflow-hidden">
+            <div class="w-20 h-20 bg-indigo-600 rounded-[2rem] mx-auto flex items-center justify-center shadow-2xl mb-4 rotate-3">
+                <i class="fas fa-user-graduate text-3xl"></i>
+            </div>
+            <h2 class="text-2xl font-black italic uppercase text-white">${student.name}</h2>
+            <p class="text-[10px] text-indigo-400 font-bold tracking-widest uppercase mt-1">Student Portal | Seat ${student.seat}</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <button onclick="markAttendance('${student.id}')" class="glass-card aspect-square flex flex-col items-center justify-center gap-3 hover:bg-indigo-600 group transition-all">
+                <i class="fas fa-calendar-check text-2xl text-indigo-400 group-hover:text-white"></i>
+                <span class="text-[10px] font-black uppercase tracking-widest">Attendance</span>
+            </button>
+            <button onclick="alert('System: Contact Admin for Payment QR')" class="glass-card aspect-square flex flex-col items-center justify-center gap-3 hover:bg-emerald-600 group transition-all">
+                <i class="fas fa-credit-card text-2xl text-emerald-400 group-hover:text-white"></i>
+                <span class="text-[10px] font-black uppercase tracking-widest">Pay Fees</span>
+            </button>
+        </div>
+
+        <button onclick="window.open('https://wa.me/91${whatsappNo}')" class="w-full bg-[#128c7e] p-6 rounded-[2rem] flex items-center justify-between text-white shadow-2xl active:scale-95 transition-all">
+            <div class="flex items-center gap-4">
+                <i class="fab fa-whatsapp text-2xl"></i>
+                <div class="text-left">
+                    <p class="font-black italic uppercase text-sm leading-none">Support Desk</p>
+                    <p class="text-[9px] font-bold opacity-70 uppercase tracking-widest mt-1">Chat with Rahul Sir</p>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right text-xs opacity-50"></i>
+        </button>
+    `;
+};
+
+window.markAttendance = (id) => {
+    const today = new Date().toLocaleDateString();
+    attendance.push({ id, date: today });
+    alert('Attendance Marked for Today! (' + today + ')');
+};
+
+window.logout = () => location.reload();
