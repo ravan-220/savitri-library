@@ -1,32 +1,16 @@
-{
-  "name": "ssl-portal",
-  "version": "1.0.0",
-  "description": "Admin & Student Management Dashboard for Savitri Success Library",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-  },
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "keywords": [
-    "library",
-    "management",
-    "admin",
-    "student-panel",
-    "dashboard"
-  ],
-  "author": "Savitri Success Library",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.18.2"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
-  }
-<<<<<<< HEAD
-}
-=======
-}
->>>>>>> 4181f29 (Updated library dashboard with latest features)
+const express = require('express');
+const path = require('path');
+const app = express();
+
+const PORT = process.env.PORT || 3000;
+
+// 'public' folder ki files ko serve karne ke liye
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
