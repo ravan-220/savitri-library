@@ -1,29 +1,13 @@
-
 {
-  "name": "ssl-portal",
-  "version": "1.0.0",
-  "description": "Admin & Student Management Dashboard for Savitri Success Library",
+  "name": "savitri-success-library",
+  "version": "1.1.0",
+  "description": "Premium Library Management System by Rahul Chauhan",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node server.js"
   },
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "keywords": [
-    "library",
-    "management",
-    "admin",
-    "student-panel",
-    "dashboard"
-  ],
-  "author": "Savitri Success Library",
-  "license": "ISC",
   "dependencies": {
     "express": "^4.18.2"
   },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
-  }
+  "author": "Rahul Chauhan"
 }
