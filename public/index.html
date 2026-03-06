@@ -7,30 +7,29 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background: #0b0f1a; color: white; font-family: 'Inter', sans-serif; }
+        body { background: #0b0f1a; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
         .hidden { display: none !important; }
         .loader-spin { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #6366f1; border-radius: 50%; width: 24px; height: 24px; display: inline-block; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         input:focus { border-color: #6366f1 !important; box-shadow: 0 0 10px rgba(99, 102, 241, 0.2); }
-        .toast { position: fixed; top: 20px; right: 20px; background: #6366f1; color: white; padding: 12px 24px; border-radius: 12px; z-index: 5000; animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #6366f1; color: white; padding: 10px 20px; border-radius: 50px; z-index: 5000; font-size: 12px; font-weight: bold; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Splash/Loader -->
-    <div id="splash" class="fixed inset-0 bg-[#0b0f1a] z-[1000] flex flex-col items-center justify-center">
+    <!-- Splash Screen -->
+    <div id="splash" class="fixed inset-0 bg-[#0b0f1a] z-[9999] flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="loader-spin mb-4"></div>
-        <p class="text-indigo-400 text-xs font-bold tracking-widest uppercase">Initializing System...</p>
+        <p class="text-indigo-400 text-[10px] font-bold tracking-widest uppercase">System Starting...</p>
     </div>
 
     <!-- Login Page -->
     <div id="loginPage" class="flex-1 flex items-center justify-center px-6">
-        <div class="w-full max-sm glass p-8 rounded-[2.5rem] shadow-2xl">
+        <div class="w-full max-w-[340px] glass p-8 rounded-[2.5rem] shadow-2xl border border-white/10">
             <div class="text-center mb-10">
                 <div class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-lg">
-                    <i class="fas fa-book-reader text-2xl"></i>
+                    <i class="fas fa-book-reader text-2xl text-white"></i>
                 </div>
                 <h1 class="text-2xl font-black italic tracking-tighter">SAVITRI <span class="text-indigo-500 italic">SUCCESS</span></h1>
                 <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Management Console</p>
@@ -39,11 +38,11 @@
             <div class="space-y-4">
                 <div class="relative">
                     <i class="fas fa-user absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
-                    <input type="text" id="userIn" placeholder="User ID / Admin" class="w-full bg-slate-900/50 border border-white/10 rounded-2xl py-4 pl-12 pr-6 outline-none transition-all text-sm">
+                    <input type="text" id="userIn" placeholder="User ID / Admin" class="w-full bg-slate-900/50 border border-white/10 rounded-2xl py-4 pl-12 pr-6 outline-none transition-all text-sm text-white">
                 </div>
                 <div class="relative">
                     <i class="fas fa-lock absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
-                    <input type="password" id="passIn" placeholder="Password" class="w-full bg-slate-900/50 border border-white/10 rounded-2xl py-4 pl-12 pr-6 outline-none transition-all text-sm">
+                    <input type="password" id="passIn" placeholder="Password" class="w-full bg-slate-900/50 border border-white/10 rounded-2xl py-4 pl-12 pr-6 outline-none transition-all text-sm text-white">
                 </div>
                 
                 <button id="loginBtn" onclick="handleLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-2xl font-black tracking-widest uppercase shadow-lg shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3">
@@ -51,22 +50,22 @@
                     <div id="btnLoader" class="loader-spin hidden" style="width:18px; height:18px;"></div>
                 </button>
 
-                <p id="errorMsg" class="text-rose-500 text-center text-xs font-bold hidden"></p>
-                <p class="text-[9px] text-center text-gray-500 uppercase mt-4">Tip: Admin/1234 works here</p>
+                <p id="errorMsg" class="text-rose-500 text-center text-[11px] font-bold hidden"></p>
+                <p class="text-[9px] text-center text-gray-600 uppercase mt-4">Admin Credentials: Admin / 1234</p>
             </div>
         </div>
     </div>
 
     <!-- Main App Dashboard -->
     <div id="dashboard" class="hidden flex-1 flex flex-col">
-        <header class="p-5 flex justify-between items-center border-b border-white/5 bg-slate-900/50 backdrop-blur-md">
+        <header class="p-5 flex justify-between items-center border-b border-white/5 bg-slate-900/80 backdrop-blur-md sticky top-0 z-40">
             <h2 class="font-black italic text-lg">SAVITRI <span class="text-indigo-500">LIB</span></h2>
             <button onclick="location.reload()" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-rose-500"><i class="fas fa-power-off"></i></button>
         </header>
 
-        <main id="content" class="flex-1 p-6 pb-24 overflow-y-auto max-w-lg mx-auto w-full"></main>
+        <main id="content" class="flex-1 p-6 pb-32 overflow-y-auto max-w-lg mx-auto w-full"></main>
 
-        <!-- Admin Navigation -->
+        <!-- Navigation -->
         <nav id="adminNav" class="fixed bottom-6 inset-x-6 hidden z-50">
             <div class="max-w-md mx-auto bg-slate-900/90 border border-white/10 backdrop-blur-xl rounded-full p-2 flex justify-between items-center shadow-2xl">
                 <button onclick="showStudents()" class="flex-1 py-3 text-indigo-400"><i class="fas fa-users-cog text-xl"></i></button>
@@ -77,13 +76,13 @@
     </div>
 
     <!-- Registration Modal -->
-    <div id="modal" class="fixed inset-0 bg-black/80 z-[2000] hidden flex items-center justify-center p-6 backdrop-blur-md">
-        <div class="glass p-8 rounded-[2rem] w-full max-w-sm">
-            <h3 class="text-xl font-black mb-6 uppercase italic">New Student</h3>
+    <div id="modal" class="fixed inset-0 bg-black/90 z-[2000] hidden flex items-center justify-center p-6 backdrop-blur-md">
+        <div class="glass p-8 rounded-[2rem] w-full max-w-sm border border-white/10">
+            <h3 class="text-xl font-black mb-6 uppercase italic">Add Member</h3>
             <div class="space-y-4">
-                <input type="text" id="regName" placeholder="Full Name" class="w-full bg-slate-800 p-4 rounded-xl outline-none border border-white/5">
-                <input type="text" id="regPhone" placeholder="Mobile Number" class="w-full bg-slate-800 p-4 rounded-xl outline-none border border-white/5">
-                <input type="number" id="regFees" placeholder="Pending Fees (₹)" class="w-full bg-slate-800 p-4 rounded-xl outline-none border border-white/5">
+                <input type="text" id="regName" placeholder="Full Name" class="w-full bg-slate-800 p-4 rounded-xl outline-none border border-white/5 text-white">
+                <input type="text" id="regPhone" placeholder="Mobile Number" class="w-full bg-slate-800 p-4 rounded-xl outline-none border border-white/5 text-white">
+                <input type="number" id="regFees" placeholder="Fees (₹)" class="w-full bg-slate-800 p-4 rounded-xl outline-none border border-white/5 text-white">
                 <div class="flex gap-3 pt-4">
                     <button onclick="closeModal()" class="flex-1 p-4 font-bold text-gray-500">CANCEL</button>
                     <button id="saveBtn" onclick="saveNewStudent()" class="flex-1 bg-indigo-600 p-4 rounded-xl font-bold shadow-lg shadow-indigo-500/20">SAVE</button>
@@ -106,7 +105,9 @@
         let students = [];
         let logs = [];
         let currentUser = null;
-        let isDbReady = false;
+
+        // Force hide splash after 3 seconds anyway
+        setTimeout(hideSplash, 3000);
 
         async function startApp() {
             try {
@@ -120,7 +121,6 @@
                     if (user) {
                         onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'students'), (snap) => {
                             students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                            isDbReady = true;
                             hideSplash();
                         }, (err) => { hideSplash(); });
 
@@ -133,7 +133,11 @@
         }
 
         function hideSplash() {
-            document.getElementById('splash').classList.add('hidden');
+            const splash = document.getElementById('splash');
+            if(splash) {
+                splash.style.opacity = '0';
+                setTimeout(() => splash.classList.add('hidden'), 500);
+            }
         }
 
         window.handleLogin = () => {
@@ -144,31 +148,42 @@
             const btnLdr = document.getElementById('btnLoader');
             const err = document.getElementById('errorMsg');
 
+            if(!u || !p) {
+                err.innerText = "Please fill all fields";
+                err.classList.remove('hidden');
+                return;
+            }
+
             err.classList.add('hidden');
             btnText.classList.add('hidden');
             btnLdr.classList.remove('hidden');
             btn.disabled = true;
 
-            setTimeout(() => {
-                // FIXED: CASE INSENSITIVE CHECK for "Admin"
-                if(u.toLowerCase() === 'admin' && p === '1234') {
+            // Admin Logic - Case Insensitive
+            if(u.toLowerCase() === 'admin' && p === '1234') {
+                setTimeout(() => {
                     currentUser = { role: 'admin' };
                     loadDashboard();
-                    return;
-                }
+                }, 500);
+                return;
+            }
 
-                const found = students.find(s => s.uid === u && s.phone === p);
-                if(found) {
+            // Student Logic
+            const found = students.find(s => s.uid === u && s.phone === p);
+            if(found) {
+                setTimeout(() => {
                     currentUser = { role: 'student', ...found };
                     loadDashboard();
-                } else {
+                }, 500);
+            } else {
+                setTimeout(() => {
                     btnText.classList.remove('hidden');
                     btnLdr.classList.add('hidden');
                     btn.disabled = false;
-                    err.innerText = !isDbReady ? "Loading database... please wait" : "Invalid credentials!";
+                    err.innerText = "Invalid User ID or Password";
                     err.classList.remove('hidden');
-                }
-            }, 800);
+                }, 800);
+            }
         };
 
         function loadDashboard() {
@@ -188,122 +203,7 @@
                 <span class="text-[10px] bg-indigo-500/20 text-indigo-400 px-3 py-1 rounded-full font-bold border border-indigo-500/30">${students.length} TOTAL</span>
             </div><div class="space-y-3">`;
             
-            if(students.length === 0) html += `<div class="text-center py-20 text-gray-500 italic">No students registered yet.</div>`;
+            if(students.length === 0) html += `<div class="text-center py-20 text-gray-500 italic">No members yet.</div>`;
 
             students.forEach(s => {
-                html += `<div class="glass p-5 rounded-2xl flex justify-between items-center border-l-4 ${Number(s.fees) > 0 ? 'border-rose-500' : 'border-emerald-500'}">
-                    <div>
-                        <p class="font-bold text-white text-sm">${s.name}</p>
-                        <p class="text-[10px] text-gray-500 uppercase font-bold mt-1">${s.uid} • ${s.phone}</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                         <div class="text-right mr-3">
-                            <p class="text-[8px] text-gray-500 font-bold uppercase">Pending</p>
-                            <p class="text-xs font-black ${Number(s.fees) > 0 ? 'text-rose-500' : 'text-emerald-500'}">₹${s.fees}</p>
-                        </div>
-                        <button onclick="toast('Fee update coming soon!')" class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xs"><i class="fas fa-edit"></i></button>
-                        <button onclick="deleteStudent('${s.id}')" class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-500 flex items-center justify-center text-xs"><i class="fas fa-trash-alt"></i></button>
-                    </div>
-                </div>`;
-            });
-            document.getElementById('content').innerHTML = html + `</div>`;
-        };
-
-        window.showStudentHome = () => {
-            const today = new Date().toLocaleDateString('en-GB');
-            const marked = logs.find(l => l.uid === currentUser.uid && l.date === today);
-            
-            document.getElementById('content').innerHTML = `
-                <div class="text-center py-10">
-                    <div class="w-24 h-24 bg-indigo-600 rounded-[2.5rem] mx-auto flex items-center justify-center text-4xl font-black mb-6 shadow-2xl shadow-indigo-500/30">${currentUser.name[0]}</div>
-                    <h2 class="text-3xl font-black italic uppercase">${currentUser.name}</h2>
-                    <p class="text-indigo-400 text-[10px] font-bold tracking-[0.3em] uppercase mb-10">Student ID: ${currentUser.uid}</p>
-                    
-                    <div class="grid grid-cols-1 gap-4 mb-8 text-left">
-                        <div class="glass p-6 rounded-3xl flex justify-between items-center border border-white/5">
-                            <div>
-                                <p class="text-[10px] text-gray-500 font-black uppercase tracking-widest">Fees Due</p>
-                                <p class="text-2xl font-black ${Number(currentUser.fees) > 0 ? 'text-rose-500' : 'text-emerald-500'}">₹${currentUser.fees}</p>
-                            </div>
-                            <i class="fas fa-wallet text-2xl opacity-10"></i>
-                        </div>
-                    </div>
-
-                    <button id="attBtn" onclick="markAttendance()" ${marked ? 'disabled' : ''} class="w-full py-5 rounded-2xl font-black tracking-widest uppercase transition-all shadow-xl flex items-center justify-center gap-3 ${marked ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-indigo-600 active:scale-95'}">
-                        <i class="fas ${marked ? 'fa-check-circle' : 'fa-fingerprint'} text-lg"></i>
-                        ${marked ? 'ATTENDANCE DONE' : 'MARK ATTENDANCE'}
-                    </button>
-                    <p class="text-[9px] text-gray-600 mt-4 uppercase font-bold tracking-widest">Digital Entry Record</p>
-                </div>
-            `;
-        };
-
-        window.markAttendance = async () => {
-            if(!auth.currentUser) return;
-            const btn = document.getElementById('attBtn');
-            btn.innerHTML = '<div class="loader-spin" style="width:16px;height:16px"></div> Marking...';
-            btn.disabled = true;
-
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), {
-                uid: currentUser.uid, 
-                name: currentUser.name, 
-                date: new Date().toLocaleDateString('en-GB'),
-                time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
-            });
-            showStudentHome();
-            toast("Attendance Marked Successfully!");
-        };
-
-        window.saveNewStudent = async () => {
-            const name = document.getElementById('regName').value.trim();
-            const phone = document.getElementById('regPhone').value.trim();
-            const fees = document.getElementById('regFees').value || 0;
-            const btn = document.getElementById('saveBtn');
-
-            if(!name || !phone) { toast("Please fill name & phone"); return; }
-            btn.disabled = true; btn.innerText = "SAVING...";
-
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'students'), {
-                uid: 'LIB' + Math.floor(1000 + Math.random() * 9000),
-                name, phone, fees
-            });
-
-            closeModal();
-            btn.disabled = false; btn.innerText = "SAVE";
-            toast("Student Added!");
-        };
-
-        window.deleteStudent = async (id) => {
-            if(confirm("Permanently delete this member?")) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id));
-                toast("Member Deleted");
-            }
-        };
-
-        window.showLogs = () => {
-            let html = `<h3 class="text-xl font-black italic mb-6 uppercase">Attendance Log</h3><div class="space-y-2">`;
-            [...logs].reverse().slice(0, 50).forEach(l => {
-                html += `<div class="glass p-4 rounded-xl flex justify-between items-center text-[11px] border-l-2 border-indigo-500">
-                    <span class="font-bold text-gray-300 uppercase">${l.name}</span>
-                    <span class="text-indigo-400 font-mono">${l.date} | ${l.time}</span>
-                </div>`;
-            });
-            if(logs.length === 0) html += `<p class="text-center py-10 text-gray-600 italic">No attendance records found.</p>`;
-            document.getElementById('content').innerHTML = html + `</div>`;
-        };
-
-        window.toast = (msg) => {
-            const t = document.createElement('div');
-            t.className = 'toast';
-            t.innerText = msg;
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 2500);
-        };
-
-        window.openAddModal = () => document.getElementById('modal').classList.remove('hidden');
-        window.closeModal = () => document.getElementById('modal').classList.add('hidden');
-
-        startApp();
-    </script>
-</body>
-</html>
+                const pending = Number(s.fees) >
