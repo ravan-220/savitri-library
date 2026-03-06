@@ -2,138 +2,168 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Savitri Success Library</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Savitri Success Library | Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
         
-        body { 
-            background: #0b0f1a; 
-            color: white; 
-            font-family: 'Inter', sans-serif; 
-            overflow-x: hidden; 
+        :root {
+            --primary: #6366f1;
+            --bg: #0b0f1a;
         }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
-        .hidden { display: none !important; }
-        
-        /* Dashboard Card Style */
+
+        body { 
+            background: var(--bg); 
+            color: white; 
+            font-family: 'Outfit', sans-serif; 
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .glass { 
+            background: rgba(30, 41, 59, 0.7); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255,255,255,0.08); 
+        }
+
         .dash-card {
             aspect-ratio: 1/1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 1.5rem;
+            border-radius: 2rem;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
-        .dash-card:hover { background: rgba(99, 102, 241, 0.15); transform: translateY(-5px); }
-        .dash-card:active { transform: scale(0.95); }
-        .dash-card i { font-size: 2rem; }
-        .dash-card span { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
 
-        .loader-spin { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #6366f1; border-radius: 50%; width: 35px; height: 35px; animation: spin 1s linear infinite; }
+        .dash-card:active { transform: scale(0.9); }
+        .dash-card i { font-size: 1.5rem; }
+        .dash-card span { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+
+        .loader-spin { 
+            border: 3px solid rgba(99, 102, 241, 0.1); 
+            border-top: 3px solid #6366f1; 
+            border-radius: 50%; 
+            width: 40px; height: 40px; 
+            animation: spin 0.8s linear infinite; 
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #6366f1; color: white; padding: 12px 24px; border-radius: 12px; z-index: 9999; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: all 0.3s ease; }
+
+        .toast { 
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%); 
+            background: #6366f1; color: white; padding: 12px 24px; 
+            border-radius: 50px; z-index: 10000; font-size: 12px; font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown { from { transform: translate(-50%, -100%); } to { transform: translate(-50%, 0); } }
+
+        input { background: rgba(15, 23, 42, 0.6) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Splash Screen -->
+    <!-- FAST SPLASH -->
     <div id="splash" class="fixed inset-0 bg-[#0b0f1a] z-[9999] flex flex-col items-center justify-center">
         <div class="loader-spin mb-6"></div>
-        <h1 class="text-white text-xl font-black italic mb-2 tracking-tighter">
-            SAVITRI SUCCESS <span class="text-indigo-500">LIBRARY</span>
-        </h1>
-        <p class="text-gray-500 text-[10px] font-bold tracking-[0.4em] uppercase">Loading System...</p>
+        <h1 class="text-white text-2xl font-black italic tracking-tighter">SAVITRI <span class="text-indigo-500">SUCCESS</span></h1>
+        <p class="text-[10px] text-gray-500 font-bold tracking-[0.3em] mt-2 uppercase">Management System</p>
     </div>
 
-    <!-- Login Page -->
-    <div id="loginPage" class="hidden min-h-screen flex items-center justify-center px-6">
-        <div class="w-full max-w-[380px] glass p-10 rounded-[3rem] shadow-2xl border border-white/10">
-            <div class="text-center mb-10">
-                <h1 class="text-3xl font-black italic tracking-tighter leading-tight">
-                    SAVITRI SUCCESS<br><span class="text-indigo-500">LIBRARY</span>
-                </h1>
-                <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2 font-bold">Member & Admin Login</p>
-            </div>
+    <!-- MAIN APP -->
+    <div id="app" class="flex-1 flex flex-col opacity-0 transition-opacity duration-500">
+        
+        <!-- LOGIN SECTION -->
+        <div id="loginPage" class="hidden min-h-screen flex items-center justify-center px-8">
+            <div class="w-full max-w-[380px] glass p-10 rounded-[3rem] shadow-2xl">
+                <div class="text-center mb-10">
+                    <div class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/30 rotate-3">
+                        <i class="fas fa-graduation-cap text-2xl"></i>
+                    </div>
+                    <h1 class="text-2xl font-black italic tracking-tighter">SAVITRI SUCCESS</h1>
+                    <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-widest mt-1">Authorized Access Only</p>
+                </div>
 
-            <div class="space-y-4">
-                <div class="relative">
-                    <i class="fas fa-user absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
-                    <input type="text" id="userIn" placeholder="User ID / Mobile" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl py-4 pl-12 pr-6 outline-none text-white font-bold focus:border-indigo-500 transition-all">
+                <div class="space-y-4">
+                    <div class="relative">
+                        <i class="fas fa-user absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+                        <input type="text" id="userIn" placeholder="Username / Mobile" class="w-full rounded-2xl py-4 pl-12 pr-6 outline-none focus:border-indigo-500 font-bold text-sm">
+                    </div>
+                    <div class="relative">
+                        <i class="fas fa-lock absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+                        <input type="password" id="passIn" placeholder="Password" class="w-full rounded-2xl py-4 pl-12 pr-6 outline-none focus:border-indigo-500 font-bold text-sm">
+                    </div>
+                    <button onclick="handleLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-2xl font-black tracking-widest uppercase active:scale-95 shadow-lg shadow-indigo-600/20 text-xs">Login Dashboard</button>
+                    <p id="errorMsg" class="text-rose-500 text-center text-[10px] font-bold hidden mt-2"></p>
                 </div>
-                <div class="relative">
-                    <i class="fas fa-lock absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
-                    <input type="password" id="passIn" placeholder="Password" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl py-4 pl-12 pr-6 outline-none text-white font-bold focus:border-indigo-500 transition-all">
-                </div>
-                
-                <button id="loginBtn" onclick="handleLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-5 rounded-2xl font-black tracking-widest uppercase transition-all shadow-lg shadow-indigo-600/20 active:scale-95 text-sm">
-                    ENTER DASHBOARD
-                </button>
-                <p id="errorMsg" class="text-rose-500 text-center text-[11px] font-bold hidden mt-2"></p>
             </div>
         </div>
-    </div>
 
-    <!-- Dashboard -->
-    <div id="dashboard" class="hidden flex-1 flex flex-col">
-        <header class="p-6 flex justify-between items-center bg-[#0b0f1a] sticky top-0 z-40 border-b border-white/5">
-            <div>
-                <h2 class="font-black italic text-xl">SAVITRI <span class="text-indigo-500">LIBRARY</span></h2>
-                <p id="subHeader" class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Administrator</p>
+        <!-- DASHBOARD SECTION -->
+        <div id="dashboard" class="hidden flex-1 flex flex-col">
+            <!-- Header -->
+            <header class="p-6 flex justify-between items-center glass sticky top-0 z-50 border-b-0 rounded-b-[2rem]">
+                <div>
+                    <h2 class="font-black italic text-xl tracking-tighter">SAVITRI <span class="text-indigo-500">SUCCESS</span></h2>
+                    <p id="subTitle" class="text-[9px] text-gray-500 font-black uppercase tracking-widest">Library Controller</p>
+                </div>
+                <button onclick="logout()" class="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center text-rose-500 border border-rose-500/20 active:scale-90"><i class="fas fa-power-off"></i></button>
+            </header>
+
+            <main class="p-6 flex-1 max-w-lg mx-auto w-full space-y-6">
+                <!-- Quick Stats -->
+                <div id="statsRow" class="grid grid-cols-2 gap-4">
+                    <div class="glass p-5 rounded-[2rem] border-l-4 border-indigo-500">
+                        <p class="text-[9px] font-black text-gray-500 uppercase mb-1">Total Members</p>
+                        <h4 id="countMembers" class="text-2xl font-black italic">0</h4>
+                    </div>
+                    <div class="glass p-5 rounded-[2rem] border-l-4 border-emerald-500">
+                        <p class="text-[9px] font-black text-gray-500 uppercase mb-1">Total Fees</p>
+                        <h4 id="totalRevenue" class="text-2xl font-black italic text-emerald-400">₹0</h4>
+                    </div>
+                </div>
+
+                <!-- Admin Grid -->
+                <div id="adminGrid" class="grid grid-cols-2 gap-4">
+                    <div onclick="renderMembers()" class="dash-card glass text-indigo-400"><i class="fas fa-users"></i><span>Members</span></div>
+                    <div onclick="renderLogs()" class="dash-card glass text-amber-400"><i class="fas fa-fingerprint"></i><span>Entry Logs</span></div>
+                    <div onclick="renderFees()" class="dash-card glass text-emerald-400"><i class="fas fa-credit-card"></i><span>Fees Due</span></div>
+                    <div onclick="openReg()" class="dash-card glass text-purple-400 border-dashed border-2 border-purple-500/30"><i class="fas fa-user-plus"></i><span>Add New</span></div>
+                </div>
+
+                <!-- Dynamic View -->
+                <div id="listView" class="hidden space-y-4 pb-24"></div>
+            </main>
+
+            <!-- Navigation Bar -->
+            <div id="navBar" class="fixed bottom-6 left-6 right-6 z-50">
+                <div class="glass p-2 rounded-full flex justify-between shadow-2xl border-white/10">
+                    <button onclick="goHome()" class="flex-1 py-3 text-indigo-500 flex flex-col items-center"><i class="fas fa-home text-lg"></i><span class="text-[8px] font-bold mt-1 uppercase">Home</span></button>
+                    <button onclick="renderMembers()" class="flex-1 py-3 text-gray-500 flex flex-col items-center"><i class="fas fa-address-book text-lg"></i><span class="text-[8px] font-bold mt-1 uppercase">List</span></button>
+                    <button onclick="renderFees()" class="flex-1 py-3 text-gray-500 flex flex-col items-center"><i class="fas fa-wallet text-lg"></i><span class="text-[8px] font-bold mt-1 uppercase">Fees</span></button>
+                </div>
             </div>
-            <button onclick="logout()" class="w-10 h-10 bg-white/5 hover:bg-rose-500/20 rounded-xl flex items-center justify-center text-rose-500 transition-all border border-white/10">
-                <i class="fas fa-power-off"></i>
-            </button>
-        </header>
-
-        <main id="content" class="flex-1 p-6 pb-24 max-w-lg mx-auto w-full">
-            <!-- Grid Dashboard -->
-            <div id="adminGrid" class="grid grid-cols-2 gap-4">
-                <div onclick="showStudents()" class="dash-card glass bg-indigo-600/10 text-indigo-400 border-indigo-500/20">
-                    <i class="fas fa-users"></i>
-                    <span>Members</span>
-                </div>
-                <div onclick="showLogs()" class="dash-card glass bg-amber-600/10 text-amber-400 border-amber-500/20">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>Attendance</span>
-                </div>
-                <div onclick="showFees()" class="dash-card glass bg-emerald-600/10 text-emerald-400 border-emerald-500/20">
-                    <i class="fas fa-indian-rupee-sign"></i>
-                    <span>Fees</span>
-                </div>
-                <div onclick="openAddModal()" class="dash-card glass bg-purple-600/10 text-purple-400 border-purple-500/20">
-                    <i class="fas fa-user-plus"></i>
-                    <span>New Entry</span>
-                </div>
-            </div>
-
-            <div id="listView" class="hidden"></div>
-        </main>
-        
-        <div id="backBtn" class="fixed bottom-8 left-1/2 -translate-x-1/2 hidden z-50">
-            <button onclick="showGrid()" class="bg-indigo-600 text-white px-8 py-4 rounded-full font-black text-xs tracking-widest shadow-2xl active:scale-95 transition-all">
-                BACK TO HOME
-            </button>
         </div>
     </div>
 
     <!-- Registration Modal -->
-    <div id="modal" class="fixed inset-0 bg-black/95 z-[2000] hidden flex items-center justify-center p-6">
-        <div class="glass p-8 rounded-[2.5rem] w-full max-w-sm border border-white/10">
-            <h3 class="text-2xl font-black italic mb-8 uppercase text-indigo-400">Add New Member</h3>
+    <div id="regModal" class="fixed inset-0 bg-black/80 z-[2000] hidden flex items-center justify-center p-8 backdrop-blur-sm">
+        <div class="glass p-8 rounded-[3rem] w-full max-w-sm animate-modal">
+            <h3 class="text-xl font-black italic mb-6 text-indigo-400 uppercase">Registration</h3>
             <div class="space-y-4">
-                <input type="text" id="regName" placeholder="Full Name" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold focus:border-indigo-500/30">
-                <input type="text" id="regPhone" placeholder="Mobile Number" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold focus:border-indigo-500/30">
-                <input type="number" id="regFees" placeholder="Fee Pending (₹)" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold focus:border-indigo-500/30">
-                <div class="flex gap-3 pt-6">
-                    <button onclick="closeModal()" class="flex-1 p-4 font-black text-gray-500 uppercase text-xs">Cancel</button>
-                    <button id="saveBtn" onclick="saveNewStudent()" class="flex-1 bg-indigo-600 p-4 rounded-2xl font-black uppercase text-xs shadow-lg shadow-indigo-600/30">Save</button>
+                <input type="text" id="mName" placeholder="Full Name" class="w-full p-4 rounded-2xl outline-none font-bold text-sm">
+                <input type="text" id="mPhone" placeholder="Mobile Number" class="w-full p-4 rounded-2xl outline-none font-bold text-sm">
+                <input type="number" id="mFees" placeholder="Monthly Fee (₹)" class="w-full p-4 rounded-2xl outline-none font-bold text-sm">
+                <div class="flex gap-3 pt-4">
+                    <button onclick="closeReg()" class="flex-1 py-4 font-black text-gray-500 text-xs">CANCEL</button>
+                    <button onclick="saveMember()" class="flex-1 bg-indigo-600 py-4 rounded-2xl font-black text-xs shadow-lg shadow-indigo-600/30">SAVE</button>
                 </div>
             </div>
         </div>
@@ -141,278 +171,166 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'savitri-lib-v3';
         const firebaseConfig = JSON.parse(__firebase_config);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'savitri-vfinal';
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        
-        let students = [], logs = [], currentUser = null;
 
-        // Force transition if loading takes too long
-        const forceEntry = setTimeout(() => {
-            const splash = document.getElementById('splash');
-            if (!splash.classList.contains('hidden')) {
-                console.log("Forcing Entry due to timeout...");
-                splash.classList.add('hidden');
-                document.getElementById('loginPage').classList.remove('hidden');
-            }
-        }, 2000);
+        let members = [], logs = [], user = null;
 
+        // AUTH & INIT
         async function init() {
             try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        setupDataListeners();
-                        clearTimeout(forceEntry);
-                        document.getElementById('splash').classList.add('hidden');
-                        document.getElementById('loginPage').classList.remove('hidden');
+                await signInAnonymously(auth);
+                onAuthStateChanged(auth, u => {
+                    if(u) {
+                        user = u;
+                        setupSync();
+                        setTimeout(() => {
+                            document.getElementById('splash').classList.add('hidden');
+                            document.getElementById('app').classList.replace('opacity-0', 'opacity-100');
+                            document.getElementById('loginPage').classList.remove('hidden');
+                        }, 800);
                     }
                 });
-            } catch (e) {
-                console.error("Init error", e);
-                document.getElementById('splash').classList.add('hidden');
-                document.getElementById('loginPage').classList.remove('hidden');
-            }
+            } catch(e) { console.error(e); }
         }
 
-        function setupDataListeners() {
-            const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
-            const logsCol = collection(db, 'artifacts', appId, 'public', 'data', 'logs');
-
-            onSnapshot(studentsCol, (snap) => {
-                students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            }, (err) => console.error("Students error", err));
-
-            onSnapshot(logsCol, (snap) => {
+        function setupSync() {
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'students'), snap => {
+                members = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                updateStats();
+            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), snap => {
                 logs = snap.docs.map(d => d.data());
-            }, (err) => console.error("Logs error", err));
+            });
         }
 
-        window.handleLogin = () => {
-            const u = document.getElementById('userIn').value.trim();
-            const p = document.getElementById('passIn').value.trim();
-            const err = document.getElementById('errorMsg');
+        function updateStats() {
+            document.getElementById('countMembers').innerText = members.length;
+            const rev = members.reduce((a,b) => a + Number(b.fees || 0), 0);
+            document.getElementById('totalRevenue').innerText = '₹' + rev.toLocaleString();
+        }
 
-            if(u.toLowerCase() === 'admin' && p === '1234') {
-                currentUser = { role: 'admin' };
+        // NAVIGATION
+        window.goHome = () => {
+            document.getElementById('adminGrid').classList.remove('hidden');
+            document.getElementById('statsRow').classList.remove('hidden');
+            document.getElementById('listView').classList.add('hidden');
+            document.getElementById('subTitle').innerText = "Library Controller";
+        };
+
+        window.renderMembers = () => {
+            const lv = document.getElementById('listView');
+            document.getElementById('adminGrid').classList.add('hidden');
+            document.getElementById('statsRow').classList.add('hidden');
+            lv.classList.remove('hidden');
+            document.getElementById('subTitle').innerText = "Members List";
+
+            let h = `<div class="space-y-4">`;
+            members.forEach(m => {
+                h += `<div class="glass p-5 rounded-[2rem] flex justify-between items-center border-l-4 border-indigo-500 animate-slide">
+                    <div>
+                        <h5 class="font-black text-sm italic uppercase">${m.name}</h5>
+                        <p class="text-[9px] text-gray-500 font-bold">${m.uid} • ${m.phone}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="whatsapp('${m.phone}', '${m.name}')" class="w-9 h-9 bg-emerald-500/10 text-emerald-500 rounded-xl flex items-center justify-center border border-emerald-500/20"><i class="fab fa-whatsapp"></i></button>
+                        <button onclick="delMember('${m.id}')" class="w-9 h-9 bg-rose-500/10 text-rose-500 rounded-xl flex items-center justify-center border border-rose-500/20"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                </div>`;
+            });
+            lv.innerHTML = h + `</div>`;
+        };
+
+        window.renderFees = () => {
+            document.getElementById('adminGrid').classList.add('hidden');
+            document.getElementById('statsRow').classList.add('hidden');
+            const lv = document.getElementById('listView');
+            lv.classList.remove('hidden');
+            document.getElementById('subTitle').innerText = "Fee Reminders";
+
+            let h = `<div class="space-y-4">`;
+            members.forEach(m => {
+                h += `<div class="glass p-5 rounded-[2rem] flex justify-between items-center border-l-4 border-rose-500">
+                    <div>
+                        <h5 class="font-black text-sm italic uppercase">${m.name}</h5>
+                        <p class="text-[10px] text-rose-400 font-black">PENDING: ₹${m.fees}</p>
+                    </div>
+                    <button onclick="whatsappFee('${m.phone}', '${m.name}', '${m.fees}')" class="bg-indigo-600 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-tighter shadow-lg shadow-indigo-600/20">Remind</button>
+                </div>`;
+            });
+            lv.innerHTML = h + `</div>`;
+        };
+
+        window.renderLogs = () => {
+            document.getElementById('adminGrid').classList.add('hidden');
+            document.getElementById('statsRow').classList.add('hidden');
+            const lv = document.getElementById('listView');
+            lv.classList.remove('hidden');
+            document.getElementById('subTitle').innerText = "Attendance Logs";
+
+            let h = `<div class="space-y-2">`;
+            [...logs].reverse().slice(0, 50).forEach(l => {
+                h += `<div class="glass px-5 py-3 rounded-2xl flex justify-between text-[10px] items-center">
+                    <span class="font-black italic uppercase">${l.name}</span>
+                    <span class="text-indigo-400 font-bold">${l.date} | ${l.time}</span>
+                </div>`;
+            });
+            lv.innerHTML = h + `</div>`;
+        };
+
+        // ACTIONS
+        window.handleLogin = () => {
+            const u = document.getElementById('userIn').value;
+            const p = document.getElementById('passIn').value;
+            if(u === 'admin' && p === '1234') {
                 document.getElementById('loginPage').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
-                showGrid();
+                toast("Welcome Admin");
             } else {
-                const found = students.find(s => (s.uid === u || s.phone === u) && s.phone === p);
-                if(found) {
-                    currentUser = { role: 'student', ...found };
-                    document.getElementById('loginPage').classList.add('hidden');
-                    document.getElementById('dashboard').classList.remove('hidden');
-                    showStudentHome();
-                } else {
-                    err.innerText = "Invalid ID or Password";
-                    err.classList.remove('hidden');
-                }
+                document.getElementById('errorMsg').innerText = "Invalid Credentials";
+                document.getElementById('errorMsg').classList.remove('hidden');
             }
         };
 
-        window.showGrid = () => {
-            document.getElementById('adminGrid').classList.remove('hidden');
-            document.getElementById('listView').classList.add('hidden');
-            document.getElementById('backBtn').classList.add('hidden');
-            document.getElementById('subHeader').innerText = "Administrator";
-        };
-
-        window.showStudents = () => {
-            const lv = document.getElementById('listView');
-            document.getElementById('adminGrid').classList.add('hidden');
-            lv.classList.remove('hidden');
-            document.getElementById('backBtn').classList.remove('hidden');
-            document.getElementById('subHeader').innerText = "Members List";
-
-            if(students.length === 0) {
-                lv.innerHTML = `<div class="text-center py-20 text-gray-500 font-bold uppercase text-[10px]">No members found</div>`;
-                return;
-            }
-
-            let html = `<div class="space-y-3">`;
-            students.forEach(s => {
-                html += `
-                <div class="glass p-5 rounded-[1.5rem] flex justify-between items-center border-l-4 border-indigo-500">
-                    <div>
-                        <p class="font-black text-sm uppercase italic">${s.name}</p>
-                        <p class="text-[10px] text-gray-400 font-bold mt-1">ID: ${s.uid} • ${s.phone}</p>
-                    </div>
-                    <button onclick="deleteStudent('${s.id}')" class="w-10 h-10 bg-rose-500/10 text-rose-500 rounded-xl hover:bg-rose-500 transition-all"><i class="fas fa-trash"></i></button>
-                </div>`;
-            });
-            lv.innerHTML = html + `</div>`;
-        };
-
-        window.showFees = () => {
-            const lv = document.getElementById('listView');
-            document.getElementById('adminGrid').classList.add('hidden');
-            lv.classList.remove('hidden');
-            document.getElementById('backBtn').classList.remove('hidden');
-            document.getElementById('subHeader').innerText = "Fees Dashboard";
-
-            let html = `<div class="space-y-3">`;
-            students.forEach(s => {
-                const hasDue = Number(s.fees) > 0;
-                html += `
-                <div class="glass p-5 rounded-[1.5rem] flex justify-between items-center border-l-4 ${hasDue ? 'border-rose-500' : 'border-emerald-500'}">
-                    <div>
-                        <p class="font-black text-sm uppercase italic">${s.name}</p>
-                        <p class="text-[9px] text-gray-500 font-bold">${s.phone}</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-[8px] text-gray-500 font-black">PENDING</p>
-                        <p class="text-lg font-black ${hasDue ? 'text-rose-500' : 'text-emerald-500'}">₹${s.fees}</p>
-                    </div>
-                </div>`;
-            });
-            lv.innerHTML = html + `</div>`;
-        };
-
-        window.showLogs = () => {
-            const lv = document.getElementById('listView');
-            document.getElementById('adminGrid').classList.add('hidden');
-            lv.classList.remove('hidden');
-            document.getElementById('backBtn').classList.remove('hidden');
-            document.getElementById('subHeader').innerText = "Entry Records";
-
-            if(logs.length === 0) {
-                lv.innerHTML = `<div class="text-center py-20 text-gray-500 font-bold uppercase text-[10px]">No entry logs found</div>`;
-                return;
-            }
-
-            let html = `<div class="space-y-2">`;
-            [...logs].reverse().slice(0, 50).forEach(l => {
-                html += `
-                <div class="glass p-4 rounded-2xl flex justify-between items-center border border-white/5">
-                    <span class="text-[11px] font-black uppercase italic">${l.name}</span>
-                    <span class="text-[9px] text-indigo-400 font-bold">${l.date} • ${l.time}</span>
-                </div>`;
-            });
-            lv.innerHTML = html + `</div>`;
-        };
-
-        window.showStudentHome = () => {
-            document.getElementById('subHeader').innerText = "Student Portal";
-            const today = new Date().toLocaleDateString('en-GB');
-            const marked = logs.find(l => l.uid === currentUser.uid && l.date === today);
-
-            document.getElementById('content').innerHTML = `
-                <div class="text-center py-4">
-                    <div class="w-20 h-20 bg-gradient-to-tr from-indigo-600 to-indigo-400 rounded-[2rem] mx-auto flex items-center justify-center text-3xl font-black mb-4 shadow-xl uppercase border-4 border-white/10">${currentUser.name[0]}</div>
-                    <h2 class="text-2xl font-black italic uppercase">${currentUser.name}</h2>
-                    <p class="text-indigo-400 text-[10px] font-bold tracking-widest mb-10">MEMBER ID: ${currentUser.uid}</p>
-                    
-                    <div class="grid grid-cols-2 gap-4 mb-10">
-                        <div class="glass p-5 rounded-3xl text-left border-l-4 border-rose-500">
-                            <p class="text-[8px] text-gray-500 font-black uppercase">Fees Due</p>
-                            <p class="text-xl font-black text-white">₹${currentUser.fees || 0}</p>
-                        </div>
-                        <div class="glass p-5 rounded-3xl text-left border-l-4 ${marked ? 'border-emerald-500' : 'border-amber-500'}">
-                            <p class="text-[8px] text-gray-500 font-black uppercase">Today's Status</p>
-                            <p class="text-xl font-black text-white">${marked ? 'Entered' : 'No Entry'}</p>
-                        </div>
-                    </div>
-
-                    <button id="markBtn" onclick="markAttendance()" ${marked ? 'disabled' : ''} class="w-full py-5 rounded-3xl font-black uppercase tracking-widest flex items-center justify-center gap-4 transition-all ${marked ? 'bg-emerald-500/10 text-emerald-500 cursor-not-allowed border border-emerald-500/20' : 'bg-indigo-600 active:scale-95 shadow-lg shadow-indigo-600/30'}">
-                        <i class="fas ${marked ? 'fa-check-circle' : 'fa-fingerprint'} text-lg"></i>
-                        ${marked ? 'ENTRY RECORDED' : 'MARK ENTRY NOW'}
-                    </button>
-                    
-                    <p class="text-gray-500 text-[9px] mt-8 font-bold uppercase tracking-widest">Savitri Success Library System</p>
-                </div>
-            `;
-        };
-
-        window.saveNewStudent = async () => {
-            if(!auth.currentUser) return;
-            const name = document.getElementById('regName').value.trim();
-            const phone = document.getElementById('regPhone').value.trim();
-            const fees = document.getElementById('regFees').value || 0;
-
-            if(!name || !phone) { toast("Fill all fields"); return; }
-
-            const btn = document.getElementById('saveBtn');
-            btn.disabled = true;
-            btn.innerText = "SAVING...";
-
+        window.saveMember = async () => {
+            const name = document.getElementById('mName').value;
+            const phone = document.getElementById('mPhone').value;
+            const fees = document.getElementById('mFees').value;
+            if(!name || !phone) return toast("Fill all fields");
+            
             try {
-                const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
-                await addDoc(studentsCol, {
-                    uid: 'S' + Math.floor(1000 + Math.random() * 9000),
-                    name, phone, fees,
-                    createdAt: new Date().toISOString()
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'students'), {
+                    name, phone, fees, uid: 'LIB' + Math.floor(100 + Math.random() * 900),
+                    joined: new Date().toLocaleDateString()
                 });
-                toast("Member Added!");
-                closeModal();
-                document.getElementById('regName').value = '';
-                document.getElementById('regPhone').value = '';
-                document.getElementById('regFees').value = '';
-            } catch (e) {
-                toast("Error saving.");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "SAVE";
+                closeReg(); toast("Member Added!");
+            } catch(e) { toast("Error saving"); }
+        };
+
+        window.delMember = async (id) => {
+            if(confirm("Confirm Delete Member?")) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id));
+                toast("Removed");
             }
         };
 
-        window.markAttendance = async () => {
-            if(!auth.currentUser || !currentUser) return;
-            const btn = document.getElementById('markBtn');
-            btn.disabled = true;
-            btn.innerText = "RECORDING...";
-
-            try {
-                const logsCol = collection(db, 'artifacts', appId, 'public', 'data', 'logs');
-                await addDoc(logsCol, {
-                    uid: currentUser.uid, 
-                    name: currentUser.name, 
-                    date: new Date().toLocaleDateString('en-GB'),
-                    time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
-                });
-                toast("Entry Marked!");
-                showStudentHome();
-            } catch (e) { 
-                toast("Failed to mark."); 
-                btn.disabled = false; 
-            }
-        };
-
-        window.deleteStudent = async (id) => {
-            if(!auth.currentUser) return;
-            if(confirm("Permanently delete this member?")) {
-                try {
-                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id));
-                    toast("Deleted");
-                } catch(e) { toast("Failed"); }
-            }
-        };
-
+        window.whatsapp = (n, m) => window.open(`https://wa.me/91${n}?text=Hello ${m}, Welcome to Savitri Success Library!`, '_blank');
+        window.whatsappFee = (n, m, f) => window.open(`https://wa.me/91${n}?text=नमस्ते ${m}, सावित्री सक्सेस लाइब्रेरी में आपकी ₹${f} फीस बकाया है। कृपया समय पर भुगतान करें।`, '_blank');
+        
         window.toast = (msg) => {
-            const t = document.createElement('div');
-            t.className = 'toast';
-            t.innerText = msg;
-            document.body.appendChild(t);
-            setTimeout(() => { 
-                t.style.opacity = '0'; 
-                setTimeout(() => t.remove(), 500); 
-            }, 2500);
+            const t = document.createElement('div'); t.className = 'toast'; t.innerText = msg;
+            document.body.appendChild(t); setTimeout(() => t.remove(), 2500);
         };
 
         window.logout = () => location.reload();
-        window.openAddModal = () => document.getElementById('modal').classList.remove('hidden');
-        window.closeModal = () => document.getElementById('modal').classList.add('hidden');
+        window.openReg = () => document.getElementById('regModal').classList.remove('hidden');
+        window.closeReg = () => document.getElementById('regModal').classList.add('hidden');
 
         init();
     </script>
