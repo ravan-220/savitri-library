@@ -23,7 +23,7 @@
             var pg = document.getElementById('loginPage');
             if(ldr) ldr.classList.add('hidden');
             if(pg) pg.classList.remove('hidden');
-        }, 1000);
+        }, 3000); // Increased timeout to ensure scripts load
     </script>
 
     <!-- Loading Screen -->
@@ -91,10 +91,8 @@
         import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, query } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
         // Firebase Config with safe fallbacks
-        let fbConfig = {};
-        try { fbConfig = JSON.parse(__firebase_config); } catch(e) { console.error("Firebase config missing"); }
-        
-        const app = initializeApp(fbConfig);
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'savitri-lib-77';
@@ -106,8 +104,10 @@
 
         function showApp() {
             clearTimeout(window.emergencyTimer);
-            document.getElementById('loader').classList.add('hidden');
-            document.getElementById('loginPage').classList.remove('hidden');
+            const ldr = document.getElementById('loader');
+            const pg = document.getElementById('loginPage');
+            if(ldr) ldr.classList.add('hidden');
+            if(pg) pg.classList.remove('hidden');
         }
 
         async function init() {
@@ -120,21 +120,26 @@
 
                 onAuthStateChanged(auth, (fbUser) => {
                     if (fbUser) {
+                        // Success listener for Students
                         onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'students'), (s) => {
                             students = s.docs.map(d => ({ id: d.id, ...d.data() }));
                             isDataReady = true;
                             showApp();
-                            // If already logged in as admin, redraw
                             if(user && user.role === 'admin') drawAdmin();
-                        }, (err) => { showApp(); });
+                        }, (err) => { 
+                            console.error("Student Load Error", err);
+                            showApp(); 
+                        });
 
+                        // Success listener for Logs
                         onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), (s) => {
                             logs = s.docs.map(d => d.data());
                             if(user && user.role === 'admin') drawLogs();
-                        });
+                        }, (err) => { console.error("Logs Load Error", err); });
                     }
                 });
             } catch (e) {
+                console.error("Init Error", e);
                 showApp();
             }
         }
@@ -143,22 +148,29 @@
             const u = document.getElementById('userIn').value.trim();
             const p = document.getElementById('passIn').value.trim();
             const err = document.getElementById('errorMsg');
+            const btn = document.getElementById('loginBtn');
             
-            // ADMIN LOGIN (Hardcoded bypass)
-            if(u === 'admin' && p === '1234') {
+            // Basic UI feedback
+            btn.innerText = "Checking...";
+            btn.disabled = true;
+
+            // ADMIN LOGIN (Bypass DB for speed)
+            if(u.toLowerCase() === 'admin' && p === '1234') {
                 user = { role: 'admin' };
                 showDashboard();
                 return;
             }
 
-            // STUDENT LOGIN
+            // STUDENT LOGIN (Check in local array)
             const s = students.find(x => x.uid === u && x.phone === p);
             if(s) {
                 user = { role: 'student', ...s };
                 showDashboard();
             } else {
+                btn.innerText = "LOGIN";
+                btn.disabled = false;
                 err.classList.remove('hidden');
-                err.innerText = isDataReady ? "Wrong ID or Phone Number!" : "Connecting to Database... try in 2 sec";
+                err.innerText = isDataReady ? "Invalid ID or Password!" : "Database still loading... Please wait 5 seconds.";
             }
         };
 
@@ -179,6 +191,10 @@
                 <span class="bg-indigo-500/10 text-indigo-400 text-[10px] font-black px-3 py-1 rounded-full border border-indigo-500/20">${students.length} ACTIVE</span>
             </div><div class="space-y-3">`;
             
+            if(students.length === 0) {
+                html += `<div class="text-center py-20 text-gray-500 italic">No members yet. Click + to add.</div>`;
+            }
+
             students.forEach(s => {
                 html += `
                 <div class="glass p-5 rounded-2xl flex justify-between items-center border-l-4 ${Number(s.fees) > 0 ? 'border-rose-500' : 'border-emerald-500'}">
@@ -189,7 +205,7 @@
                     <button onclick="delStudent('${s.id}')" class="text-gray-600 hover:text-rose-500 p-2"><i class="fas fa-trash-alt"></i></button>
                 </div>`;
             });
-            document.getElementById('content').innerHTML = html + (students.length === 0 ? '<p class="text-center text-gray-500 text-sm mt-10">No students found.</p>' : '') + `</div>`;
+            document.getElementById('content').innerHTML = html + `</div>`;
         };
 
         window.drawStudent = () => {
@@ -259,7 +275,7 @@
                     <span class="text-indigo-400 font-mono text-[10px]">${l.date} • ${l.time}</span>
                 </div>`;
             });
-            document.getElementById('content').innerHTML = html + `</div>`;
+            document.getElementById('content').innerHTML = html + (logs.length === 0 ? '<p class="text-center py-10 text-gray-500">No logs today.</p>' : '') + `</div>`;
         };
 
         init();
