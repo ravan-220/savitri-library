@@ -3,329 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Savitri Success Library | Admin</title>
+    <title>Savitri Success Library</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Simple & Clean Font */
-        body { 
-            font-family: system-ui, -apple-system, sans-serif; 
-            background: #0f172a; 
-            color: white; 
-            margin: 0; 
-        }
-        .glass-card { 
-            background: rgba(30, 41, 59, 0.7); 
-            backdrop-filter: blur(10px); 
-            border: 1px solid rgba(255,255,255,0.1); 
-            border-radius: 12px; 
-        }
-        .btn-primary { 
-            background: #6366f1; 
-            transition: all 0.2s; 
-        }
-        .btn-primary:active { scale: 0.95; }
-        .hidden { display: none; }
-        
-        /* Navigation Labels Style */
-        .nav-label {
-            font-size: 10px;
-            font-weight: 600;
-            margin-top: 4px;
-            text-transform: uppercase;
-        }
+        body { background: #0f172a; color: white; font-family: sans-serif; }
+        .glass { background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); }
+        .hidden { display: none !important; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner { border: 3px solid rgba(255,255,255,0.1); border-top-color: #6366f1; border-radius: 50%; width: 30px; height: 30px; animation: spin 0.8s linear infinite; }
     </style>
 </head>
-<body class="pb-28">
+<body class="min-h-screen">
 
-    <!-- Loading -->
-    <div id="loadingOverlay" class="fixed inset-0 bg-[#0f172a] z-[200] flex flex-col items-center justify-center">
-        <div class="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p class="text-indigo-400 text-sm font-bold">SAVITRI LIBRARY CONNECTING...</p>
+    <!-- Loading Screen -->
+    <div id="loader" class="fixed inset-0 bg-[#0f172a] z-[500] flex flex-col items-center justify-center">
+        <div class="spinner mb-4"></div>
+        <h1 class="text-indigo-400 font-bold tracking-widest text-sm">SAVITRI LIBRARY CONNECTING...</h1>
+        <p class="text-gray-500 text-[10px] mt-2">Checking connection...</p>
     </div>
 
-    <!-- Login -->
-    <div id="loginScreen" class="min-h-screen flex items-center justify-center px-6 hidden">
-        <div class="w-full max-w-md glass-card p-8 text-center">
-            <h1 class="text-3xl font-bold mb-1 tracking-tight">SAVITRI</h1>
-            <p class="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-8">Success Library</p>
+    <!-- Login Area -->
+    <div id="loginPage" class="hidden flex items-center justify-center min-h-screen px-6">
+        <div class="w-full max-w-md glass p-8 rounded-2xl shadow-2xl">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-black tracking-tighter">SAVITRI <span class="text-indigo-500">SUCCESS</span></h2>
+                <p class="text-gray-400 text-xs mt-1 uppercase tracking-widest">Library Management</p>
+            </div>
             <div class="space-y-4">
-                <input type="text" id="username" placeholder="Username (admin / Student ID)" class="w-full bg-slate-800 border border-white/10 rounded-lg py-3 px-4 outline-none focus:border-indigo-500 text-white">
-                <input type="password" id="password" placeholder="Password (1234 / Mobile)" class="w-full bg-slate-800 border border-white/10 rounded-lg py-3 px-4 outline-none focus:border-indigo-500 text-white">
-                <button onclick="handleLogin()" class="w-full btn-primary py-3 rounded-lg font-bold text-white shadow-lg">LOGIN</button>
-                <p id="loginError" class="text-red-400 text-xs mt-2 hidden">Invalid Details!</p>
+                <input type="text" id="userIn" placeholder="Username (admin / Student ID)" class="w-full bg-slate-900 border border-white/10 rounded-xl py-4 px-5 outline-none focus:border-indigo-500 transition-all">
+                <input type="password" id="passIn" placeholder="Password (1234 / Phone)" class="w-full bg-slate-900 border border-white/10 rounded-xl py-4 px-5 outline-none focus:border-indigo-500 transition-all">
+                <button onclick="doLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-xl font-bold shadow-lg shadow-indigo-500/20 active:scale-[0.98] transition-all">LOGIN</button>
+                <p id="errorMsg" class="text-red-400 text-center text-sm hidden">Invalid login credentials!</p>
             </div>
         </div>
     </div>
 
     <!-- Dashboard -->
-    <div id="dashboardMain" class="hidden">
-        <header class="p-5 flex justify-between items-center sticky top-0 z-50 bg-[#0f172a]/90 border-b border-white/5">
-            <h2 class="text-lg font-bold">SAVITRI <span class="text-indigo-500 underline decoration-2 underline-offset-4">LIBRARY</span></h2>
-            <button onclick="logout()" class="text-gray-400 hover:text-rose-500 transition-colors"><i class="fas fa-power-off text-xl"></i></button>
-        </header>
-
-        <main id="mainContent" class="px-5 py-6">
-            <!-- Data shows here -->
-        </main>
-
-        <!-- Admin Navigation with Labels -->
-        <div id="adminNav" class="fixed bottom-6 left-0 right-0 px-6 hidden z-50">
-            <div class="max-w-md mx-auto bg-slate-900 border border-white/10 rounded-2xl p-2 flex justify-around items-center shadow-2xl">
-                <button onclick="renderAdminUI()" class="flex flex-col items-center p-2 text-indigo-400">
-                    <i class="fas fa-home text-xl"></i>
-                    <span class="nav-label">Home</span>
-                </button>
-                
-                <button onclick="showAddModal()" class="flex flex-col items-center -mt-10">
-                    <div class="w-14 h-14 btn-primary rounded-full flex items-center justify-center text-white text-2xl shadow-xl border-4 border-[#0f172a]">
-                        <i class="fas fa-plus"></i>
-                    </div>
-                    <span class="nav-label text-indigo-400 mt-1">Add</span>
-                </button>
-
-                <button onclick="renderAttendanceLog()" class="flex flex-col items-center p-2 text-gray-500">
-                    <i class="fas fa-list-check text-xl"></i>
-                    <span class="nav-label">Logs</span>
-                </button>
+    <div id="dashboard" class="hidden">
+        <nav class="p-5 flex justify-between items-center border-b border-white/5 bg-slate-900/50">
+            <h1 class="font-bold">SAVITRI <span class="text-indigo-500">LIB</span></h1>
+            <button onclick="location.reload()" class="text-gray-400"><i class="fas fa-sign-out-alt"></i></button>
+        </nav>
+        <div id="content" class="p-6 pb-32"></div>
+        
+        <!-- Bottom Nav (Admin Only) -->
+        <div id="adminNav" class="fixed bottom-6 inset-x-6 hidden">
+            <div class="max-w-md mx-auto bg-slate-900 border border-white/10 rounded-2xl p-3 flex justify-around items-center shadow-2xl">
+                <button onclick="drawAdmin()" class="text-indigo-400"><i class="fas fa-users text-xl"></i></button>
+                <button onclick="showAdd()" class="bg-indigo-600 w-12 h-12 rounded-full -mt-10 border-4 border-[#0f172a]"><i class="fas fa-plus"></i></button>
+                <button onclick="drawLogs()" class="text-gray-400"><i class="fas fa-history text-xl"></i></button>
             </div>
         </div>
     </div>
 
-    <!-- Register Modal -->
-    <div id="regModal" class="fixed inset-0 bg-black/80 z-[100] flex items-center justify-center px-6 hidden">
-        <div class="w-full max-w-md glass-card p-6">
-            <h3 class="text-lg font-bold mb-4">Add New Student</h3>
-            <div class="space-y-4">
-                <input type="text" id="sName" placeholder="Student Name" class="w-full bg-slate-800 border border-white/10 rounded-lg py-3 px-4 text-white">
-                <input type="text" id="sPhone" placeholder="Mobile Number" class="w-full bg-slate-800 border border-white/10 rounded-lg py-3 px-4 text-white">
-                <input type="number" id="sFees" placeholder="Pending Fees (₹)" class="w-full bg-slate-800 border border-white/10 rounded-lg py-3 px-4 text-white">
-                <div class="flex gap-2 pt-2">
-                    <button onclick="document.getElementById('regModal').classList.add('hidden')" class="flex-1 py-3 text-gray-400 font-bold">CANCEL</button>
-                    <button id="saveBtn" onclick="saveStudent()" class="flex-[2] btn-primary py-3 rounded-lg font-bold text-white">SAVE STUDENT</button>
-                </div>
+    <!-- Add Modal -->
+    <div id="addModal" class="fixed inset-0 bg-black/80 z-[200] hidden flex items-center justify-center p-6">
+        <div class="glass p-6 rounded-2xl w-full max-w-sm">
+            <h3 class="font-bold mb-4">Register Student</h3>
+            <input type="text" id="newName" placeholder="Name" class="w-full bg-slate-800 p-3 rounded-lg mb-3">
+            <input type="text" id="newPhone" placeholder="Phone" class="w-full bg-slate-800 p-3 rounded-lg mb-3">
+            <input type="number" id="newFees" placeholder="Fees Due" class="w-full bg-slate-800 p-3 rounded-lg mb-4">
+            <div class="flex gap-2">
+                <button onclick="document.getElementById('addModal').classList.add('hidden')" class="flex-1 p-3 text-gray-400">Cancel</button>
+                <button onclick="saveStudent()" class="flex-2 bg-indigo-600 px-6 py-3 rounded-lg font-bold">Save</button>
             </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, query, onSnapshot, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
         const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'savitri-main-db';
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'savitri-lib-77';
 
         let students = [];
-        let attendanceLogs = [];
-        let currentUser = null;
+        let logs = [];
+        let user = null;
 
-        // AUTH
-        const startApp = async () => {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-            } else {
-                await signInAnonymously(auth);
+        // Force Show Login if Firebase is too slow (3 seconds)
+        const forceLoad = setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if(!loader.classList.contains('hidden')) {
+                loader.classList.add('hidden');
+                document.getElementById('loginPage').classList.remove('hidden');
             }
-        };
+        }, 3000);
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setupRealtimeSync();
-                const saved = localStorage.getItem('savitri_session');
-                if (saved) {
-                    currentUser = JSON.parse(saved);
-                    enterApp();
+        async function init() {
+            try {
+                // RULE 3: Auth Before Queries
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
-                    showLogin();
+                    await signInAnonymously(auth);
                 }
+
+                onAuthStateChanged(auth, (fbUser) => {
+                    if (fbUser) {
+                        // Sync Students
+                        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'students'), (s) => {
+                            students = s.docs.map(d => ({ id: d.id, ...d.data() }));
+                            clearTimeout(forceLoad);
+                            document.getElementById('loader').classList.add('hidden');
+                            document.getElementById('loginPage').classList.remove('hidden');
+                        }, (err) => console.error("Firestore Error:", err));
+
+                        // Sync Logs
+                        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), (s) => {
+                            logs = s.docs.map(d => d.data());
+                        }, (err) => console.error("Logs Error:", err));
+                    }
+                });
+            } catch (e) {
+                console.error("Auth Error:", e);
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('loginPage').classList.remove('hidden');
             }
-        });
-
-        function setupRealtimeSync() {
-            const studentCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
-            const attCol = collection(db, 'artifacts', appId, 'public', 'data', 'attendance');
-
-            onSnapshot(studentCol, (snap) => {
-                students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                if (currentUser && currentUser.role === 'admin') renderAdminUI();
-                document.getElementById('loadingOverlay').classList.add('hidden');
-            });
-
-            onSnapshot(attCol, (snap) => {
-                attendanceLogs = snap.docs.map(d => d.data());
-                if (currentUser && currentUser.role === 'admin' && document.getElementById('mainContent').getAttribute('data-view') === 'logs') {
-                    renderAttendanceLog();
-                }
-            });
         }
 
-        window.handleLogin = function() {
-            const u = document.getElementById('username').value.trim();
-            const p = document.getElementById('password').value.trim();
-            const err = document.getElementById('loginError');
-
-            if (u === 'admin' && p === '1234') {
-                currentUser = { role: 'admin', name: 'Admin' };
-                localStorage.setItem('savitri_session', JSON.stringify(currentUser));
-                enterApp();
+        window.doLogin = () => {
+            const u = document.getElementById('userIn').value;
+            const p = document.getElementById('passIn').value;
+            
+            if(u === 'admin' && p === '1234') {
+                user = { role: 'admin' };
+                showDashboard();
             } else {
                 const s = students.find(x => x.uid === u && x.phone === p);
-                if (s) {
-                    currentUser = { role: 'student', ...s };
-                    localStorage.setItem('savitri_session', JSON.stringify(currentUser));
-                    enterApp();
+                if(s) {
+                    user = { role: 'student', ...s };
+                    showDashboard();
                 } else {
-                    err.classList.remove('hidden');
+                    document.getElementById('errorMsg').classList.remove('hidden');
                 }
             }
         };
 
-        window.logout = function() {
-            localStorage.removeItem('savitri_session');
-            location.reload();
-        };
-
-        function showLogin() {
-            document.getElementById('loadingOverlay').classList.add('hidden');
-            document.getElementById('loginScreen').classList.remove('hidden');
-        }
-
-        function enterApp() {
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('dashboardMain').classList.remove('hidden');
-            if (currentUser.role === 'admin') {
+        function showDashboard() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            if(user.role === 'admin') {
                 document.getElementById('adminNav').classList.remove('hidden');
-                renderAdminUI();
+                drawAdmin();
             } else {
-                renderStudentUI();
+                drawStudent();
             }
         }
 
-        window.renderAdminUI = function() {
-            const main = document.getElementById('mainContent');
-            main.setAttribute('data-view', 'home');
-            const dues = students.reduce((acc, s) => acc + Number(s.fees), 0);
-
-            main.innerHTML = `
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="glass-card p-4">
-                        <p class="text-[10px] text-gray-500 font-bold uppercase">Total Students</p>
-                        <h3 class="text-2xl font-bold">${students.length}</h3>
+        window.drawAdmin = () => {
+            let html = `<h2 class="text-xl font-bold mb-4">Students (${students.length})</h2><div class="space-y-3">`;
+            students.forEach(s => {
+                html += `
+                <div class="glass p-4 rounded-xl flex justify-between items-center">
+                    <div>
+                        <p class="font-bold">${s.name}</p>
+                        <p class="text-xs text-indigo-400">ID: ${s.uid} | ₹${s.fees} Pending</p>
                     </div>
-                    <div class="glass-card p-4">
-                        <p class="text-[10px] text-gray-500 font-bold uppercase">Total Dues</p>
-                        <h3 class="text-2xl font-bold text-rose-400">₹${dues}</h3>
-                    </div>
-                </div>
-
-                <h3 class="text-sm font-bold uppercase text-indigo-400 mb-4 tracking-wider">Student List</h3>
-                <div class="space-y-3">
-                    ${students.length === 0 ? '<p class="text-center text-gray-500 py-10">No students yet.</p>' : ''}
-                    ${students.map(s => `
-                        <div class="glass-card p-4">
-                            <div class="flex justify-between items-center mb-3">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center font-bold text-indigo-400">${s.name[0]}</div>
-                                    <div>
-                                        <h4 class="font-bold text-sm">${s.name}</h4>
-                                        <p class="text-[10px] text-gray-500">ID: ${s.uid} | ${s.phone}</p>
-                                    </div>
-                                </div>
-                                <button onclick="deleteStudent('${s.id}')" class="text-rose-500 opacity-30 hover:opacity-100 p-2"><i class="fas fa-trash"></i></button>
-                            </div>
-                            <div class="flex gap-2">
-                                <div class="flex-[3] bg-white/5 py-2 rounded-lg text-xs font-bold text-center">Fees: ₹${s.fees}</div>
-                                <button onclick="window.open('https://wa.me/91${s.phone}')" class="flex-1 bg-green-500/10 py-2 rounded-lg text-green-500 text-center border border-green-500/20"><i class="fab fa-whatsapp"></i></button>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
+                    <button onclick="delStudent('${s.id}')" class="text-rose-500 p-2"><i class="fas fa-trash"></i></button>
+                </div>`;
+            });
+            document.getElementById('content').innerHTML = html + `</div>`;
         };
 
-        window.renderAttendanceLog = function() {
-            const main = document.getElementById('mainContent');
-            main.setAttribute('data-view', 'logs');
-            main.innerHTML = `
-                <h3 class="text-xl font-bold mb-6">Check-in History</h3>
-                <div class="space-y-2">
-                    ${attendanceLogs.length === 0 ? '<p class="text-gray-500 text-center py-10">No entries yet.</p>' : ''}
-                    ${attendanceLogs.slice().reverse().map(l => `
-                        <div class="glass-card p-3 flex justify-between items-center border-l-4 border-indigo-500">
-                            <div><p class="font-bold text-sm">${l.name}</p></div>
-                            <div class="text-right text-[10px]"><p class="font-bold text-indigo-400">${l.time}</p><p class="text-gray-500">${l.date}</p></div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        };
-
-        window.renderStudentUI = function() {
-            const main = document.getElementById('mainContent');
+        window.drawStudent = () => {
             const today = new Date().toLocaleDateString('en-GB');
-            const done = attendanceLogs.find(l => l.uid === currentUser.uid && l.date === today);
-
-            main.innerHTML = `
-                <div class="glass-card p-8 text-center mb-6">
-                    <div class="w-20 h-20 bg-indigo-500 rounded-2xl mx-auto mb-4 flex items-center justify-center text-3xl font-bold">${currentUser.name[0]}</div>
-                    <h2 class="text-2xl font-bold">${currentUser.name}</h2>
-                    <p class="text-xs text-indigo-400 font-bold uppercase mt-1">ID: ${currentUser.uid}</p>
+            const mark = logs.find(l => l.uid === user.uid && l.date === today);
+            document.getElementById('content').innerHTML = `
+                <div class="text-center py-10">
+                    <div class="w-20 h-20 bg-indigo-600 rounded-2xl mx-auto flex items-center justify-center text-3xl font-bold mb-4 shadow-xl">${user.name[0]}</div>
+                    <h2 class="text-2xl font-bold">${user.name}</h2>
+                    <p class="text-indigo-400 mb-8">Student ID: ${user.uid}</p>
+                    <div class="glass p-6 rounded-2xl mb-6">
+                        <p class="text-sm text-gray-400">Fee Status</p>
+                        <p class="text-xl font-bold ${user.fees > 0 ? 'text-rose-400' : 'text-emerald-400'}">₹${user.fees} Pending</p>
+                    </div>
+                    <button onclick="markAtt()" ${mark ? 'disabled' : ''} class="w-full py-4 rounded-xl font-bold ${mark ? 'bg-emerald-600/20 text-emerald-500' : 'bg-indigo-600 shadow-lg shadow-indigo-500/30'}">
+                        ${mark ? '<i class="fas fa-check mr-2"></i> PRESENT' : 'MARK ATTENDANCE'}
+                    </button>
                 </div>
-                <div class="glass-card p-5 mb-6 flex justify-between items-center">
-                    <span class="text-xs font-bold text-gray-400 uppercase">Fee Status</span>
-                    <span class="font-bold ${currentUser.fees > 0 ? 'text-rose-400' : 'text-emerald-400'}">₹${currentUser.fees} Due</span>
-                </div>
-                <button id="attBtn" onclick="markAttendance()" ${done ? 'disabled' : ''} class="w-full ${done ? 'bg-emerald-500' : 'btn-primary'} py-4 rounded-xl font-bold text-white shadow-xl">
-                    ${done ? 'ATTENDANCE MARKED' : 'MARK ATTENDANCE'}
-                </button>
             `;
         };
 
-        window.saveStudent = async function() {
-            const n = document.getElementById('sName').value;
-            const p = document.getElementById('sPhone').value;
-            const f = document.getElementById('sFees').value;
-            if(!n || !p) return alert("Details bhariye!");
+        window.markAtt = async () => {
+            if (!auth.currentUser) return;
+            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), {
+                uid: user.uid,
+                name: user.name,
+                date: new Date().toLocaleDateString('en-GB'),
+                time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
+            });
+            drawStudent();
+        };
 
-            const btn = document.getElementById('saveBtn');
-            btn.disabled = true;
-            btn.innerHTML = "SAVING...";
-
+        window.saveStudent = async () => {
+            if (!auth.currentUser) return;
+            const n = document.getElementById('newName').value;
+            const p = document.getElementById('newPhone').value;
+            const f = document.getElementById('newFees').value;
+            if(!n || !p) return;
+            
             await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'students'), {
-                uid: 'LIB-' + Math.floor(1000 + Math.random() * 9000),
-                name: n, phone: p, fees: f || 0,
-                date: new Date().toISOString()
+                uid: 'LIB' + Math.floor(1000 + Math.random()*9000),
+                name: n, phone: p, fees: f || 0
             });
-
-            document.getElementById('regModal').classList.add('hidden');
-            btn.disabled = false;
-            btn.innerHTML = "SAVE STUDENT";
+            document.getElementById('addModal').classList.add('hidden');
+            // Reset fields
+            document.getElementById('newName').value = '';
+            document.getElementById('newPhone').value = '';
+            document.getElementById('newFees').value = '';
         };
 
-        window.deleteStudent = async function(id) {
-            if(confirm("Student ko delete karein?")) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id));
-            }
+        window.delStudent = async (id) => {
+            if (!auth.currentUser) return;
+            if(confirm("Delete student?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id));
         };
 
-        window.markAttendance = async function() {
-            const now = new Date();
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'attendance'), {
-                uid: currentUser.uid,
-                name: currentUser.name,
-                date: now.toLocaleDateString('en-GB'),
-                time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        window.showAdd = () => document.getElementById('addModal').classList.remove('hidden');
+        
+        window.drawLogs = () => {
+            let html = `<h2 class="text-xl font-bold mb-4">Attendance Logs</h2><div class="space-y-2">`;
+            const sortedLogs = [...logs].reverse();
+            sortedLogs.forEach(l => {
+                html += `<div class="glass p-3 rounded-lg flex justify-between text-sm">
+                    <span class="font-medium">${l.name}</span>
+                    <span class="text-indigo-400 font-mono">${l.date} ${l.time}</span>
+                </div>`;
             });
-            renderStudentUI();
+            document.getElementById('content').innerHTML = html + `</div>`;
         };
 
-        window.showAddModal = () => document.getElementById('regModal').classList.remove('hidden');
-
-        startApp();
+        init();
     </script>
 </body>
 </html>
