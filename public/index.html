@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savitri Success Library | Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
+        :root { --bg: #0f172a; --glass: rgba(30, 41, 59, 0.7); }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: white; margin: 0; }
+        .glass-card { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; }
+        .btn-primary { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); transition: all 0.3s; }
+        .btn-primary:active { scale: 0.95; }
+        .id-badge { background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .hidden { display: none; }
+        /* Smooth fade in animation */
+        .animate-fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- 1. LOGIN SCREEN -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center px-6">
+        <div class="w-full max-w-md glass-card p-8 text-center">
+            <div class="w-20 h-20 bg-indigo-500 rounded-3xl mx-auto mb-6 flex items-center justify-center text-3xl shadow-2xl rotate-3">
+                <i class="fas fa-book-reader"></i>
+            </div>
+            <h1 class="text-3xl font-black mb-2 italic">SAVITRI</h1>
+            <p class="text-gray-400 text-sm mb-8 uppercase tracking-[0.2em]">Success Library</p>
+            
+            <div class="space-y-4">
+                <input type="text" id="username" placeholder="Username (admin / ID)" class="w-full bg-slate-800/50 border border-white/10 rounded-xl py-4 px-5 outline-none focus:border-indigo-500 transition-all text-white">
+                <input type="password" id="password" placeholder="Password (1234 / Mobile)" class="w-full bg-slate-800/50 border border-white/10 rounded-xl py-4 px-5 outline-none focus:border-indigo-500 transition-all text-white">
+                <button onclick="handleLogin()" class="w-full btn-primary py-4 rounded-xl font-bold tracking-widest shadow-lg text-white">LOGIN NOW</button>
+                <p id="loginError" class="text-red-400 text-xs mt-2 hidden">Invalid Username or Password!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. DASHBOARD MAIN -->
+    <div id="dashboardMain" class="hidden animate-fade-in">
+        <!-- Header -->
+        <header class="p-6 flex justify-between items-center sticky top-0 z-50 bg-[#0f172a]/80 backdrop-blur-md border-b border-white/5">
+            <div>
+                <h2 class="text-xl font-black italic">SAVITRI <span class="text-indigo-500">PRO</span></h2>
+            </div>
+            <button onclick="logout()" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-400 hover:text-rose-500 transition-colors">
+                <i class="fas fa-power-off"></i>
+            </button>
+        </header>
+
+        <main id="mainContent" class="px-6 py-4">
+            <!-- Dynamic Content Injected Here -->
+        </main>
+
+        <!-- Bottom Navigation (Admin Only) -->
+        <div id="adminNav" class="fixed bottom-6 left-0 right-0 px-6 hidden z-50">
+            <div class="max-w-md mx-auto bg-slate-900/90 border border-white/10 backdrop-blur-xl rounded-2xl p-2 flex justify-around items-center shadow-2xl">
+                <button onclick="renderAdminUI()" class="p-4 text-indigo-400"><i class="fas fa-th-large text-xl"></i></button>
+                <button onclick="showAddModal()" class="w-14 h-14 btn-primary rounded-2xl flex items-center justify-center text-white text-2xl shadow-xl -mt-8 border-4 border-[#0f172a]"><i class="fas fa-plus"></i></button>
+                <button onclick="renderAnalytics()" class="p-4 text-gray-500 hover:text-indigo-400 transition-colors"><i class="fas fa-chart-pie text-xl"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. ADD STUDENT MODAL -->
+    <div id="regModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center px-6 hidden">
+        <div class="w-full max-w-md glass-card p-8">
+            <h3 class="text-xl font-black mb-6">Register Student</h3>
+            <div class="space-y-4">
+                <input type="text" id="sName" placeholder="Full Name" class="w-full bg-slate-800 border border-white/10 rounded-xl py-3 px-4 outline-none text-white focus:border-indigo-500">
+                <input type="text" id="sPhone" placeholder="Mobile Number" class="w-full bg-slate-800 border border-white/10 rounded-xl py-3 px-4 outline-none text-white focus:border-indigo-500">
+                <input type="number" id="sFees" placeholder="Pending Fees (₹)" class="w-full bg-slate-800 border border-white/10 rounded-xl py-3 px-4 outline-none text-white focus:border-indigo-500">
+                <div class="flex gap-3 mt-6">
+                    <button onclick="document.getElementById('regModal').classList.add('hidden')" class="flex-1 py-3 text-gray-400 font-bold hover:text-white transition-colors">CANCEL</button>
+                    <button onclick="saveStudent()" class="flex-[2] btn-primary py-3 rounded-xl font-bold text-white">SAVE MEMBER</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data State
+        let students = JSON.parse(localStorage.getItem('library_students')) || [
+            { uid: 'SS-101', name: 'Jitendra Meghwal', phone: '9462376154', fees: '3000', status: 'Pending', end: '01/03/2026' },
+            { uid: 'SS-102', name: 'Vikas Sankhla', phone: '9588811700', fees: '0', status: 'Paid', end: '08/03/2026' }
+        ];
+        let currentUser = null;
+        const EXPENSES = 50151;
+
+        // Login Logic
+        function handleLogin() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const error = document.getElementById('loginError');
+
+            if (user === 'admin' && pass === '1234') {
+                currentUser = { role: 'admin', name: 'Admin' };
+                enterApp();
+            } else {
+                const s = students.find(x => x.uid === user && x.phone === pass);
+                if (s) {
+                    currentUser = { role: 'student', ...s };
+                    enterApp();
+                } else {
+                    error.classList.remove('hidden');
+                }
+            }
+        }
+
+        function enterApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('dashboardMain').classList.remove('hidden');
+            if (currentUser.role === 'admin') {
+                document.getElementById('adminNav').classList.remove('hidden');
+                renderAdminUI();
+            } else {
+                renderStudentUI();
+            }
+        }
+
+        // UI Rendering
+        function renderAdminUI(list = students) {
+            const main = document.getElementById('mainContent');
+            const revenue = list.reduce((acc, s) => acc + (3000 - Number(s.fees)), 0); 
+            const profit = revenue - EXPENSES;
+
+            main.innerHTML = `
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="glass-card p-4 border-l-4 border-indigo-500">
+                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Students</p>
+                        <h3 class="text-xl font-black">${list.length}</h3>
+                    </div>
+                    <div class="glass-card p-4 border-l-4 border-emerald-500">
+                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Revenue</p>
+                        <h3 class="text-xl font-black text-emerald-400">₹${revenue}</h3>
+                    </div>
+                    <div class="glass-card p-4 border-l-4 border-rose-500">
+                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Expenses</p>
+                        <h3 class="text-xl font-black text-rose-400">₹${EXPENSES}</h3>
+                    </div>
+                    <div class="glass-card p-4 border-l-4 border-amber-500">
+                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Net Profit</p>
+                        <h3 class="text-xl font-black text-amber-400">₹${profit}</h3>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between mb-4 px-1">
+                    <h3 class="text-sm font-black uppercase tracking-widest italic text-indigo-400">Member Directory</h3>
+                    <span class="text-[10px] bg-white/5 px-3 py-1 rounded-full border border-white/10">${list.length} Total</span>
+                </div>
+
+                <div class="space-y-4">
+                    ${list.map(s => `
+                        <div class="glass-card p-5 group hover:border-indigo-500/50 transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-slate-800 border border-white/10 flex items-center justify-center font-black text-indigo-400 shadow-lg group-hover:scale-110 transition-transform">
+                                        ${s.name.charAt(0)}
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-sm text-white">${s.name}</h4>
+                                        <p class="text-[10px] text-gray-500 uppercase font-medium">ID: ${s.uid} • ${s.phone}</p>
+                                    </div>
+                                </div>
+                                <div class="id-badge ${s.fees == 0 ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5' : 'text-rose-400 border-rose-500/20 bg-rose-500/5'}">${s.fees == 0 ? 'Paid' : 'Due: ₹' + s.fees}</div>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="flex-[3] bg-white/5 py-3 rounded-xl text-[10px] font-bold flex items-center justify-center border border-white/5">
+                                    <i class="far fa-calendar-alt mr-2 opacity-50"></i> Valid till: ${s.end}
+                                </div>
+                                <button onclick="window.open('https://wa.me/91${s.phone}?text=नमस्ते ${s.name}, सावित्री लाइब्रेरी में आपकी बकाया फीस ₹${s.fees} है।')" class="flex-1 bg-green-500/10 hover:bg-green-500/20 py-3 rounded-xl text-green-500 border border-green-500/20 flex items-center justify-center transition-colors">
+                                    <i class="fab fa-whatsapp text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderStudentUI() {
+            const main = document.getElementById('mainContent');
+            main.innerHTML = `
+                <div class="glass-card p-10 text-center mb-6 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl rotate-12"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="w-24 h-24 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-3xl mx-auto mb-4 flex items-center justify-center text-4xl shadow-2xl font-black text-white">${currentUser.name.charAt(0)}</div>
+                    <h2 class="text-2xl font-black text-white">${currentUser.name}</h2>
+                    <p class="text-xs text-indigo-400 uppercase tracking-widest mt-1 font-bold">Premium Library Member</p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="glass-card p-5 text-center border-b-4 border-indigo-500">
+                        <p class="text-[10px] text-gray-500 uppercase mb-1 font-bold">Your Unique ID</p>
+                        <p class="font-black text-xl text-white">${currentUser.uid}</p>
+                    </div>
+                    <div class="glass-card p-5 text-center border-b-4 border-emerald-500">
+                        <p class="text-[10px] text-gray-500 uppercase mb-1 font-bold">Valid Until</p>
+                        <p class="font-black text-xl text-emerald-400">${currentUser.end}</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 mb-8 flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] text-gray-400 uppercase font-bold">Account Status</p>
+                        <p class="text-lg font-black ${currentUser.fees == 0 ? 'text-emerald-400' : 'text-rose-400'}">${currentUser.fees == 0 ? 'All Clear' : 'Fees Pending'}</p>
+                    </div>
+                    <i class="fas ${currentUser.fees == 0 ? 'fa-check-circle text-emerald-400' : 'fa-exclamation-circle text-rose-400'} text-3xl"></i>
+                </div>
+
+                <button onclick="markAttendance()" class="w-full btn-primary py-5 rounded-2xl font-black tracking-[0.2em] shadow-2xl text-white uppercase active:scale-95 transition-all">
+                    <i class="fas fa-fingerprint mr-2"></i> Mark Attendance
+                </button>
+            `;
+        }
+
+        function markAttendance() {
+            const btn = event.target.closest('button');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> PROCESSING...';
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check-double mr-2"></i> ATTENDANCE MARKED';
+                btn.classList.remove('btn-primary');
+                btn.classList.add('bg-emerald-500');
+            }, 1500);
+        }
+
+        function saveStudent() {
+            const name = document.getElementById('sName').value;
+            const phone = document.getElementById('sPhone').value;
+            const fees = document.getElementById('sFees').value;
+            if(!name || !phone) return alert("Please enter both Name and Phone!");
+            
+            const newS = {
+                uid: 'SS-' + Math.floor(1000 + Math.random() * 9000),
+                name, 
+                phone, 
+                fees: fees || 0, 
+                status: 'Active', 
+                end: new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('en-GB')
+            };
+            students.unshift(newS);
+            localStorage.setItem('library_students', JSON.stringify(students));
+            document.getElementById('regModal').classList.add('hidden');
+            renderAdminUI();
+            
+            // Clear inputs
+            document.getElementById('sName').value = '';
+            document.getElementById('sPhone').value = '';
+            document.getElementById('sFees').value = '';
+        }
+
+        function showAddModal() { document.getElementById('regModal').classList.remove('hidden'); }
+        function logout() { location.reload(); }
+        function renderAnalytics() { alert('Detailed Analytics Dashboard is being prepared for Savitri Library!'); }
+    </script>
+</body>
+</html>
