@@ -35,30 +35,34 @@
         .dash-card i { font-size: 2rem; }
         .dash-card span { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
 
-        /* Tooltip style */
+        /* Custom Tooltip */
         .tooltip { position: relative; }
-        .tooltip:hover::after {
-            content: attr(data-tip);
-            position: absolute;
-            bottom: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1e293b;
-            color: white;
-            padding: 4px 10px;
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 100px;
+            background-color: #1e293b;
+            color: #fff;
+            text-align: center;
             border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 101;
+            bottom: -110%;
+            left: 50%;
+            margin-left: -50px;
+            opacity: 0;
+            transition: opacity 0.3s;
             font-size: 10px;
-            white-space: nowrap;
             font-weight: bold;
             border: 1px solid rgba(255,255,255,0.1);
-            z-index: 100;
+            pointer-events: none;
         }
+        .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
 
-        .loader-spin { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #6366f1; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        .loader-spin { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #6366f1; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #6366f1; color: white; padding: 12px 24px; border-radius: 12px; z-index: 9999; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.5); animation: slideDown 0.3s ease; }
-        @keyframes slideDown { from { transform: translate(-50%, -100%); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #6366f1; color: white; padding: 12px 24px; border-radius: 12px; z-index: 9999; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: all 0.3s ease; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -66,21 +70,21 @@
     <!-- Splash Screen -->
     <div id="splash" class="fixed inset-0 bg-[#0b0f1a] z-[9999] flex flex-col items-center justify-center">
         <div class="loader-spin mb-4"></div>
-        <p class="text-indigo-400 text-[10px] font-bold tracking-[0.3em] uppercase">Savitri Success Library</p>
+        <p class="text-indigo-400 text-[12px] font-bold tracking-[0.3em] uppercase">SAVITRI SUCCESS LIBRARY</p>
     </div>
 
     <!-- Login Page -->
-    <div id="loginPage" class="flex-1 flex items-center justify-center px-6">
+    <div id="loginPage" class="hidden min-h-screen flex items-center justify-center px-6">
         <div class="w-full max-w-[380px] glass p-10 rounded-[3rem] shadow-2xl">
             <div class="text-center mb-10">
                 <h1 class="text-2xl font-black italic tracking-tighter leading-tight">
                     SAVITRI SUCCESS<br><span class="text-indigo-500">LIBRARY</span>
                 </h1>
-                <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2 font-bold">Admin Console</p>
+                <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2 font-bold">Secure Access</p>
             </div>
 
             <div class="space-y-4">
-                <input type="text" id="userIn" placeholder="User ID" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl py-4 px-6 outline-none text-white font-bold focus:border-indigo-500/50 transition-all">
+                <input type="text" id="userIn" placeholder="User ID / Mobile" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl py-4 px-6 outline-none text-white font-bold focus:border-indigo-500/50 transition-all">
                 <input type="password" id="passIn" placeholder="Password" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl py-4 px-6 outline-none text-white font-bold focus:border-indigo-500/50 transition-all">
                 
                 <button id="loginBtn" onclick="handleLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-5 rounded-2xl font-black tracking-widest uppercase transition-all shadow-lg shadow-indigo-600/20 active:scale-95">
@@ -93,18 +97,21 @@
 
     <!-- Dashboard -->
     <div id="dashboard" class="hidden flex-1 flex flex-col">
-        <header class="p-6 flex justify-between items-center bg-[#0b0f1a] sticky top-0 z-40">
+        <header class="p-6 flex justify-between items-center bg-[#0b0f1a] sticky top-0 z-40 border-b border-white/5">
             <div>
                 <h2 class="font-black italic text-xl">SAVITRI <span class="text-indigo-500">LIBRARY</span></h2>
                 <p id="subHeader" class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Administrator</p>
             </div>
-            <button onclick="logout()" data-tip="Logout Admin" class="tooltip w-12 h-12 bg-white/5 hover:bg-white/10 rounded-2xl flex items-center justify-center text-rose-500 transition-all">
-                <i class="fas fa-sign-out-alt"></i>
-            </button>
+            <div class="tooltip">
+                <button onclick="logout()" class="w-12 h-12 bg-white/5 hover:bg-white/10 rounded-2xl flex items-center justify-center text-rose-500 transition-all">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+                <span class="tooltiptext">Logout Admin</span>
+            </div>
         </header>
 
         <main id="content" class="flex-1 p-6 pb-20 max-w-lg mx-auto w-full">
-            <!-- Grid Dashboard (Default for Admin) -->
+            <!-- Grid Dashboard -->
             <div id="adminGrid" class="grid grid-cols-2 gap-4">
                 <div onclick="showStudents()" class="dash-card glass bg-indigo-600/10 text-indigo-400 border-indigo-500/20">
                     <i class="fas fa-users"></i>
@@ -124,11 +131,10 @@
                 </div>
             </div>
 
-            <!-- List Views (Injected here) -->
+            <!-- List Views -->
             <div id="listView" class="hidden"></div>
         </main>
         
-        <!-- Back to Grid Button (Only visible in list views) -->
         <div id="backBtn" class="fixed bottom-8 left-1/2 -translate-x-1/2 hidden z-50">
             <button onclick="showGrid()" class="bg-indigo-600 text-white px-8 py-4 rounded-full font-black text-xs tracking-widest shadow-2xl active:scale-95 transition-all">
                 BACK TO DASHBOARD
@@ -141,21 +147,12 @@
         <div class="glass p-8 rounded-[2.5rem] w-full max-w-sm">
             <h3 class="text-2xl font-black italic mb-8 uppercase text-indigo-400">Add New Member</h3>
             <div class="space-y-4">
-                <div class="space-y-1">
-                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2">Full Name</label>
-                    <input type="text" id="regName" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold focus:border-indigo-500/30">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2">Mobile (Password)</label>
-                    <input type="text" id="regPhone" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold focus:border-indigo-500/30">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2">Monthly Fee (₹)</label>
-                    <input type="number" id="regFees" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold focus:border-indigo-500/30">
-                </div>
+                <input type="text" id="regName" placeholder="Full Name" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold focus:border-indigo-500/30">
+                <input type="text" id="regPhone" placeholder="Mobile Number" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold focus:border-indigo-500/30">
+                <input type="number" id="regFees" placeholder="Monthly Fee (₹)" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold focus:border-indigo-500/30">
                 <div class="flex gap-3 pt-6">
                     <button onclick="closeModal()" class="flex-1 p-4 font-black text-gray-500 uppercase text-xs">Cancel</button>
-                    <button id="saveBtn" onclick="saveNewStudent()" class="flex-1 bg-indigo-600 p-4 rounded-2xl font-black uppercase text-xs shadow-lg shadow-indigo-600/30 active:scale-95">Save Member</button>
+                    <button id="saveBtn" onclick="saveNewStudent()" class="flex-1 bg-indigo-600 p-4 rounded-2xl font-black uppercase text-xs shadow-lg shadow-indigo-600/30">Save</button>
                 </div>
             </div>
         </div>
@@ -164,7 +161,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'savitri-lib-v3';
         const firebaseConfig = JSON.parse(__firebase_config);
@@ -174,12 +171,18 @@
         
         let students = [], logs = [], currentUser = null;
 
-        // Enter key listeners for login
-        document.getElementById('userIn').addEventListener('keypress', (e) => { if(e.key === 'Enter') handleLogin(); });
-        document.getElementById('passIn').addEventListener('keypress', (e) => { if(e.key === 'Enter') handleLogin(); });
+        // Login inputs enter key listener
+        const setupLoginKeys = () => {
+            ['userIn', 'passIn'].forEach(id => {
+                document.getElementById(id).addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') handleLogin();
+                });
+            });
+        };
 
         async function init() {
             try {
+                // RULE 3: Auth First
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
@@ -188,23 +191,33 @@
 
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        // Using correct artifact paths as per Rule 1
-                        const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
-                        const logsCol = collection(db, 'artifacts', appId, 'public', 'data', 'logs');
-
-                        onSnapshot(studentsCol, (snap) => {
-                            students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                            if(document.getElementById('listView').classList.contains('active-view-students')) showStudents();
-                        }, (err) => console.error("Students load error:", err));
-
-                        onSnapshot(logsCol, (snap) => {
-                            logs = snap.docs.map(d => d.data());
-                        }, (err) => console.error("Logs load error:", err));
-
-                        setTimeout(() => document.getElementById('splash').classList.add('hidden'), 800);
+                        setupDataListeners();
                     }
+                    // Release splash screen always after 1.5s max to prevent stuck loading
+                    setTimeout(() => {
+                        document.getElementById('splash').classList.add('hidden');
+                        document.getElementById('loginPage').classList.remove('hidden');
+                    }, 1000);
                 });
-            } catch (e) { document.getElementById('splash').classList.add('hidden'); }
+            } catch (e) {
+                console.error("Init error", e);
+                document.getElementById('splash').classList.add('hidden');
+                document.getElementById('loginPage').classList.remove('hidden');
+            }
+        }
+
+        function setupDataListeners() {
+            const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
+            const logsCol = collection(db, 'artifacts', appId, 'public', 'data', 'logs');
+
+            onSnapshot(studentsCol, (snap) => {
+                students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                if(document.getElementById('listView').classList.contains('students-view')) showStudents();
+            }, (err) => console.error("Students error", err));
+
+            onSnapshot(logsCol, (snap) => {
+                logs = snap.docs.map(d => d.data());
+            }, (err) => console.error("Logs error", err));
         }
 
         window.handleLogin = () => {
@@ -225,7 +238,7 @@
                     document.getElementById('dashboard').classList.remove('hidden');
                     showStudentHome();
                 } else {
-                    err.innerText = "Invalid Details. Check ID/Mobile.";
+                    err.innerText = "Invalid ID or Password";
                     err.classList.remove('hidden');
                 }
             }
@@ -235,7 +248,7 @@
             document.getElementById('adminGrid').classList.remove('hidden');
             document.getElementById('listView').classList.add('hidden');
             document.getElementById('backBtn').classList.add('hidden');
-            document.getElementById('listView').className = 'hidden'; 
+            document.getElementById('listView').className = 'hidden';
             document.getElementById('subHeader').innerText = "Administrator";
         };
 
@@ -243,12 +256,12 @@
             document.getElementById('adminGrid').classList.add('hidden');
             const lv = document.getElementById('listView');
             lv.classList.remove('hidden');
-            lv.className = 'active-view-students';
+            lv.className = 'students-view';
             document.getElementById('backBtn').classList.remove('hidden');
             document.getElementById('subHeader').innerText = "Members List";
 
             if(students.length === 0) {
-                lv.innerHTML = `<div class="text-center py-20 text-gray-500 font-bold uppercase text-xs">No members found</div>`;
+                lv.innerHTML = `<div class="text-center py-20 text-gray-500 font-bold uppercase text-[10px]">No members added yet</div>`;
                 return;
             }
 
@@ -258,9 +271,9 @@
                 <div class="glass p-5 rounded-[1.5rem] flex justify-between items-center border-l-4 border-indigo-500">
                     <div>
                         <p class="font-black text-sm uppercase italic">${s.name}</p>
-                        <p class="text-[9px] text-gray-500 font-bold mt-1 tracking-tighter">ID: ${s.uid} • ${s.phone}</p>
+                        <p class="text-[9px] text-gray-500 font-bold mt-1">ID: ${s.uid} • ${s.phone}</p>
                     </div>
-                    <button onclick="deleteStudent('${s.id}')" class="w-10 h-10 bg-rose-500/10 text-rose-500 rounded-xl hover:bg-rose-500 hover:text-white transition-all"><i class="fas fa-trash"></i></button>
+                    <button onclick="deleteStudent('${s.id}')" class="w-10 h-10 bg-rose-500/10 text-rose-500 rounded-xl"><i class="fas fa-trash"></i></button>
                 </div>`;
             });
             lv.innerHTML = html + `</div>`;
@@ -271,20 +284,20 @@
             const lv = document.getElementById('listView');
             lv.classList.remove('hidden');
             document.getElementById('backBtn').classList.remove('hidden');
-            document.getElementById('subHeader').innerText = "Fees Status";
+            document.getElementById('subHeader').innerText = "Fees Dashboard";
 
             let html = `<div class="space-y-3">`;
             students.forEach(s => {
-                const isDues = Number(s.fees) > 0;
+                const hasDue = Number(s.fees) > 0;
                 html += `
-                <div class="glass p-5 rounded-[1.5rem] flex justify-between items-center border-l-4 ${isDues ? 'border-rose-500' : 'border-emerald-500'}">
+                <div class="glass p-5 rounded-[1.5rem] flex justify-between items-center border-l-4 ${hasDue ? 'border-rose-500' : 'border-emerald-500'}">
                     <div>
                         <p class="font-black text-sm uppercase italic">${s.name}</p>
-                        <p class="text-[9px] text-gray-500 font-bold">Contact: ${s.phone}</p>
+                        <p class="text-[9px] text-gray-500 font-bold">${s.phone}</p>
                     </div>
                     <div class="text-right">
-                        <p class="text-[8px] text-gray-500 font-black uppercase">Pending</p>
-                        <p class="text-lg font-black ${isDues ? 'text-rose-500' : 'text-emerald-500'}">₹${s.fees}</p>
+                        <p class="text-[8px] text-gray-500 font-black">PENDING</p>
+                        <p class="text-lg font-black ${hasDue ? 'text-rose-500' : 'text-emerald-500'}">₹${s.fees}</p>
                     </div>
                 </div>`;
             });
@@ -296,22 +309,19 @@
             const lv = document.getElementById('listView');
             lv.classList.remove('hidden');
             document.getElementById('backBtn').classList.remove('hidden');
-            document.getElementById('subHeader').innerText = "Recent Attendance";
+            document.getElementById('subHeader').innerText = "Entry Records";
 
             if(logs.length === 0) {
-                lv.innerHTML = `<div class="text-center py-20 text-gray-500 font-bold uppercase text-xs">No entries today</div>`;
+                lv.innerHTML = `<div class="text-center py-20 text-gray-500 font-bold uppercase text-[10px]">No logs today</div>`;
                 return;
             }
 
             let html = `<div class="space-y-2">`;
-            [...logs].reverse().slice(0, 50).forEach(l => {
+            [...logs].reverse().slice(0, 30).forEach(l => {
                 html += `
                 <div class="glass p-4 rounded-2xl flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-indigo-600/20 text-indigo-400 rounded-lg flex items-center justify-center text-xs font-black">${l.name[0]}</div>
-                        <span class="text-[11px] font-black uppercase italic">${l.name}</span>
-                    </div>
-                    <span class="text-[10px] text-gray-500 font-bold">${l.date} | ${l.time}</span>
+                    <span class="text-[11px] font-black uppercase italic">${l.name}</span>
+                    <span class="text-[9px] text-gray-500 font-bold">${l.date} • ${l.time}</span>
                 </div>`;
             });
             lv.innerHTML = html + `</div>`;
@@ -324,49 +334,28 @@
             const marked = logs.find(l => l.uid === currentUser.uid && l.date === today);
 
             document.getElementById('content').innerHTML = `
-                <div class="text-center py-6">
-                    <div class="w-24 h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[2.5rem] mx-auto flex items-center justify-center text-3xl font-black mb-6 shadow-2xl">${currentUser.name[0]}</div>
-                    <h2 class="text-3xl font-black italic uppercase">${currentUser.name}</h2>
-                    <p class="text-indigo-400 text-[10px] font-bold tracking-[0.4em] mb-10">ID: ${currentUser.uid}</p>
+                <div class="text-center py-4">
+                    <div class="w-20 h-20 bg-indigo-600 rounded-[2rem] mx-auto flex items-center justify-center text-2xl font-black mb-4 shadow-xl">${currentUser.name[0]}</div>
+                    <h2 class="text-2xl font-black italic uppercase">${currentUser.name}</h2>
+                    <p class="text-indigo-400 text-[10px] font-bold tracking-widest mb-8">ID: ${currentUser.uid}</p>
                     
-                    <div class="grid grid-cols-2 gap-4 mb-8">
-                        <div class="glass p-5 rounded-3xl text-left border-l-4 border-indigo-500">
-                            <p class="text-[8px] text-gray-500 font-black uppercase mb-1">Fee Status</p>
-                            <p class="text-xl font-black ${Number(currentUser.fees) > 0 ? 'text-rose-500' : 'text-emerald-500'}">₹${currentUser.fees}</p>
+                    <div class="grid grid-cols-2 gap-3 mb-8">
+                        <div class="glass p-4 rounded-3xl text-left">
+                            <p class="text-[8px] text-gray-500 font-black">FEE DUE</p>
+                            <p class="text-lg font-black ${Number(currentUser.fees) > 0 ? 'text-rose-500' : 'text-emerald-500'}">₹${currentUser.fees}</p>
                         </div>
-                        <div class="glass p-5 rounded-3xl text-left border-l-4 border-amber-500">
-                            <p class="text-[8px] text-gray-500 font-black uppercase mb-1">Entry Today</p>
-                            <p class="text-xl font-black text-white">${marked ? 'Marked' : 'Pending'}</p>
+                        <div class="glass p-4 rounded-3xl text-left">
+                            <p class="text-[8px] text-gray-500 font-black">TODAY</p>
+                            <p class="text-lg font-black">${marked ? 'Marked' : 'Missing'}</p>
                         </div>
                     </div>
 
-                    <button id="markBtn" onclick="markAttendance()" ${marked ? 'disabled' : ''} class="w-full py-6 rounded-2xl font-black tracking-widest uppercase flex items-center justify-center gap-4 transition-all ${marked ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-indigo-600 shadow-xl shadow-indigo-600/30 active:scale-95'}">
-                        <i class="fas ${marked ? 'fa-check-double' : 'fa-fingerprint'} text-xl"></i>
-                        ${marked ? 'Entry Confirmed' : 'Mark Daily Entry'}
+                    <button id="markBtn" onclick="markAttendance()" ${marked ? 'disabled' : ''} class="w-full py-5 rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-3 transition-all ${marked ? 'bg-emerald-500/10 text-emerald-500' : 'bg-indigo-600 active:scale-95 shadow-lg shadow-indigo-600/30'}">
+                        <i class="fas ${marked ? 'fa-check' : 'fa-fingerprint'}"></i>
+                        ${marked ? 'Entry Marked' : 'Mark Today\'s Entry'}
                     </button>
                 </div>
             `;
-        };
-
-        window.markAttendance = async () => {
-            if(!auth.currentUser) return;
-            const btn = document.getElementById('markBtn');
-            btn.disabled = true;
-            btn.innerHTML = `<div class="loader-spin"></div>`;
-
-            try {
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), {
-                    uid: currentUser.uid, 
-                    name: currentUser.name, 
-                    date: new Date().toLocaleDateString('en-GB'),
-                    time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
-                });
-                toast("Entry successful!");
-                showStudentHome();
-            } catch (e) {
-                toast("Network error. Try again.");
-                btn.disabled = false;
-            }
         };
 
         window.saveNewStudent = async () => {
@@ -374,64 +363,77 @@
             const name = document.getElementById('regName').value.trim();
             const phone = document.getElementById('regPhone').value.trim();
             const fees = document.getElementById('regFees').value || 0;
-            if(!name || !phone) {
-                toast("Name and Mobile are required");
-                return;
-            }
+
+            if(!name || !phone) { toast("Enter required details"); return; }
 
             const btn = document.getElementById('saveBtn');
-            btn.innerHTML = `<div class="loader-spin mx-auto"></div>`;
             btn.disabled = true;
+            btn.innerText = "Saving...";
 
             try {
+                // RULE 1: Strict Paths
                 const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
                 await addDoc(studentsCol, {
-                    uid: 'SAV' + Math.floor(1000 + Math.random() * 9000),
+                    uid: 'S' + Math.floor(1000 + Math.random() * 9000),
                     name, phone, fees,
                     createdAt: new Date().toISOString()
                 });
-                toast("Student Added Successfully!");
-                
-                // Clear inputs
+                toast("Member Saved!");
+                closeModal();
                 document.getElementById('regName').value = '';
                 document.getElementById('regPhone').value = '';
                 document.getElementById('regFees').value = '';
-                
-                closeModal();
             } catch (e) {
-                console.error("Save Error:", e);
-                toast("Error saving data");
+                console.error("Save error", e);
+                toast("Failed to save. Check connection.");
             } finally {
-                btn.innerHTML = "Save Member";
                 btn.disabled = false;
+                btn.innerText = "Save";
             }
+        };
+
+        window.markAttendance = async () => {
+            if(!auth.currentUser) return;
+            const btn = document.getElementById('markBtn');
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+
+            try {
+                const logsCol = collection(db, 'artifacts', appId, 'public', 'data', 'logs');
+                await addDoc(logsCol, {
+                    uid: currentUser.uid, 
+                    name: currentUser.name, 
+                    date: new Date().toLocaleDateString('en-GB'),
+                    time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
+                });
+                toast("Entry successful!");
+                showStudentHome();
+            } catch (e) { toast("Error marking entry"); btn.disabled = false; }
         };
 
         window.deleteStudent = async (id) => {
             if(!auth.currentUser) return;
-            if(confirm("Delete this student permanently?")) {
+            if(confirm("Confirm deletion?")) {
                 try {
                     await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id));
-                    toast("Member Deleted");
+                    toast("Deleted");
                 } catch(e) { toast("Delete failed"); }
             }
         };
 
-        window.logout = () => location.reload();
-        window.openAddModal = () => document.getElementById('modal').classList.remove('hidden');
-        window.closeModal = () => document.getElementById('modal').classList.add('hidden');
-        
         window.toast = (msg) => {
             const t = document.createElement('div');
             t.className = 'toast';
             t.innerText = msg;
             document.body.appendChild(t);
-            setTimeout(() => {
-                t.style.opacity = '0';
-                setTimeout(() => t.remove(), 300);
-            }, 2500);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 2000);
         };
 
+        window.logout = () => location.reload();
+        window.openAddModal = () => document.getElementById('modal').classList.remove('hidden');
+        window.closeModal = () => document.getElementById('modal').classList.add('hidden');
+
+        setupLoginKeys();
         init();
     </script>
 </body>
