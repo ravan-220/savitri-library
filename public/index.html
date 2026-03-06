@@ -28,15 +28,37 @@
             gap: 12px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 1.5rem;
+            cursor: pointer;
         }
+        .dash-card:hover { background: rgba(99, 102, 241, 0.15); transform: translateY(-5px); }
         .dash-card:active { transform: scale(0.95); }
-        .dash-card i { font-size: 1.8rem; }
+        .dash-card i { font-size: 2rem; }
         .dash-card span { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
+
+        /* Tooltip style */
+        .tooltip { position: relative; }
+        .tooltip:hover::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            white-space: nowrap;
+            font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 100;
+        }
 
         .loader-spin { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #6366f1; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #6366f1; color: white; padding: 12px 24px; border-radius: 12px; z-index: 9999; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #6366f1; color: white; padding: 12px 24px; border-radius: 12px; z-index: 9999; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.5); animation: slideDown 0.3s ease; }
+        @keyframes slideDown { from { transform: translate(-50%, -100%); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -49,17 +71,19 @@
 
     <!-- Login Page -->
     <div id="loginPage" class="flex-1 flex items-center justify-center px-6">
-        <div class="w-full max-w-[350px] glass p-10 rounded-[3rem] shadow-2xl">
+        <div class="w-full max-w-[380px] glass p-10 rounded-[3rem] shadow-2xl">
             <div class="text-center mb-10">
-                <h1 class="text-3xl font-black italic tracking-tighter">SAVITRI <span class="text-indigo-500">SUCCESS</span></h1>
+                <h1 class="text-2xl font-black italic tracking-tighter leading-tight">
+                    SAVITRI SUCCESS<br><span class="text-indigo-500">LIBRARY</span>
+                </h1>
                 <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2 font-bold">Admin Console</p>
             </div>
 
             <div class="space-y-4">
-                <input type="text" id="userIn" placeholder="User ID" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl py-4 px-6 outline-none text-white font-bold">
-                <input type="password" id="passIn" placeholder="Password" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl py-4 px-6 outline-none text-white font-bold">
+                <input type="text" id="userIn" placeholder="User ID" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl py-4 px-6 outline-none text-white font-bold focus:border-indigo-500/50 transition-all">
+                <input type="password" id="passIn" placeholder="Password" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl py-4 px-6 outline-none text-white font-bold focus:border-indigo-500/50 transition-all">
                 
-                <button id="loginBtn" onclick="handleLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-5 rounded-2xl font-black tracking-widest uppercase transition-all shadow-lg shadow-indigo-600/20">
+                <button id="loginBtn" onclick="handleLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-5 rounded-2xl font-black tracking-widest uppercase transition-all shadow-lg shadow-indigo-600/20 active:scale-95">
                     LOGIN
                 </button>
                 <p id="errorMsg" class="text-rose-500 text-center text-[11px] font-bold hidden"></p>
@@ -71,10 +95,12 @@
     <div id="dashboard" class="hidden flex-1 flex flex-col">
         <header class="p-6 flex justify-between items-center bg-[#0b0f1a] sticky top-0 z-40">
             <div>
-                <h2 class="font-black italic text-xl">SAVITRI <span class="text-indigo-500">LIB</span></h2>
+                <h2 class="font-black italic text-xl">SAVITRI <span class="text-indigo-500">LIBRARY</span></h2>
                 <p id="subHeader" class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Administrator</p>
             </div>
-            <button onclick="logout()" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-rose-500"><i class="fas fa-sign-out-alt"></i></button>
+            <button onclick="logout()" data-tip="Logout Admin" class="tooltip w-12 h-12 bg-white/5 hover:bg-white/10 rounded-2xl flex items-center justify-center text-rose-500 transition-all">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
         </header>
 
         <main id="content" class="flex-1 p-6 pb-20 max-w-lg mx-auto w-full">
@@ -104,7 +130,7 @@
         
         <!-- Back to Grid Button (Only visible in list views) -->
         <div id="backBtn" class="fixed bottom-8 left-1/2 -translate-x-1/2 hidden z-50">
-            <button onclick="showGrid()" class="bg-indigo-600 text-white px-8 py-4 rounded-full font-black text-xs tracking-widest shadow-2xl">
+            <button onclick="showGrid()" class="bg-indigo-600 text-white px-8 py-4 rounded-full font-black text-xs tracking-widest shadow-2xl active:scale-95 transition-all">
                 BACK TO DASHBOARD
             </button>
         </div>
@@ -117,19 +143,19 @@
             <div class="space-y-4">
                 <div class="space-y-1">
                     <label class="text-[9px] font-black uppercase text-gray-500 ml-2">Full Name</label>
-                    <input type="text" id="regName" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold">
+                    <input type="text" id="regName" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold focus:border-indigo-500/30">
                 </div>
                 <div class="space-y-1">
                     <label class="text-[9px] font-black uppercase text-gray-500 ml-2">Mobile (Password)</label>
-                    <input type="text" id="regPhone" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold">
+                    <input type="text" id="regPhone" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold focus:border-indigo-500/30">
                 </div>
                 <div class="space-y-1">
                     <label class="text-[9px] font-black uppercase text-gray-500 ml-2">Monthly Fee (₹)</label>
-                    <input type="number" id="regFees" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold">
+                    <input type="number" id="regFees" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold focus:border-indigo-500/30">
                 </div>
                 <div class="flex gap-3 pt-6">
                     <button onclick="closeModal()" class="flex-1 p-4 font-black text-gray-500 uppercase text-xs">Cancel</button>
-                    <button id="saveBtn" onclick="saveNewStudent()" class="flex-1 bg-indigo-600 p-4 rounded-2xl font-black uppercase text-xs shadow-lg shadow-indigo-600/30">Save Member</button>
+                    <button id="saveBtn" onclick="saveNewStudent()" class="flex-1 bg-indigo-600 p-4 rounded-2xl font-black uppercase text-xs shadow-lg shadow-indigo-600/30 active:scale-95">Save Member</button>
                 </div>
             </div>
         </div>
@@ -140,16 +166,20 @@
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'savitri-lib-v2';
-        let db, auth, students = [], logs = [], currentUser = null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'savitri-lib-v3';
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        let students = [], logs = [], currentUser = null;
+
+        // Enter key listeners for login
+        document.getElementById('userIn').addEventListener('keypress', (e) => { if(e.key === 'Enter') handleLogin(); });
+        document.getElementById('passIn').addEventListener('keypress', (e) => { if(e.key === 'Enter') handleLogin(); });
 
         async function init() {
             try {
-                const firebaseConfig = JSON.parse(__firebase_config);
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
@@ -158,15 +188,20 @@
 
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'students'), (snap) => {
+                        // Using correct artifact paths as per Rule 1
+                        const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
+                        const logsCol = collection(db, 'artifacts', appId, 'public', 'data', 'logs');
+
+                        onSnapshot(studentsCol, (snap) => {
                             students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                            // UI Refresh if on specific view
                             if(document.getElementById('listView').classList.contains('active-view-students')) showStudents();
-                        });
-                        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), (snap) => {
+                        }, (err) => console.error("Students load error:", err));
+
+                        onSnapshot(logsCol, (snap) => {
                             logs = snap.docs.map(d => d.data());
-                        });
-                        setTimeout(() => document.getElementById('splash').classList.add('hidden'), 1000);
+                        }, (err) => console.error("Logs load error:", err));
+
+                        setTimeout(() => document.getElementById('splash').classList.add('hidden'), 800);
                     }
                 });
             } catch (e) { document.getElementById('splash').classList.add('hidden'); }
@@ -183,14 +218,14 @@
                 document.getElementById('dashboard').classList.remove('hidden');
                 showGrid();
             } else {
-                const found = students.find(s => s.uid === u && s.phone === p);
+                const found = students.find(s => (s.uid === u || s.phone === u) && s.phone === p);
                 if(found) {
                     currentUser = { role: 'student', ...found };
                     document.getElementById('loginPage').classList.add('hidden');
                     document.getElementById('dashboard').classList.remove('hidden');
                     showStudentHome();
                 } else {
-                    err.innerText = "Invalid ID or Password";
+                    err.innerText = "Invalid Details. Check ID/Mobile.";
                     err.classList.remove('hidden');
                 }
             }
@@ -212,6 +247,11 @@
             document.getElementById('backBtn').classList.remove('hidden');
             document.getElementById('subHeader').innerText = "Members List";
 
+            if(students.length === 0) {
+                lv.innerHTML = `<div class="text-center py-20 text-gray-500 font-bold uppercase text-xs">No members found</div>`;
+                return;
+            }
+
             let html = `<div class="space-y-3">`;
             students.forEach(s => {
                 html += `
@@ -220,7 +260,7 @@
                         <p class="font-black text-sm uppercase italic">${s.name}</p>
                         <p class="text-[9px] text-gray-500 font-bold mt-1 tracking-tighter">ID: ${s.uid} • ${s.phone}</p>
                     </div>
-                    <button onclick="deleteStudent('${s.id}')" class="w-10 h-10 bg-rose-500/10 text-rose-500 rounded-xl"><i class="fas fa-trash"></i></button>
+                    <button onclick="deleteStudent('${s.id}')" class="w-10 h-10 bg-rose-500/10 text-rose-500 rounded-xl hover:bg-rose-500 hover:text-white transition-all"><i class="fas fa-trash"></i></button>
                 </div>`;
             });
             lv.innerHTML = html + `</div>`;
@@ -243,7 +283,7 @@
                         <p class="text-[9px] text-gray-500 font-bold">Contact: ${s.phone}</p>
                     </div>
                     <div class="text-right">
-                        <p class="text-[8px] text-gray-500 font-bold uppercase">Pending</p>
+                        <p class="text-[8px] text-gray-500 font-black uppercase">Pending</p>
                         <p class="text-lg font-black ${isDues ? 'text-rose-500' : 'text-emerald-500'}">₹${s.fees}</p>
                     </div>
                 </div>`;
@@ -258,13 +298,18 @@
             document.getElementById('backBtn').classList.remove('hidden');
             document.getElementById('subHeader').innerText = "Recent Attendance";
 
+            if(logs.length === 0) {
+                lv.innerHTML = `<div class="text-center py-20 text-gray-500 font-bold uppercase text-xs">No entries today</div>`;
+                return;
+            }
+
             let html = `<div class="space-y-2">`;
             [...logs].reverse().slice(0, 50).forEach(l => {
                 html += `
                 <div class="glass p-4 rounded-2xl flex justify-between items-center">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 bg-indigo-600/20 text-indigo-400 rounded-lg flex items-center justify-center text-xs font-black">${l.name[0]}</div>
-                        <span class="text-[11px] font-black uppercase">${l.name}</span>
+                        <span class="text-[11px] font-black uppercase italic">${l.name}</span>
                     </div>
                     <span class="text-[10px] text-gray-500 font-bold">${l.date} | ${l.time}</span>
                 </div>`;
@@ -285,52 +330,76 @@
                     <p class="text-indigo-400 text-[10px] font-bold tracking-[0.4em] mb-10">ID: ${currentUser.uid}</p>
                     
                     <div class="grid grid-cols-2 gap-4 mb-8">
-                        <div class="glass p-5 rounded-3xl text-left">
+                        <div class="glass p-5 rounded-3xl text-left border-l-4 border-indigo-500">
                             <p class="text-[8px] text-gray-500 font-black uppercase mb-1">Fee Status</p>
                             <p class="text-xl font-black ${Number(currentUser.fees) > 0 ? 'text-rose-500' : 'text-emerald-500'}">₹${currentUser.fees}</p>
                         </div>
-                        <div class="glass p-5 rounded-3xl text-left">
-                            <p class="text-[8px] text-gray-500 font-black uppercase mb-1">Today</p>
-                            <p class="text-xl font-black text-white">${marked ? 'Present' : 'Absent'}</p>
+                        <div class="glass p-5 rounded-3xl text-left border-l-4 border-amber-500">
+                            <p class="text-[8px] text-gray-500 font-black uppercase mb-1">Entry Today</p>
+                            <p class="text-xl font-black text-white">${marked ? 'Marked' : 'Pending'}</p>
                         </div>
                     </div>
 
-                    <button onclick="markAttendance()" ${marked ? 'disabled' : ''} class="w-full py-6 rounded-2xl font-black tracking-widest uppercase flex items-center justify-center gap-4 ${marked ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-indigo-600 shadow-xl shadow-indigo-600/30'}">
+                    <button id="markBtn" onclick="markAttendance()" ${marked ? 'disabled' : ''} class="w-full py-6 rounded-2xl font-black tracking-widest uppercase flex items-center justify-center gap-4 transition-all ${marked ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-indigo-600 shadow-xl shadow-indigo-600/30 active:scale-95'}">
                         <i class="fas ${marked ? 'fa-check-double' : 'fa-fingerprint'} text-xl"></i>
-                        ${marked ? 'Entry Marked' : 'Mark Daily Entry'}
+                        ${marked ? 'Entry Confirmed' : 'Mark Daily Entry'}
                     </button>
                 </div>
             `;
         };
 
         window.markAttendance = async () => {
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), {
-                uid: currentUser.uid, name: currentUser.name, 
-                date: new Date().toLocaleDateString('en-GB'),
-                time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
-            });
-            showStudentHome();
-            toast("Attendance Marked!");
+            if(!auth.currentUser) return;
+            const btn = document.getElementById('markBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<div class="loader-spin"></div>`;
+
+            try {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), {
+                    uid: currentUser.uid, 
+                    name: currentUser.name, 
+                    date: new Date().toLocaleDateString('en-GB'),
+                    time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
+                });
+                toast("Entry successful!");
+                showStudentHome();
+            } catch (e) {
+                toast("Network error. Try again.");
+                btn.disabled = false;
+            }
         };
 
         window.saveNewStudent = async () => {
+            if(!auth.currentUser) return;
             const name = document.getElementById('regName').value.trim();
             const phone = document.getElementById('regPhone').value.trim();
             const fees = document.getElementById('regFees').value || 0;
-            if(!name || !phone) return;
+            if(!name || !phone) {
+                toast("Name and Mobile are required");
+                return;
+            }
 
             const btn = document.getElementById('saveBtn');
             btn.innerHTML = `<div class="loader-spin mx-auto"></div>`;
             btn.disabled = true;
 
             try {
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'students'), {
+                const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
+                await addDoc(studentsCol, {
                     uid: 'SAV' + Math.floor(1000 + Math.random() * 9000),
-                    name, phone, fees
+                    name, phone, fees,
+                    createdAt: new Date().toISOString()
                 });
-                toast("Student Added!");
+                toast("Student Added Successfully!");
+                
+                // Clear inputs
+                document.getElementById('regName').value = '';
+                document.getElementById('regPhone').value = '';
+                document.getElementById('regFees').value = '';
+                
                 closeModal();
             } catch (e) {
+                console.error("Save Error:", e);
                 toast("Error saving data");
             } finally {
                 btn.innerHTML = "Save Member";
@@ -339,21 +408,28 @@
         };
 
         window.deleteStudent = async (id) => {
+            if(!auth.currentUser) return;
             if(confirm("Delete this student permanently?")) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id));
-                toast("Member Deleted");
+                try {
+                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id));
+                    toast("Member Deleted");
+                } catch(e) { toast("Delete failed"); }
             }
         };
 
         window.logout = () => location.reload();
         window.openAddModal = () => document.getElementById('modal').classList.remove('hidden');
         window.closeModal = () => document.getElementById('modal').classList.add('hidden');
+        
         window.toast = (msg) => {
             const t = document.createElement('div');
             t.className = 'toast';
             t.innerText = msg;
             document.body.appendChild(t);
-            setTimeout(() => t.remove(), 2000);
+            setTimeout(() => {
+                t.style.opacity = '0';
+                setTimeout(() => t.remove(), 300);
+            }, 2500);
         };
 
         init();
