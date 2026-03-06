@@ -7,66 +7,82 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #0f172a; color: white; font-family: sans-serif; }
-        .glass { background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); }
+        body { background: #0f172a; color: white; font-family: sans-serif; overflow-x: hidden; }
+        .glass { background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
         .hidden { display: none !important; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .spinner { border: 3px solid rgba(255,255,255,0.1); border-top-color: #6366f1; border-radius: 50%; width: 30px; height: 30px; animation: spin 0.8s linear infinite; }
+        .spinner { border: 3px solid rgba(255,255,255,0.1); border-top-color: #6366f1; border-radius: 50%; width: 35px; height: 35px; animation: spin 0.8s linear infinite; }
     </style>
 </head>
 <body class="min-h-screen">
 
+    <!-- Emergency Load Script (Runs BEFORE everything) -->
+    <script>
+        // अगर 1 सेकंड में लोड नहीं हुआ, तो जबरदस्ती लॉगिन स्क्रीन दिखाओ
+        window.emergencyTimer = setTimeout(function() {
+            var ldr = document.getElementById('loader');
+            var pg = document.getElementById('loginPage');
+            if(ldr) ldr.classList.add('hidden');
+            if(pg) pg.classList.remove('hidden');
+            console.log("Forced start triggered.");
+        }, 1000);
+    </script>
+
     <!-- Loading Screen -->
-    <div id="loader" class="fixed inset-0 bg-[#0f172a] z-[500] flex flex-col items-center justify-center">
+    <div id="loader" class="fixed inset-0 bg-[#0f172a] z-[999] flex flex-col items-center justify-center">
         <div class="spinner mb-4"></div>
-        <h1 class="text-indigo-400 font-bold tracking-widest text-sm">SAVITRI LIBRARY CONNECTING...</h1>
-        <p class="text-gray-500 text-[10px] mt-2">Checking connection...</p>
+        <h1 class="text-indigo-400 font-bold tracking-widest text-[10px] uppercase">Starting Library System...</h1>
     </div>
 
     <!-- Login Area -->
     <div id="loginPage" class="hidden flex items-center justify-center min-h-screen px-6">
-        <div class="w-full max-w-md glass p-8 rounded-2xl shadow-2xl">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-black tracking-tighter">SAVITRI <span class="text-indigo-500">SUCCESS</span></h2>
-                <p class="text-gray-400 text-xs mt-1 uppercase tracking-widest">Library Management</p>
+        <div class="w-full max-w-md glass p-8 rounded-3xl shadow-2xl">
+            <div class="text-center mb-10">
+                <div class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/20">
+                    <i class="fas fa-graduation-cap text-2xl"></i>
+                </div>
+                <h2 class="text-3xl font-black tracking-tighter uppercase">SAVITRI <span class="text-indigo-500">SUCCESS</span></h2>
+                <p class="text-gray-500 text-[10px] mt-1 uppercase tracking-[0.3em]">Library Management</p>
             </div>
             <div class="space-y-4">
-                <input type="text" id="userIn" placeholder="Username (admin / Student ID)" class="w-full bg-slate-900 border border-white/10 rounded-xl py-4 px-5 outline-none focus:border-indigo-500 transition-all">
-                <input type="password" id="passIn" placeholder="Password (1234 / Phone)" class="w-full bg-slate-900 border border-white/10 rounded-xl py-4 px-5 outline-none focus:border-indigo-500 transition-all">
-                <button onclick="doLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-xl font-bold shadow-lg shadow-indigo-500/20 active:scale-[0.98] transition-all">LOGIN</button>
-                <p id="errorMsg" class="text-red-400 text-center text-sm hidden">Invalid login credentials!</p>
+                <input type="text" id="userIn" placeholder="Admin or Student ID" class="w-full bg-slate-900 border border-white/5 rounded-2xl py-4 px-6 outline-none focus:border-indigo-500 transition-all text-sm">
+                <input type="password" id="passIn" placeholder="Password" class="w-full bg-slate-900 border border-white/5 rounded-2xl py-4 px-6 outline-none focus:border-indigo-500 transition-all text-sm">
+                <button onclick="doLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-2xl font-black tracking-widest uppercase shadow-lg shadow-indigo-500/20 active:scale-95 transition-all mt-4">LOGIN</button>
+                <p id="errorMsg" class="text-rose-400 text-center text-xs hidden font-bold">Invalid username or password!</p>
             </div>
         </div>
     </div>
 
     <!-- Dashboard -->
     <div id="dashboard" class="hidden">
-        <nav class="p-5 flex justify-between items-center border-b border-white/5 bg-slate-900/50">
-            <h1 class="font-bold">SAVITRI <span class="text-indigo-500">LIB</span></h1>
-            <button onclick="location.reload()" class="text-gray-400"><i class="fas fa-sign-out-alt"></i></button>
+        <nav class="p-5 flex justify-between items-center border-b border-white/5 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+            <h1 class="font-black italic text-lg uppercase">SAVITRI <span class="text-indigo-500">LIB</span></h1>
+            <button onclick="location.reload()" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center"><i class="fas fa-power-off text-rose-500 text-sm"></i></button>
         </nav>
-        <div id="content" class="p-6 pb-32"></div>
+        <div id="content" class="p-6 pb-32 max-w-lg mx-auto"></div>
         
-        <!-- Bottom Nav (Admin Only) -->
+        <!-- Bottom Nav -->
         <div id="adminNav" class="fixed bottom-6 inset-x-6 hidden">
-            <div class="max-w-md mx-auto bg-slate-900 border border-white/10 rounded-2xl p-3 flex justify-around items-center shadow-2xl">
-                <button onclick="drawAdmin()" class="text-indigo-400"><i class="fas fa-users text-xl"></i></button>
-                <button onclick="showAdd()" class="bg-indigo-600 w-12 h-12 rounded-full -mt-10 border-4 border-[#0f172a]"><i class="fas fa-plus"></i></button>
-                <button onclick="drawLogs()" class="text-gray-400"><i class="fas fa-history text-xl"></i></button>
+            <div class="max-w-md mx-auto bg-[#1e293b]/90 backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 flex justify-around items-center shadow-2xl">
+                <button onclick="drawAdmin()" class="text-indigo-400 p-3"><i class="fas fa-users text-xl"></i></button>
+                <button onclick="showAdd()" class="bg-indigo-600 w-14 h-14 rounded-full -mt-12 border-4 border-[#0f172a] flex items-center justify-center text-white shadow-xl"><i class="fas fa-plus text-lg"></i></button>
+                <button onclick="drawLogs()" class="text-gray-500 p-3"><i class="fas fa-history text-xl"></i></button>
             </div>
         </div>
     </div>
 
-    <!-- Add Modal -->
-    <div id="addModal" class="fixed inset-0 bg-black/80 z-[200] hidden flex items-center justify-center p-6">
-        <div class="glass p-6 rounded-2xl w-full max-w-sm">
-            <h3 class="font-bold mb-4">Register Student</h3>
-            <input type="text" id="newName" placeholder="Name" class="w-full bg-slate-800 p-3 rounded-lg mb-3">
-            <input type="text" id="newPhone" placeholder="Phone" class="w-full bg-slate-800 p-3 rounded-lg mb-3">
-            <input type="number" id="newFees" placeholder="Fees Due" class="w-full bg-slate-800 p-3 rounded-lg mb-4">
-            <div class="flex gap-2">
-                <button onclick="document.getElementById('addModal').classList.add('hidden')" class="flex-1 p-3 text-gray-400">Cancel</button>
-                <button onclick="saveStudent()" class="flex-2 bg-indigo-600 px-6 py-3 rounded-lg font-bold">Save</button>
+    <!-- Registration Modal -->
+    <div id="addModal" class="fixed inset-0 bg-black/80 z-[200] hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="glass p-8 rounded-[2.5rem] w-full max-w-sm">
+            <h3 class="font-black text-xl mb-6 italic">New Student</h3>
+            <div class="space-y-3">
+                <input type="text" id="newName" placeholder="Full Name" class="w-full bg-slate-800 p-4 rounded-xl outline-none">
+                <input type="text" id="newPhone" placeholder="Phone Number" class="w-full bg-slate-800 p-4 rounded-xl outline-none">
+                <input type="number" id="newFees" placeholder="Fees Due (₹)" class="w-full bg-slate-800 p-4 rounded-xl outline-none">
+            </div>
+            <div class="flex gap-3 mt-8">
+                <button onclick="document.getElementById('addModal').classList.add('hidden')" class="flex-1 p-4 text-gray-400 font-bold">Cancel</button>
+                <button onclick="saveStudent()" id="saveBtn" class="flex-1 bg-indigo-600 p-4 rounded-xl font-bold">Save</button>
             </div>
         </div>
     </div>
@@ -74,8 +90,9 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, query } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
+        // Global Firebase Config
         const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -86,18 +103,14 @@
         let logs = [];
         let user = null;
 
-        // Force Show Login if Firebase is too slow (3 seconds)
-        const forceLoad = setTimeout(() => {
-            const loader = document.getElementById('loader');
-            if(!loader.classList.contains('hidden')) {
-                loader.classList.add('hidden');
-                document.getElementById('loginPage').classList.remove('hidden');
-            }
-        }, 3000);
+        function showApp() {
+            clearTimeout(window.emergencyTimer);
+            document.getElementById('loader').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+        }
 
         async function init() {
             try {
-                // RULE 3: Auth Before Queries
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
@@ -106,30 +119,26 @@
 
                 onAuthStateChanged(auth, (fbUser) => {
                     if (fbUser) {
-                        // Sync Students
+                        // Background Data Sync
                         onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'students'), (s) => {
                             students = s.docs.map(d => ({ id: d.id, ...d.data() }));
-                            clearTimeout(forceLoad);
-                            document.getElementById('loader').classList.add('hidden');
-                            document.getElementById('loginPage').classList.remove('hidden');
-                        }, (err) => console.error("Firestore Error:", err));
+                            showApp();
+                        }, showApp);
 
-                        // Sync Logs
                         onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), (s) => {
                             logs = s.docs.map(d => d.data());
-                        }, (err) => console.error("Logs Error:", err));
+                        });
                     }
                 });
             } catch (e) {
-                console.error("Auth Error:", e);
-                document.getElementById('loader').classList.add('hidden');
-                document.getElementById('loginPage').classList.remove('hidden');
+                console.error("Auth Error", e);
+                showApp();
             }
         }
 
         window.doLogin = () => {
-            const u = document.getElementById('userIn').value;
-            const p = document.getElementById('passIn').value;
+            const u = document.getElementById('userIn').value.trim();
+            const p = document.getElementById('passIn').value.trim();
             
             if(u === 'admin' && p === '1234') {
                 user = { role: 'admin' };
@@ -157,15 +166,19 @@
         }
 
         window.drawAdmin = () => {
-            let html = `<h2 class="text-xl font-bold mb-4">Students (${students.length})</h2><div class="space-y-3">`;
+            let html = `<div class="flex justify-between items-center mb-6 px-1">
+                <h2 class="text-xl font-black italic">MEMBERS</h2>
+                <span class="bg-indigo-500/10 text-indigo-400 text-[10px] font-black px-3 py-1 rounded-full border border-indigo-500/20">${students.length} TOTAL</span>
+            </div><div class="space-y-3">`;
+            
             students.forEach(s => {
                 html += `
-                <div class="glass p-4 rounded-xl flex justify-between items-center">
+                <div class="glass p-5 rounded-2xl flex justify-between items-center border-l-4 ${s.fees > 0 ? 'border-rose-500' : 'border-emerald-500'}">
                     <div>
-                        <p class="font-bold">${s.name}</p>
-                        <p class="text-xs text-indigo-400">ID: ${s.uid} | ₹${s.fees} Pending</p>
+                        <p class="font-bold text-white leading-tight">${s.name}</p>
+                        <p class="text-[10px] text-gray-500 mt-1 uppercase font-bold">ID: ${s.uid} • ₹${s.fees} DUE</p>
                     </div>
-                    <button onclick="delStudent('${s.id}')" class="text-rose-500 p-2"><i class="fas fa-trash"></i></button>
+                    <button onclick="delStudent('${s.id}')" class="text-gray-600 hover:text-rose-500 p-2"><i class="fas fa-trash-alt"></i></button>
                 </div>`;
             });
             document.getElementById('content').innerHTML = html + `</div>`;
@@ -175,16 +188,21 @@
             const today = new Date().toLocaleDateString('en-GB');
             const mark = logs.find(l => l.uid === user.uid && l.date === today);
             document.getElementById('content').innerHTML = `
-                <div class="text-center py-10">
-                    <div class="w-20 h-20 bg-indigo-600 rounded-2xl mx-auto flex items-center justify-center text-3xl font-bold mb-4 shadow-xl">${user.name[0]}</div>
-                    <h2 class="text-2xl font-bold">${user.name}</h2>
-                    <p class="text-indigo-400 mb-8">Student ID: ${user.uid}</p>
-                    <div class="glass p-6 rounded-2xl mb-6">
-                        <p class="text-sm text-gray-400">Fee Status</p>
-                        <p class="text-xl font-bold ${user.fees > 0 ? 'text-rose-400' : 'text-emerald-400'}">₹${user.fees} Pending</p>
+                <div class="text-center py-8">
+                    <div class="w-24 h-24 bg-gradient-to-tr from-indigo-600 to-violet-600 rounded-3xl mx-auto flex items-center justify-center text-4xl font-black mb-6 shadow-xl shadow-indigo-500/20">${user.name[0]}</div>
+                    <h2 class="text-3xl font-black italic uppercase">${user.name}</h2>
+                    <p class="text-indigo-400 text-[10px] uppercase font-bold tracking-[0.2em] mb-10">Student ID: ${user.uid}</p>
+                    
+                    <div class="glass p-6 rounded-3xl mb-8 flex justify-between items-center">
+                        <div class="text-left">
+                            <p class="text-[10px] text-gray-500 uppercase font-black tracking-widest">Fees Due</p>
+                            <p class="text-2xl font-black ${user.fees > 0 ? 'text-rose-400' : 'text-emerald-400'}">₹${user.fees}</p>
+                        </div>
+                        <i class="fas fa-wallet text-2xl opacity-20"></i>
                     </div>
-                    <button onclick="markAtt()" ${mark ? 'disabled' : ''} class="w-full py-4 rounded-xl font-bold ${mark ? 'bg-emerald-600/20 text-emerald-500' : 'bg-indigo-600 shadow-lg shadow-indigo-500/30'}">
-                        ${mark ? '<i class="fas fa-check mr-2"></i> PRESENT' : 'MARK ATTENDANCE'}
+
+                    <button id="attBtn" onclick="markAtt()" ${mark ? 'disabled' : ''} class="w-full py-5 rounded-2xl font-black tracking-widest uppercase transition-all shadow-xl ${mark ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-indigo-600 shadow-indigo-500/30 hover:scale-[1.02]'}">
+                        ${mark ? '<i class="fas fa-check-circle mr-2"></i> Attendance Done' : 'Mark Attendance'}
                     </button>
                 </div>
             `;
@@ -192,6 +210,8 @@
 
         window.markAtt = async () => {
             if (!auth.currentUser) return;
+            const btn = document.getElementById('attBtn');
+            btn.innerHTML = 'Wait...';
             await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), {
                 uid: user.uid,
                 name: user.name,
@@ -208,12 +228,15 @@
             const f = document.getElementById('newFees').value;
             if(!n || !p) return;
             
+            document.getElementById('saveBtn').innerHTML = 'Saving...';
             await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'students'), {
                 uid: 'LIB' + Math.floor(1000 + Math.random()*9000),
                 name: n, phone: p, fees: f || 0
             });
+            
+            document.getElementById('saveBtn').innerHTML = 'Save';
             document.getElementById('addModal').classList.add('hidden');
-            // Reset fields
+            // Reset
             document.getElementById('newName').value = '';
             document.getElementById('newPhone').value = '';
             document.getElementById('newFees').value = '';
@@ -227,12 +250,11 @@
         window.showAdd = () => document.getElementById('addModal').classList.remove('hidden');
         
         window.drawLogs = () => {
-            let html = `<h2 class="text-xl font-bold mb-4">Attendance Logs</h2><div class="space-y-2">`;
-            const sortedLogs = [...logs].reverse();
-            sortedLogs.forEach(l => {
-                html += `<div class="glass p-3 rounded-lg flex justify-between text-sm">
-                    <span class="font-medium">${l.name}</span>
-                    <span class="text-indigo-400 font-mono">${l.date} ${l.time}</span>
+            let html = `<h2 class="text-xl font-black italic mb-6">ATTENDANCE LOGS</h2><div class="space-y-2">`;
+            [...logs].reverse().slice(0, 50).forEach(l => {
+                html += `<div class="glass p-4 rounded-xl flex justify-between items-center text-xs">
+                    <span class="font-bold text-slate-300">${l.name}</span>
+                    <span class="text-indigo-400 font-mono text-[10px]">${l.date} • ${l.time}</span>
                 </div>`;
             });
             document.getElementById('content').innerHTML = html + `</div>`;
