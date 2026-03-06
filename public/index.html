@@ -7,84 +7,129 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background: #0b0f1a; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        
+        body { 
+            background: #0b0f1a; 
+            color: white; 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; 
+        }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
         .hidden { display: none !important; }
-        .loader-spin { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #6366f1; border-radius: 50%; width: 24px; height: 24px; display: inline-block; animation: spin 1s linear infinite; }
+        
+        /* Dashboard Card Style */
+        .dash-card {
+            aspect-ratio: 1/1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 1.5rem;
+        }
+        .dash-card:active { transform: scale(0.95); }
+        .dash-card i { font-size: 1.8rem; }
+        .dash-card span { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
+
+        .loader-spin { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #6366f1; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #6366f1; color: white; padding: 10px 20px; border-radius: 50px; z-index: 5000; font-size: 12px; font-weight: bold; }
+        
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #6366f1; color: white; padding: 12px 24px; border-radius: 12px; z-index: 9999; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Splash Screen (Ab sirf 1 second ke liye dikhega) -->
-    <div id="splash" class="fixed inset-0 bg-[#0b0f1a] z-[9999] flex flex-col items-center justify-center transition-opacity duration-300">
+    <!-- Splash Screen -->
+    <div id="splash" class="fixed inset-0 bg-[#0b0f1a] z-[9999] flex flex-col items-center justify-center">
         <div class="loader-spin mb-4"></div>
-        <p class="text-indigo-400 text-[10px] font-bold tracking-widest uppercase">System Starting...</p>
+        <p class="text-indigo-400 text-[10px] font-bold tracking-[0.3em] uppercase">Savitri Success Library</p>
     </div>
 
     <!-- Login Page -->
     <div id="loginPage" class="flex-1 flex items-center justify-center px-6">
-        <div class="w-full max-w-[340px] glass p-8 rounded-[2.5rem] shadow-2xl border border-white/10">
+        <div class="w-full max-w-[350px] glass p-10 rounded-[3rem] shadow-2xl">
             <div class="text-center mb-10">
-                <div class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto flex items-center justify-center mb-4">
-                    <i class="fas fa-book-reader text-2xl text-white"></i>
-                </div>
-                <h1 class="text-2xl font-black italic tracking-tighter">SAVITRI <span class="text-indigo-500 italic">SUCCESS</span></h1>
-                <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Management Console</p>
+                <h1 class="text-3xl font-black italic tracking-tighter">SAVITRI <span class="text-indigo-500">SUCCESS</span></h1>
+                <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2 font-bold">Admin Console</p>
             </div>
 
             <div class="space-y-4">
-                <div class="relative">
-                    <i class="fas fa-user absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
-                    <input type="text" id="userIn" placeholder="User ID / Admin" class="w-full bg-slate-900/50 border border-white/10 rounded-2xl py-4 pl-12 pr-6 outline-none text-white text-sm">
-                </div>
-                <div class="relative">
-                    <i class="fas fa-lock absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
-                    <input type="password" id="passIn" placeholder="Password" class="w-full bg-slate-900/50 border border-white/10 rounded-2xl py-4 pl-12 pr-6 outline-none text-white text-sm">
-                </div>
+                <input type="text" id="userIn" placeholder="User ID" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl py-4 px-6 outline-none text-white font-bold">
+                <input type="password" id="passIn" placeholder="Password" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl py-4 px-6 outline-none text-white font-bold">
                 
-                <button id="loginBtn" onclick="handleLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-2xl font-black tracking-widest uppercase active:scale-95 transition-all flex items-center justify-center gap-3">
-                    <span id="btnText">LOGIN</span>
-                    <div id="btnLoader" class="loader-spin hidden" style="width:18px; height:18px;"></div>
+                <button id="loginBtn" onclick="handleLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-5 rounded-2xl font-black tracking-widest uppercase transition-all shadow-lg shadow-indigo-600/20">
+                    LOGIN
                 </button>
-
                 <p id="errorMsg" class="text-rose-500 text-center text-[11px] font-bold hidden"></p>
-                <p class="text-[9px] text-center text-gray-600 uppercase mt-4">Admin: Admin / 1234</p>
             </div>
         </div>
     </div>
 
-    <!-- Main App Dashboard -->
+    <!-- Dashboard -->
     <div id="dashboard" class="hidden flex-1 flex flex-col">
-        <header class="p-5 flex justify-between items-center border-b border-white/5 bg-slate-900/80 backdrop-blur-md sticky top-0 z-40">
-            <h2 class="font-black italic text-lg">SAVITRI <span class="text-indigo-500">LIB</span></h2>
-            <button onclick="location.reload()" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-rose-500"><i class="fas fa-power-off"></i></button>
+        <header class="p-6 flex justify-between items-center bg-[#0b0f1a] sticky top-0 z-40">
+            <div>
+                <h2 class="font-black italic text-xl">SAVITRI <span class="text-indigo-500">LIB</span></h2>
+                <p id="subHeader" class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Administrator</p>
+            </div>
+            <button onclick="logout()" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-rose-500"><i class="fas fa-sign-out-alt"></i></button>
         </header>
 
-        <main id="content" class="flex-1 p-6 pb-32 overflow-y-auto max-w-lg mx-auto w-full"></main>
-
-        <!-- Navigation -->
-        <nav id="adminNav" class="fixed bottom-6 inset-x-6 hidden z-50">
-            <div class="max-w-md mx-auto bg-slate-900/90 border border-white/10 backdrop-blur-xl rounded-full p-2 flex justify-between items-center shadow-2xl">
-                <button onclick="showStudents()" class="flex-1 py-3 text-indigo-400"><i class="fas fa-users-cog text-xl"></i></button>
-                <button onclick="openAddModal()" class="w-14 h-14 bg-indigo-600 rounded-full flex items-center justify-center text-white -mt-10 border-4 border-[#0b0f1a] shadow-xl"><i class="fas fa-plus text-lg"></i></button>
-                <button onclick="showLogs()" class="flex-1 py-3 text-gray-500"><i class="fas fa-clock-rotate-left text-xl"></i></button>
+        <main id="content" class="flex-1 p-6 pb-20 max-w-lg mx-auto w-full">
+            <!-- Grid Dashboard (Default for Admin) -->
+            <div id="adminGrid" class="grid grid-cols-2 gap-4">
+                <div onclick="showStudents()" class="dash-card glass bg-indigo-600/10 text-indigo-400 border-indigo-500/20">
+                    <i class="fas fa-users"></i>
+                    <span>Members</span>
+                </div>
+                <div onclick="showLogs()" class="dash-card glass bg-amber-600/10 text-amber-400 border-amber-500/20">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Attendance</span>
+                </div>
+                <div onclick="showFees()" class="dash-card glass bg-emerald-600/10 text-emerald-400 border-emerald-500/20">
+                    <i class="fas fa-indian-rupee-sign"></i>
+                    <span>Fees Status</span>
+                </div>
+                <div onclick="openAddModal()" class="dash-card glass bg-purple-600/10 text-purple-400 border-purple-500/20">
+                    <i class="fas fa-user-plus"></i>
+                    <span>New Entry</span>
+                </div>
             </div>
-        </nav>
+
+            <!-- List Views (Injected here) -->
+            <div id="listView" class="hidden"></div>
+        </main>
+        
+        <!-- Back to Grid Button (Only visible in list views) -->
+        <div id="backBtn" class="fixed bottom-8 left-1/2 -translate-x-1/2 hidden z-50">
+            <button onclick="showGrid()" class="bg-indigo-600 text-white px-8 py-4 rounded-full font-black text-xs tracking-widest shadow-2xl">
+                BACK TO DASHBOARD
+            </button>
+        </div>
     </div>
 
     <!-- Registration Modal -->
-    <div id="modal" class="fixed inset-0 bg-black/90 z-[2000] hidden flex items-center justify-center p-6 backdrop-blur-md">
-        <div class="glass p-8 rounded-[2rem] w-full max-w-sm border border-white/10">
-            <h3 class="text-xl font-black mb-6 uppercase italic">Add Member</h3>
+    <div id="modal" class="fixed inset-0 bg-black/95 z-[2000] hidden flex items-center justify-center p-6">
+        <div class="glass p-8 rounded-[2.5rem] w-full max-w-sm">
+            <h3 class="text-2xl font-black italic mb-8 uppercase text-indigo-400">Add New Member</h3>
             <div class="space-y-4">
-                <input type="text" id="regName" placeholder="Full Name" class="w-full bg-slate-800 p-4 rounded-xl outline-none border border-white/5 text-white">
-                <input type="text" id="regPhone" placeholder="Mobile Number" class="w-full bg-slate-800 p-4 rounded-xl outline-none border border-white/5 text-white">
-                <input type="number" id="regFees" placeholder="Fees (₹)" class="w-full bg-slate-800 p-4 rounded-xl outline-none border border-white/5 text-white">
-                <div class="flex gap-3 pt-4">
-                    <button onclick="closeModal()" class="flex-1 p-4 font-bold text-gray-500">CANCEL</button>
-                    <button id="saveBtn" onclick="saveNewStudent()" class="flex-1 bg-indigo-600 p-4 rounded-xl font-bold">SAVE</button>
+                <div class="space-y-1">
+                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2">Full Name</label>
+                    <input type="text" id="regName" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2">Mobile (Password)</label>
+                    <input type="text" id="regPhone" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2">Monthly Fee (₹)</label>
+                    <input type="number" id="regFees" class="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-white/5 font-bold">
+                </div>
+                <div class="flex gap-3 pt-6">
+                    <button onclick="closeModal()" class="flex-1 p-4 font-black text-gray-500 uppercase text-xs">Cancel</button>
+                    <button id="saveBtn" onclick="saveNewStudent()" class="flex-1 bg-indigo-600 p-4 rounded-2xl font-black uppercase text-xs shadow-lg shadow-indigo-600/30">Save Member</button>
                 </div>
             </div>
         </div>
@@ -93,17 +138,10 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
-        // Global Variables
-        let students = [];
-        let logs = [];
-        let currentUser = null;
-        let db, auth;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'savitri-lib-v1';
-
-        // 1. URGENT: Force hide splash after 1 second regardless of anything
-        setTimeout(hideSplash, 1000);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'savitri-lib-v2';
+        let db, auth, students = [], logs = [], currentUser = null;
 
         async function init() {
             try {
@@ -120,151 +158,159 @@
 
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        // Background sync (doesn't block login)
                         onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'students'), (snap) => {
                             students = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                            hideSplash();
+                            // UI Refresh if on specific view
+                            if(document.getElementById('listView').classList.contains('active-view-students')) showStudents();
                         });
                         onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), (snap) => {
                             logs = snap.docs.map(d => d.data());
                         });
+                        setTimeout(() => document.getElementById('splash').classList.add('hidden'), 1000);
                     }
                 });
-            } catch (e) { 
-                console.error("Firebase fail", e);
-                hideSplash(); 
-            }
-        }
-
-        function hideSplash() {
-            const s = document.getElementById('splash');
-            if(s) {
-                s.style.opacity = '0';
-                setTimeout(() => s.classList.add('hidden'), 300);
-            }
+            } catch (e) { document.getElementById('splash').classList.add('hidden'); }
         }
 
         window.handleLogin = () => {
             const u = document.getElementById('userIn').value.trim();
             const p = document.getElementById('passIn').value.trim();
-            const btn = document.getElementById('loginBtn');
-            const btnText = document.getElementById('btnText');
-            const btnLdr = document.getElementById('btnLoader');
             const err = document.getElementById('errorMsg');
 
-            if(!u || !p) {
-                err.innerText = "Kripya details bharein";
-                err.classList.remove('hidden');
-                return;
-            }
-
-            // Show Loader
-            err.classList.add('hidden');
-            btnText.classList.add('hidden');
-            btnLdr.classList.remove('hidden');
-            btn.disabled = true;
-
-            // Admin Logic
             if(u.toLowerCase() === 'admin' && p === '1234') {
                 currentUser = { role: 'admin' };
-                loadDashboard();
-                return;
-            }
-
-            // Student Logic (Offline/Cached check)
-            const found = students.find(s => s.uid === u && s.phone === p);
-            if(found) {
-                currentUser = { role: 'student', ...found };
-                loadDashboard();
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                showGrid();
             } else {
-                // If not found in current list, try waiting 1s (incase sync is slow)
-                setTimeout(() => {
-                    const foundRetry = students.find(s => s.uid === u && s.phone === p);
-                    if(foundRetry) {
-                        currentUser = { role: 'student', ...foundRetry };
-                        loadDashboard();
-                    } else {
-                        btnText.classList.remove('hidden');
-                        btnLdr.classList.add('hidden');
-                        btn.disabled = false;
-                        err.innerText = "Invalid ID or Password";
-                        err.classList.remove('hidden');
-                    }
-                }, 1000);
+                const found = students.find(s => s.uid === u && s.phone === p);
+                if(found) {
+                    currentUser = { role: 'student', ...found };
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    showStudentHome();
+                } else {
+                    err.innerText = "Invalid ID or Password";
+                    err.classList.remove('hidden');
+                }
             }
         };
 
-        function loadDashboard() {
-            document.getElementById('loginPage').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
-            if(currentUser.role === 'admin') {
-                document.getElementById('adminNav').classList.remove('hidden');
-                showStudents();
-            } else {
-                showStudentHome();
-            }
-        }
+        window.showGrid = () => {
+            document.getElementById('adminGrid').classList.remove('hidden');
+            document.getElementById('listView').classList.add('hidden');
+            document.getElementById('backBtn').classList.add('hidden');
+            document.getElementById('listView').className = 'hidden'; 
+            document.getElementById('subHeader').innerText = "Administrator";
+        };
 
         window.showStudents = () => {
-            let html = `<div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-black italic uppercase">Members (${students.length})</h3>
-            </div><div class="space-y-3">`;
-            
+            document.getElementById('adminGrid').classList.add('hidden');
+            const lv = document.getElementById('listView');
+            lv.classList.remove('hidden');
+            lv.className = 'active-view-students';
+            document.getElementById('backBtn').classList.remove('hidden');
+            document.getElementById('subHeader').innerText = "Members List";
+
+            let html = `<div class="space-y-3">`;
             students.forEach(s => {
-                const pending = Number(s.fees) > 0;
-                html += `<div class="glass p-5 rounded-2xl flex justify-between items-center border-l-4 ${pending ? 'border-rose-500' : 'border-emerald-500'}">
+                html += `
+                <div class="glass p-5 rounded-[1.5rem] flex justify-between items-center border-l-4 border-indigo-500">
                     <div>
-                        <p class="font-bold text-white text-sm">${s.name}</p>
-                        <p class="text-[10px] text-gray-500 uppercase font-bold mt-1">${s.uid} • ${s.phone}</p>
+                        <p class="font-black text-sm uppercase italic">${s.name}</p>
+                        <p class="text-[9px] text-gray-500 font-bold mt-1 tracking-tighter">ID: ${s.uid} • ${s.phone}</p>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <div class="text-right">
-                            <p class="text-[8px] text-gray-500 font-bold uppercase">Due</p>
-                            <p class="text-xs font-black ${pending ? 'text-rose-500' : 'text-emerald-500'}">₹${s.fees}</p>
-                        </div>
-                        <button onclick="deleteStudent('${s.id}')" class="text-rose-500 p-2"><i class="fas fa-trash-alt"></i></button>
+                    <button onclick="deleteStudent('${s.id}')" class="w-10 h-10 bg-rose-500/10 text-rose-500 rounded-xl"><i class="fas fa-trash"></i></button>
+                </div>`;
+            });
+            lv.innerHTML = html + `</div>`;
+        };
+
+        window.showFees = () => {
+            document.getElementById('adminGrid').classList.add('hidden');
+            const lv = document.getElementById('listView');
+            lv.classList.remove('hidden');
+            document.getElementById('backBtn').classList.remove('hidden');
+            document.getElementById('subHeader').innerText = "Fees Status";
+
+            let html = `<div class="space-y-3">`;
+            students.forEach(s => {
+                const isDues = Number(s.fees) > 0;
+                html += `
+                <div class="glass p-5 rounded-[1.5rem] flex justify-between items-center border-l-4 ${isDues ? 'border-rose-500' : 'border-emerald-500'}">
+                    <div>
+                        <p class="font-black text-sm uppercase italic">${s.name}</p>
+                        <p class="text-[9px] text-gray-500 font-bold">Contact: ${s.phone}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[8px] text-gray-500 font-bold uppercase">Pending</p>
+                        <p class="text-lg font-black ${isDues ? 'text-rose-500' : 'text-emerald-500'}">₹${s.fees}</p>
                     </div>
                 </div>`;
             });
-            document.getElementById('content').innerHTML = html || `<p class="text-center py-20 text-gray-500">No members found.</p>`;
+            lv.innerHTML = html + `</div>`;
+        };
+
+        window.showLogs = () => {
+            document.getElementById('adminGrid').classList.add('hidden');
+            const lv = document.getElementById('listView');
+            lv.classList.remove('hidden');
+            document.getElementById('backBtn').classList.remove('hidden');
+            document.getElementById('subHeader').innerText = "Recent Attendance";
+
+            let html = `<div class="space-y-2">`;
+            [...logs].reverse().slice(0, 50).forEach(l => {
+                html += `
+                <div class="glass p-4 rounded-2xl flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-indigo-600/20 text-indigo-400 rounded-lg flex items-center justify-center text-xs font-black">${l.name[0]}</div>
+                        <span class="text-[11px] font-black uppercase">${l.name}</span>
+                    </div>
+                    <span class="text-[10px] text-gray-500 font-bold">${l.date} | ${l.time}</span>
+                </div>`;
+            });
+            lv.innerHTML = html + `</div>`;
         };
 
         window.showStudentHome = () => {
+            document.getElementById('adminGrid').classList.add('hidden');
+            document.getElementById('subHeader').innerText = "Student Portal";
             const today = new Date().toLocaleDateString('en-GB');
             const marked = logs.find(l => l.uid === currentUser.uid && l.date === today);
-            
+
             document.getElementById('content').innerHTML = `
-                <div class="text-center py-10">
-                    <div class="w-24 h-24 bg-indigo-600 rounded-[2.5rem] mx-auto flex items-center justify-center text-4xl font-black mb-6 shadow-2xl">${currentUser.name[0]}</div>
+                <div class="text-center py-6">
+                    <div class="w-24 h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[2.5rem] mx-auto flex items-center justify-center text-3xl font-black mb-6 shadow-2xl">${currentUser.name[0]}</div>
                     <h2 class="text-3xl font-black italic uppercase">${currentUser.name}</h2>
-                    <p class="text-indigo-400 text-[10px] font-bold tracking-[0.3em] uppercase mb-10">ID: ${currentUser.uid}</p>
+                    <p class="text-indigo-400 text-[10px] font-bold tracking-[0.4em] mb-10">ID: ${currentUser.uid}</p>
                     
-                    <div class="glass p-6 rounded-3xl flex justify-between items-center border border-white/5 mb-8">
-                        <div class="text-left">
-                            <p class="text-[10px] text-gray-500 font-black uppercase">Pending Fees</p>
-                            <p class="text-2xl font-black ${Number(currentUser.fees) > 0 ? 'text-rose-500' : 'text-emerald-500'}">₹${currentUser.fees}</p>
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div class="glass p-5 rounded-3xl text-left">
+                            <p class="text-[8px] text-gray-500 font-black uppercase mb-1">Fee Status</p>
+                            <p class="text-xl font-black ${Number(currentUser.fees) > 0 ? 'text-rose-500' : 'text-emerald-500'}">₹${currentUser.fees}</p>
                         </div>
-                        <i class="fas fa-wallet text-2xl text-white/10"></i>
+                        <div class="glass p-5 rounded-3xl text-left">
+                            <p class="text-[8px] text-gray-500 font-black uppercase mb-1">Today</p>
+                            <p class="text-xl font-black text-white">${marked ? 'Present' : 'Absent'}</p>
+                        </div>
                     </div>
 
-                    <button id="attBtn" onclick="markAttendance()" ${marked ? 'disabled' : ''} class="w-full py-5 rounded-2xl font-black tracking-widest uppercase flex items-center justify-center gap-3 ${marked ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-indigo-600'}">
-                        <i class="fas ${marked ? 'fa-check-circle' : 'fa-fingerprint'}"></i>
-                        ${marked ? 'ATTENDANCE DONE' : 'MARK ATTENDANCE'}
+                    <button onclick="markAttendance()" ${marked ? 'disabled' : ''} class="w-full py-6 rounded-2xl font-black tracking-widest uppercase flex items-center justify-center gap-4 ${marked ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-indigo-600 shadow-xl shadow-indigo-600/30'}">
+                        <i class="fas ${marked ? 'fa-check-double' : 'fa-fingerprint'} text-xl"></i>
+                        ${marked ? 'Entry Marked' : 'Mark Daily Entry'}
                     </button>
                 </div>
             `;
         };
 
         window.markAttendance = async () => {
-            const btn = document.getElementById('attBtn');
-            btn.disabled = true;
             await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), {
                 uid: currentUser.uid, name: currentUser.name, 
                 date: new Date().toLocaleDateString('en-GB'),
                 time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
             });
             showStudentHome();
-            toast("Marked successfully!");
+            toast("Attendance Marked!");
         };
 
         window.saveNewStudent = async () => {
@@ -274,36 +320,34 @@
             if(!name || !phone) return;
 
             const btn = document.getElementById('saveBtn');
+            btn.innerHTML = `<div class="loader-spin mx-auto"></div>`;
             btn.disabled = true;
 
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'students'), {
-                uid: 'SAV' + Math.floor(1000 + Math.random() * 9000),
-                name, phone, fees
-            });
-
-            closeModal();
-            btn.disabled = false;
-            toast("Member Added!");
-        };
-
-        window.deleteStudent = async (id) => {
-            if(confirm("Confirm Delete?")) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id));
-                toast("Removed!");
+            try {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'students'), {
+                    uid: 'SAV' + Math.floor(1000 + Math.random() * 9000),
+                    name, phone, fees
+                });
+                toast("Student Added!");
+                closeModal();
+            } catch (e) {
+                toast("Error saving data");
+            } finally {
+                btn.innerHTML = "Save Member";
+                btn.disabled = false;
             }
         };
 
-        window.showLogs = () => {
-            let html = `<h3 class="text-xl font-black italic mb-6 uppercase">Daily Activity</h3><div class="space-y-2">`;
-            [...logs].reverse().slice(0, 30).forEach(l => {
-                html += `<div class="glass p-4 rounded-xl flex justify-between items-center text-[10px]">
-                    <span class="font-bold text-gray-300 uppercase">${l.name}</span>
-                    <span class="text-indigo-400">${l.date} ${l.time}</span>
-                </div>`;
-            });
-            document.getElementById('content').innerHTML = html + `</div>`;
+        window.deleteStudent = async (id) => {
+            if(confirm("Delete this student permanently?")) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id));
+                toast("Member Deleted");
+            }
         };
 
+        window.logout = () => location.reload();
+        window.openAddModal = () => document.getElementById('modal').classList.remove('hidden');
+        window.closeModal = () => document.getElementById('modal').classList.add('hidden');
         window.toast = (msg) => {
             const t = document.createElement('div');
             t.className = 'toast';
@@ -311,9 +355,6 @@
             document.body.appendChild(t);
             setTimeout(() => t.remove(), 2000);
         };
-
-        window.openAddModal = () => document.getElementById('modal').classList.remove('hidden');
-        window.closeModal = () => document.getElementById('modal').classList.add('hidden');
 
         init();
     </script>
