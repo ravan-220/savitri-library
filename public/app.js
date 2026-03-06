@@ -57,46 +57,62 @@ window.renderAdminDashboard = () => {
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="grid grid-cols-4 gap-3 mb-8">
-            <div onclick="toggleModal(true)" class="premium-card aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-indigo-600 group transition-all rounded-2xl">
-                <i class="fas fa-user-plus text-indigo-400 group-hover:text-white mb-2"></i>
-                <span class="text-[8px] font-bold uppercase">Add Student</span>
+        <!-- Quick Actions (Square Icons Grid) -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div onclick="toggleModal(true)" class="premium-card aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-indigo-600 group transition-all rounded-[2.5rem]">
+                <div class="w-14 h-14 bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-2">
+                    <i class="fas fa-user-plus text-indigo-400 text-xl"></i>
+                </div>
+                <span class="text-[10px] font-black uppercase tracking-widest">Add Student</span>
             </div>
-            <div onclick="showSeatMatrix()" class="premium-card aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-amber-600 group transition-all rounded-2xl">
-                <i class="fas fa-th text-amber-400 group-hover:text-white mb-2"></i>
-                <span class="text-[8px] font-bold uppercase">Seat Grid</span>
+            <div onclick="showSeatMatrix()" class="premium-card aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-amber-600 group transition-all rounded-[2.5rem]">
+                <div class="w-14 h-14 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-2">
+                    <i class="fas fa-th text-amber-400 text-xl"></i>
+                </div>
+                <span class="text-[10px] font-black uppercase tracking-widest">Seat Grid</span>
             </div>
-            <div onclick="renderAdminDashboard()" class="premium-card aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-600 group transition-all rounded-2xl">
-                <i class="fas fa-list text-emerald-400 group-hover:text-white mb-2"></i>
-                <span class="text-[8px] font-bold uppercase">Refresh</span>
+            <div onclick="showMembersList()" class="premium-card aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-600 group transition-all rounded-[2.5rem]">
+                <div class="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center mb-2">
+                    <i class="fas fa-list text-emerald-400 text-xl"></i>
+                </div>
+                <span class="text-[10px] font-black uppercase tracking-widest">Members</span>
             </div>
-            <div onclick="showAttendanceLogs()" class="premium-card aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-blue-600 group transition-all rounded-2xl">
-                <i class="fas fa-clipboard-check text-blue-400 group-hover:text-white mb-2"></i>
-                <span class="text-[8px] font-bold uppercase">Logs</span>
+            <div onclick="showAttendanceLogs()" class="premium-card aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-blue-600 group transition-all rounded-[2.5rem]">
+                <div class="w-14 h-14 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-2">
+                    <i class="fas fa-clipboard-check text-blue-400 text-xl"></i>
+                </div>
+                <span class="text-[10px] font-black uppercase tracking-widest">Logs</span>
             </div>
         </div>
 
         <div id="dynamicSection" class="space-y-4">
-            <h4 class="text-xs font-black uppercase text-gray-500 tracking-widest px-2">Registered Students</h4>
-            ${students.length === 0 ? '<p class="text-center text-gray-600 py-10 italic text-xs">Koi student nahi hai. Naya add karein!</p>' : ''}
-            ${students.map(s => `
-                <div class="premium-card p-5 rounded-2xl">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h4 class="font-black italic text-white">${s.name}</h4>
-                            <p class="text-[10px] text-gray-500 uppercase font-bold tracking-tighter">
-                                Phone: ${s.phone} | Fee: ₹${s.fee}
-                            </p>
-                        </div>
-                        <button onclick="deleteStudent('${s.id}')" class="text-rose-500 p-2"><i class="fas fa-trash"></i></button>
-                    </div>
-                    <div class="flex gap-2 mt-4">
-                        <button onclick="window.open('https://wa.me/91${s.phone}')" class="flex-1 bg-emerald-600/10 text-emerald-500 py-3 rounded-xl text-[9px] font-black uppercase">WhatsApp Message</button>
-                    </div>
-                </div>
-            `).join('')}
+            <!-- Dynamic content will load here -->
         </div>
+    `;
+};
+
+// Feature: Show Members List
+window.showMembersList = () => {
+    const section = document.getElementById('dynamicSection');
+    section.innerHTML = `
+        <h4 class="text-xs font-black uppercase text-gray-500 tracking-widest px-2">Registered Students</h4>
+        ${students.length === 0 ? '<p class="text-center text-gray-600 py-10 italic text-xs">Koi student nahi hai. Naya add karein!</p>' : ''}
+        ${students.map(s => `
+            <div class="premium-card p-5 rounded-2xl mb-3">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="font-black italic text-white">${s.name}</h4>
+                        <p class="text-[10px] text-gray-500 uppercase font-bold tracking-tighter">
+                            Phone: ${s.phone} | Fee: ₹${s.fee}
+                        </p>
+                    </div>
+                    <button onclick="deleteStudent('${s.id}')" class="text-rose-500 p-2"><i class="fas fa-trash"></i></button>
+                </div>
+                <div class="flex gap-2 mt-4">
+                    <button onclick="window.open('https://wa.me/91${s.phone}')" class="flex-1 bg-emerald-600/10 text-emerald-500 py-3 rounded-xl text-[9px] font-black uppercase">WhatsApp Message</button>
+                </div>
+            </div>
+        `).join('')}
     `;
 };
 
@@ -115,7 +131,7 @@ window.showSeatMatrix = () => {
             </div>
         `;
     }
-    seatHtml += '</div><button onclick="renderAdminDashboard()" class="btn-primary w-full py-4 mt-6 rounded-xl text-xs font-black uppercase">Back to Dashboard</button>';
+    seatHtml += '</div>';
     section.innerHTML = `<h3 class="text-lg font-black italic uppercase mb-4 px-2 text-white">Seat Matrix</h3>` + seatHtml;
 };
 
@@ -178,12 +194,14 @@ document.getElementById('addForm').onsubmit = (e) => {
     toggleModal(false);
     e.target.reset();
     renderAdminDashboard();
+    showMembersList(); // Automatically show list after adding
 };
 
 window.deleteStudent = (id) => {
     if(confirm('Remove this student?')) {
         students = students.filter(s => s.id !== id);
         renderAdminDashboard();
+        showMembersList();
     }
 };
 
@@ -201,7 +219,6 @@ window.showAttendanceLogs = () => {
             ${attendance.length === 0 ? '<p class="text-gray-500 text-xs italic">No logs today.</p>' : ''}
             ${attendance.map(a => `<div class="premium-card p-3 text-[10px] font-bold text-white">${a.id} - ${a.date}</div>`).join('')}
         </div>
-        <button onclick="renderAdminDashboard()" class="btn-primary w-full py-4 mt-6 rounded-xl text-xs font-black uppercase">Back</button>
     `;
 };
 
