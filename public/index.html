@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Savitri Success Library | Advanced Management System</title>
+    <title>Savitri Success Library | Management System</title>
     
     <!-- Tailwind CSS & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -141,13 +141,20 @@
             box-shadow: 0 0 10px #6366f1;
             animation: scan 2s linear infinite;
         }
+
+        /* Founder Text - Normal Font */
+        .founder-text {
+            font-family: system-ui, -apple-system, sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
     </style>
 </head>
 <body class="pb-24">
 
     <!-- Login Screen (Visible by default) -->
     <div id="login-screen" class="fixed inset-0 z-[200] bg-[#020617] flex items-center justify-center p-6">
-        <div class="w-full max-w-sm space-y-8 text-center">
+        <div class="w-full max-w-sm space-y-6 text-center">
             <div class="inline-block bg-indigo-600 p-4 rounded-3xl shadow-2xl shadow-indigo-600/20 mb-4">
                 <i class="fas fa-graduation-cap text-white text-4xl"></i>
             </div>
@@ -156,26 +163,55 @@
                 <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-[0.3em] mt-2">Library Management System</p>
             </div>
             
-            <div class="glass p-8 rounded-[2.5rem] space-y-4">
-                <div class="flex gap-2 mb-6">
-                    <button onclick="setLoginMode('admin')" id="btn-admin" class="flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white">Admin</button>
-                    <button onclick="setLoginMode('student')" id="btn-student" class="flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400">Student</button>
+            <div class="glass p-6 rounded-[2rem] space-y-4">
+                <!-- Login Mode Toggle -->
+                <div class="flex gap-2 mb-4">
+                    <button onclick="setLoginMode('admin')" id="btn-admin" class="flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white transition-all">Admin</button>
+                    <button onclick="setLoginMode('student')" id="btn-student" class="flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400 transition-all">Student</button>
                 </div>
 
-                <div class="space-y-1 text-left">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase ml-2" id="username-label">Username</label>
-                    <input type="text" id="username" placeholder="admin" 
-                        class="w-full login-input rounded-2xl p-4 text-white outline-none">
+                <!-- Admin Login Form -->
+                <div id="admin-login-form" class="space-y-3">
+                    <div class="space-y-1 text-left">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase ml-2">Admin Username</label>
+                        <input type="text" id="admin-username" placeholder="admin" value="admin"
+                            class="w-full login-input rounded-xl p-3 text-white outline-none text-sm">
+                    </div>
+                    <div class="space-y-1 text-left">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase ml-2">Password</label>
+                        <input type="password" id="admin-password" placeholder="Enter password" 
+                            class="w-full login-input rounded-xl p-3 text-white outline-none text-sm">
+                    </div>
                 </div>
-                <div class="space-y-1 text-left">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase ml-2">Password</label>
-                    <input type="password" id="password" placeholder="••••" 
-                        class="w-full login-input rounded-2xl p-4 text-white outline-none">
+
+                <!-- Student Login Form (Hidden by default) -->
+                <div id="student-login-form" class="space-y-3 hidden">
+                    <div class="space-y-1 text-left">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase ml-2">Student ID</label>
+                        <input type="text" id="student-id" placeholder="e.g. SSL0001" 
+                            class="w-full login-input rounded-xl p-3 text-white outline-none text-sm">
+                    </div>
+                    <div class="space-y-1 text-left">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase ml-2">Password (Phone Number)</label>
+                        <input type="password" id="student-password" placeholder="Enter phone number" 
+                            class="w-full login-input rounded-xl p-3 text-white outline-none text-sm">
+                    </div>
                 </div>
-                <p id="login-error" class="text-rose-500 text-[10px] font-bold uppercase hidden">Invalid Credentials!</p>
-                <button onclick="handleLogin()" class="btn-primary w-full py-4 rounded-2xl text-white font-black uppercase tracking-widest text-xs mt-4">
-                    Access Dashboard
+
+                <p id="login-error" class="text-rose-500 text-[11px] font-medium hidden"></p>
+                
+                <button onclick="handleLogin()" class="btn-primary w-full py-3 rounded-xl text-white font-bold uppercase tracking-wider text-xs mt-2">
+                    Login
                 </button>
+
+                <p class="text-[10px] text-slate-500 mt-4">
+                    Default Admin: admin / 1234
+                </p>
+            </div>
+
+            <!-- Founder Credit -->
+            <div class="mt-8">
+                <p class="founder-text text-sm text-slate-400 tracking-wide">Founder - Rahul Chauhan</p>
             </div>
         </div>
     </div>
@@ -209,7 +245,7 @@
             <div id="admin-dashboard" class="hidden-view space-y-6">
                 <div class="mb-2">
                     <h2 class="text-2xl font-black italic tracking-tight uppercase">Admin Dashboard</h2>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Welcome Back, Admin</p>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Welcome Back, <span id="admin-name">Admin</span></p>
                 </div>
 
                 <!-- Stats Cards -->
@@ -228,16 +264,16 @@
                         <div class="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-clipboard-list text-amber-400 text-xl"></i>
                         </div>
-                        <h3 class="text-sm font-black uppercase tracking-widest">Attendance Logs</h3>
-                        <p class="text-[10px] text-slate-500 mt-1">View Records</p>
+                        <h3 class="text-sm font-black uppercase tracking-widest">Attendance</h3>
+                        <p class="text-[10px] text-slate-500 mt-1">View Logs</p>
                     </div>
 
-                    <!-- Card 3: Fees & Payments -->
+                    <!-- Card 3: Fees -->
                     <div onclick="showView('fees')" class="premium-card p-6 rounded-[2.5rem] text-center flex flex-col items-center justify-center min-h-[160px]">
                         <div class="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-wallet text-emerald-400 text-xl"></i>
                         </div>
-                        <h3 class="text-sm font-black uppercase tracking-widest">Fees & Payments</h3>
+                        <h3 class="text-sm font-black uppercase tracking-widest">Fees</h3>
                         <p class="text-[10px] text-slate-500 mt-1" id="stat-fees">₹0</p>
                     </div>
 
@@ -246,7 +282,7 @@
                         <div class="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-chair text-purple-400 text-xl"></i>
                         </div>
-                        <h3 class="text-sm font-black uppercase tracking-widest">Seat Management</h3>
+                        <h3 class="text-sm font-black uppercase tracking-widest">Seats</h3>
                         <p class="text-[10px] text-slate-500 mt-1" id="stat-seats">View Layout</p>
                     </div>
 
@@ -265,7 +301,22 @@
             <div id="student-dashboard" class="hidden-view space-y-6">
                 <div class="mb-2">
                     <h2 class="text-2xl font-black italic tracking-tight uppercase">Student Panel</h2>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Welcome, <span id="student-name">Student</span></p>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">ID: <span id="student-id-display">SSL0000</span></p>
+                </div>
+
+                <div class="glass p-4 rounded-2xl mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center text-2xl font-black text-white" id="student-avatar">
+                            S
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white" id="student-dashboard-name">Student Name</h3>
+                            <p class="text-xs text-slate-400" id="student-dashboard-phone">+91 9876543210</p>
+                            <div class="flex gap-2 mt-1">
+                                <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-[10px] rounded-lg font-bold">Active</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -274,7 +325,7 @@
                         <div class="w-12 h-12 bg-green-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-qrcode text-green-400 text-xl"></i>
                         </div>
-                        <h3 class="text-sm font-black uppercase tracking-widest">Mark Attendance</h3>
+                        <h3 class="text-sm font-black uppercase tracking-widest">Attendance</h3>
                         <p class="text-[10px] text-slate-500 mt-1">Check In/Out</p>
                     </div>
 
@@ -292,7 +343,7 @@
                         <div class="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-user text-purple-400 text-xl"></i>
                         </div>
-                        <h3 class="text-sm font-black uppercase tracking-widest">My Profile</h3>
+                        <h3 class="text-sm font-black uppercase tracking-widest">Profile</h3>
                         <p class="text-[10px] text-slate-500 mt-1">View Details</p>
                     </div>
 
@@ -301,8 +352,8 @@
                         <div class="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-history text-amber-400 text-xl"></i>
                         </div>
-                        <h3 class="text-sm font-black uppercase tracking-widest">My Payments</h3>
-                        <p class="text-[10px] text-slate-500 mt-1">History</p>
+                        <h3 class="text-sm font-black uppercase tracking-widest">History</h3>
+                        <p class="text-[10px] text-slate-500 mt-1">Payments</p>
                     </div>
                 </div>
             </div>
@@ -319,7 +370,7 @@
 
                 <div class="relative group">
                     <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"></i>
-                    <input type="text" id="searchInput" oninput="renderList()" placeholder="Student ka naam search karein..." 
+                    <input type="text" id="searchInput" oninput="renderList()" placeholder="Search by name or ID..." 
                         class="w-full bg-slate-900/50 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-sm focus:outline-none focus:border-indigo-500 transition-all">
                 </div>
 
@@ -372,10 +423,6 @@
                                 <div class="w-4 h-4 rounded bg-red-500/20 border border-red-500"></div>
                                 <span class="text-slate-400">Occupied</span>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <div class="w-4 h-4 rounded bg-indigo-500/20 border border-indigo-500"></div>
-                                <span class="text-slate-400">Selected</span>
-                            </div>
                         </div>
                         <button onclick="initializeSeats()" class="text-xs bg-indigo-600 px-3 py-1 rounded-lg">Reset All</button>
                     </div>
@@ -387,7 +434,7 @@
                     <div class="mt-6 p-4 bg-slate-900/50 rounded-xl">
                         <h4 class="text-sm font-bold mb-2">Seat Details</h4>
                         <div id="seatDetails" class="text-xs text-slate-400">
-                            Kisi seat par click karein details dekhne ke liye
+                            Click on a seat to view details
                         </div>
                     </div>
                 </div>
@@ -454,7 +501,7 @@
                     <div class="w-32 h-32 mx-auto bg-slate-900 rounded-2xl flex items-center justify-center mb-4 border-2 border-indigo-500/30">
                         <i class="fas fa-qrcode text-4xl text-indigo-400"></i>
                     </div>
-                    <p class="text-sm text-slate-400 mb-6">QR Code scan karein ya manual entry karein</p>
+                    <p class="text-sm text-slate-400 mb-6">Scan QR or mark manually</p>
                     
                     <div class="space-y-3">
                         <button onclick="markAttendance('checkin')" class="w-full py-4 rounded-2xl bg-green-500/20 border border-green-500 text-green-400 font-bold uppercase tracking-wider hover:bg-green-500 hover:text-white transition-all">
@@ -467,9 +514,9 @@
                 </div>
 
                 <div class="glass p-6 rounded-2xl">
-                    <h3 class="text-sm font-bold mb-3">Aaj ka Status</h3>
+                    <h3 class="text-sm font-bold mb-3">Today's Status</h3>
                     <div id="todayAttendance" class="text-xs text-slate-400">
-                        Aaj koi attendance marked nahi hai
+                        No attendance marked today
                     </div>
                 </div>
             </div>
@@ -527,11 +574,12 @@
                 </div>
 
                 <div class="glass p-6 rounded-[2.5rem] text-center">
-                    <div class="w-20 h-20 mx-auto bg-indigo-600 rounded-full flex items-center justify-center mb-4 text-2xl font-black">
-                        <span id="profileInitial">S</span>
+                    <div class="w-20 h-20 mx-auto bg-indigo-600 rounded-full flex items-center justify-center mb-4 text-2xl font-black text-white" id="profileInitial">
+                        S
                     </div>
                     <h3 class="text-xl font-bold" id="profileName">Student Name</h3>
                     <p class="text-sm text-slate-400 mt-1" id="profilePhone">+91 9876543210</p>
+                    <p class="text-xs text-indigo-400 mt-1 font-mono" id="profileId">ID: SSL0001</p>
                     
                     <div class="grid grid-cols-2 gap-4 mt-6">
                         <div class="bg-slate-900/50 p-4 rounded-2xl">
@@ -573,24 +621,30 @@
     <div id="modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-6">
         <div class="modal-content glass w-full max-w-sm rounded-[2.5rem] p-8 scale-90 opacity-0 transform transition-all duration-300">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-black italic uppercase">New Entry</h2>
+                <h2 class="text-xl font-black italic uppercase">New Student Entry</h2>
                 <button onclick="toggleModal(false)" class="text-slate-500 hover:text-white"><i class="fas fa-times"></i></button>
             </div>
             <form id="studentForm" class="space-y-4">
                 <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase ml-1">Student Name</label>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase ml-1">Student Name *</label>
                     <input type="text" id="mName" required placeholder="Full Name"
                         class="w-full bg-slate-900 border border-white/5 rounded-xl p-4 text-white outline-none focus:border-indigo-500">
                 </div>
                 <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase ml-1">Mobile Number</label>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase ml-1">Mobile Number *</label>
                     <input type="tel" id="mPhone" required maxlength="10" placeholder="10 Digit Number"
                         class="w-full bg-slate-900 border border-white/5 rounded-xl p-4 text-white outline-none focus:border-indigo-500">
                 </div>
                 <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase ml-1">Total Fee (₹)</label>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase ml-1">Total Fee (₹) *</label>
                     <input type="number" id="mFee" required placeholder="Total Amount"
                         class="w-full bg-slate-900 border border-white/5 rounded-xl p-4 text-white outline-none focus:border-indigo-500">
+                </div>
+                <div class="bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-3">
+                    <p class="text-[10px] text-indigo-300">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Student ID auto-generate hoga: <span class="font-bold">SSLXXXX</span>
+                    </p>
                 </div>
                 <button type="submit" id="saveBtn" class="btn-primary w-full py-4 rounded-xl text-white font-black uppercase tracking-widest text-xs mt-4">
                     Confirm & Save
@@ -600,89 +654,177 @@
     </div>
 
     <script>
-        // Firebase Config - Replace with your config
+        // ==========================================
+        // FIREBASE CONFIGURATION
+        // ==========================================
+        // YEH CONFIG APNE FIREBASE CONSOLE SE COPY KAREIN
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "your-project.firebaseapp.com",
-            projectId: "your-project",
-            storageBucket: "your-project.appspot.com",
+            apiKey: "YOUR_API_KEY_HERE",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
             messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef"
+            appId: "1:123456789:web:abcdef123456"
         };
 
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // Global Variables
+        // ==========================================
+        // GLOBAL VARIABLES
+        // ==========================================
         let currentUser = null;
-        let userRole = 'admin'; // 'admin' or 'student'
+        let userRole = 'admin';
         let allStudents = [];
         let allSeats = [];
         let selectedPaymentMethod = '';
         let currentStudentId = null;
         let attendanceLogs = [];
+        let nextStudentId = 1;
 
-        // Initialize
-        const init = async () => {
-            await auth.signInAnonymously();
+        // ==========================================
+        // INITIALIZATION & PERSISTENCE
+        // ==========================================
+        
+        // Check if user is already logged in (from localStorage)
+        window.onload = function() {
+            const savedUser = localStorage.getItem('ssl_user');
+            const savedRole = localStorage.getItem('ssl_role');
+            
+            if (savedUser && savedRole) {
+                currentUser = JSON.parse(savedUser);
+                userRole = savedRole;
+                
+                // Verify student still exists in DB
+                if (userRole === 'student' && currentUser.studentId) {
+                    verifyAndLoginStudent(currentUser.studentId, currentUser.password);
+                } else if (userRole === 'admin') {
+                    showMainApp();
+                }
+            }
+            
+            // Initialize Firebase Auth persistence
+            auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+                .then(() => {
+                    console.log("Auth persistence set to LOCAL");
+                })
+                .catch((error) => {
+                    console.error("Persistence error:", error);
+                });
+                
+            // Load initial data
+            loadData();
         };
 
-        // Login Mode Switcher
+        // Verify student exists before auto-login
+        function verifyAndLoginStudent(studentId, password) {
+            db.collection('students').where('studentId', '==', studentId).get()
+                .then(snapshot => {
+                    if (!snapshot.empty) {
+                        const student = snapshot.docs[0].data();
+                        if (student.phone === password) {
+                            currentUser = { role: 'student', id: snapshot.docs[0].id, ...student };
+                            currentStudentId = snapshot.docs[0].id;
+                            showMainApp();
+                        } else {
+                            clearLoginData();
+                        }
+                    } else {
+                        clearLoginData();
+                    }
+                });
+        }
+
+        // ==========================================
+        // LOGIN SYSTEM
+        // ==========================================
+        
         function setLoginMode(mode) {
             userRole = mode;
             const btnAdmin = document.getElementById('btn-admin');
             const btnStudent = document.getElementById('btn-student');
-            const usernameLabel = document.getElementById('username-label');
+            const adminForm = document.getElementById('admin-login-form');
+            const studentForm = document.getElementById('student-login-form');
             
             if (mode === 'admin') {
-                btnAdmin.className = 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white';
-                btnStudent.className = 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400';
-                usernameLabel.innerText = 'Admin Username';
-                document.getElementById('username').placeholder = 'admin';
+                btnAdmin.className = 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white transition-all';
+                btnStudent.className = 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400 transition-all';
+                adminForm.classList.remove('hidden');
+                studentForm.classList.add('hidden');
             } else {
-                btnStudent.className = 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white';
-                btnAdmin.className = 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400';
-                usernameLabel.innerText = 'Student ID / Phone';
-                document.getElementById('username').placeholder = 'Phone Number';
+                btnStudent.className = 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white transition-all';
+                btnAdmin.className = 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400 transition-all';
+                studentForm.classList.remove('hidden');
+                adminForm.classList.add('hidden');
             }
         }
 
-        // Login Handler
         function handleLogin() {
-            const u = document.getElementById('username').value;
-            const p = document.getElementById('password').value;
             const err = document.getElementById('login-error');
+            err.classList.add('hidden');
 
             if (userRole === 'admin') {
+                const u = document.getElementById('admin-username').value;
+                const p = document.getElementById('admin-password').value;
+
                 if (u === 'admin' && p === '1234') {
-                    currentUser = { role: 'admin', name: 'Admin' };
+                    currentUser = { role: 'admin', name: 'Admin', username: u };
+                    saveLoginData();
                     showMainApp();
                 } else {
+                    err.innerText = 'Invalid admin credentials!';
                     err.classList.remove('hidden');
-                    setTimeout(() => err.classList.add('hidden'), 2000);
                 }
             } else {
-                // Student Login - Check if phone exists in database
-                const student = allStudents.find(s => s.phone === u && s.password === p);
-                if (student) {
-                    currentUser = { role: 'student', ...student };
-                    currentStudentId = student.id;
-                    showMainApp();
-                } else {
-                    // For demo, allow any student login
-                    const demoStudent = allStudents.find(s => s.phone === u);
-                    if (demoStudent) {
-                        currentUser = { role: 'student', ...demoStudent };
-                        currentStudentId = demoStudent.id;
-                        showMainApp();
-                    } else {
-                        err.innerText = 'Student not found!';
-                        err.classList.remove('hidden');
-                        setTimeout(() => err.classList.add('hidden'), 2000);
-                    }
+                const studentId = document.getElementById('student-id').value.trim().toUpperCase();
+                const password = document.getElementById('student-password').value;
+
+                if (!studentId || !password) {
+                    err.innerText = 'Please enter Student ID and Password!';
+                    err.classList.remove('hidden');
+                    return;
                 }
+
+                // Verify from Firestore
+                db.collection('students').where('studentId', '==', studentId).get()
+                    .then(snapshot => {
+                        if (snapshot.empty) {
+                            err.innerText = 'Student ID not found!';
+                            err.classList.remove('hidden');
+                            return;
+                        }
+
+                        const studentDoc = snapshot.docs[0];
+                        const studentData = studentDoc.data();
+
+                        // Password is phone number
+                        if (studentData.phone === password) {
+                            currentUser = { role: 'student', id: studentDoc.id, ...studentData };
+                            currentStudentId = studentDoc.id;
+                            saveLoginData();
+                            showMainApp();
+                        } else {
+                            err.innerText = 'Invalid password!';
+                            err.classList.remove('hidden');
+                        }
+                    })
+                    .catch(error => {
+                        err.innerText = 'Error: ' + error.message;
+                        err.classList.remove('hidden');
+                    });
             }
+        }
+
+        function saveLoginData() {
+            localStorage.setItem('ssl_user', JSON.stringify(currentUser));
+            localStorage.setItem('ssl_role', userRole);
+        }
+
+        function clearLoginData() {
+            localStorage.removeItem('ssl_user');
+            localStorage.removeItem('ssl_role');
         }
 
         function showMainApp() {
@@ -694,35 +836,52 @@
             if (currentUser.role === 'admin') {
                 document.getElementById('admin-dashboard').classList.remove('hidden-view');
                 document.getElementById('student-dashboard').classList.add('hidden-view');
-                loadData();
+                document.getElementById('admin-name').innerText = currentUser.name || 'Admin';
             } else {
                 document.getElementById('admin-dashboard').classList.add('hidden-view');
                 document.getElementById('student-dashboard').classList.remove('hidden-view');
-                document.getElementById('student-name').innerText = currentUser.name;
+                
+                // Update student dashboard info
+                document.getElementById('student-id-display').innerText = currentUser.studentId || 'SSL0000';
+                document.getElementById('student-dashboard-name').innerText = currentUser.name;
+                document.getElementById('student-dashboard-phone').innerText = currentUser.phone;
+                document.getElementById('student-avatar').innerText = currentUser.name.charAt(0).toUpperCase();
+                
                 loadStudentData();
             }
         }
 
         function logout() {
-            location.reload();
+            clearLoginData();
+            auth.signOut().then(() => {
+                location.reload();
+            });
         }
 
-        // View Switcher
+        // ==========================================
+        // NAVIGATION & VIEWS
+        // ==========================================
+        
         function showView(viewName) {
             // Hide all views
             const views = ['view-members', 'view-attendance-logs', 'view-fees', 'view-seats',
                           'view-mark-attendance', 'view-pay-fees', 'view-my-profile', 'view-my-payments'];
-            views.forEach(v => document.getElementById(v)?.classList.add('hidden-view'));
+            views.forEach(v => {
+                const el = document.getElementById(v);
+                if (el) el.classList.add('hidden-view');
+            });
             
             // Hide dashboards
-            document.getElementById('admin-dashboard')?.classList.add('hidden-view');
-            document.getElementById('student-dashboard')?.classList.add('hidden-view');
+            const adminDash = document.getElementById('admin-dashboard');
+            const studentDash = document.getElementById('student-dashboard');
+            if (adminDash) adminDash.classList.add('hidden-view');
+            if (studentDash) studentDash.classList.add('hidden-view');
 
             if (viewName === 'dashboard') {
                 if (currentUser.role === 'admin') {
-                    document.getElementById('admin-dashboard').classList.remove('hidden-view');
+                    if (adminDash) adminDash.classList.remove('hidden-view');
                 } else {
-                    document.getElementById('student-dashboard').classList.remove('hidden-view');
+                    if (studentDash) studentDash.classList.remove('hidden-view');
                 }
             } else if (viewName === 'members') {
                 document.getElementById('view-members').classList.remove('hidden-view');
@@ -754,18 +913,33 @@
             window.scrollTo(0, 0);
         }
 
-        // Data Loading
+        // ==========================================
+        // DATA LOADING
+        // ==========================================
+        
         function loadData() {
-            // Load Students
+            // Get next student ID
+            db.collection('students').orderBy('createdAt', 'desc').limit(1).onSnapshot(snapshot => {
+                if (!snapshot.empty) {
+                    const lastStudent = snapshot.docs[0].data();
+                    if (lastStudent.studentId) {
+                        const num = parseInt(lastStudent.studentId.replace('SSL', ''));
+                        if (!isNaN(num)) nextStudentId = num + 1;
+                    }
+                }
+            });
+
+            // Load all students
             db.collection('students').onSnapshot((snapshot) => {
                 allStudents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 updateStats();
-                if (!document.getElementById('view-members')?.classList.contains('hidden-view')) {
+                if (currentUser && currentUser.role === 'admin' && 
+                    !document.getElementById('view-members').classList.contains('hidden-view')) {
                     renderList();
                 }
             });
 
-            // Load Seats
+            // Load seats
             db.collection('seats').onSnapshot((snapshot) => {
                 if (snapshot.empty) {
                     initializeSeats();
@@ -777,29 +951,142 @@
                 }
             });
 
-            // Load Attendance
+            // Load attendance
             db.collection('attendance').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
                 attendanceLogs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            });
-
-            // Load Payments
-            db.collection('payments').orderBy('timestamp', 'desc').onSnapshot(() => {
-                if (!document.getElementById('view-fees')?.classList.contains('hidden-view')) {
-                    renderPaymentsList();
-                }
             });
         }
 
         function loadStudentData() {
-            // Load specific student data
+            if (!currentStudentId) return;
+            
             db.collection('students').doc(currentStudentId).onSnapshot((doc) => {
                 if (doc.exists) {
-                    currentUser = { ...currentUser, ...doc.data() };
+                    const data = doc.data();
+                    currentUser = { ...currentUser, ...data };
+                    // Update UI if on profile page
+                    if (!document.getElementById('view-my-profile').classList.contains('hidden-view')) {
+                        loadProfile();
+                    }
                 }
             });
         }
 
-        // Initialize Seats (20 seats total)
+        // ==========================================
+        // STUDENT MANAGEMENT (ADMIN)
+        // ==========================================
+        
+        // Generate Unique Student ID
+        function generateStudentId() {
+            const id = 'SSL' + String(nextStudentId).padStart(4, '0');
+            nextStudentId++;
+            return id;
+        }
+
+        // Add Student Form Handler
+        document.getElementById('studentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saveBtn');
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            const studentId = generateStudentId();
+            const data = {
+                studentId: studentId,
+                name: document.getElementById('mName').value.trim(),
+                phone: document.getElementById('mPhone').value.trim(),
+                totalFee: parseFloat(document.getElementById('mFee').value) || 0,
+                paid: 0,
+                password: document.getElementById('mPhone').value.trim(), // Default password = phone
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'active'
+            };
+
+            try {
+                await db.collection('students').add(data);
+                
+                // Show success with ID
+                alert(`Student added successfully!\n\nStudent ID: ${studentId}\nPassword: ${data.phone}\n\nStudent can login using these credentials.`);
+                
+                toggleModal(false);
+                e.target.reset();
+            } catch (err) {
+                console.error("Save Error:", err);
+                alert('Error saving student: ' + err.message);
+            } finally {
+                btn.innerText = "Confirm & Save";
+                btn.disabled = false;
+            }
+        });
+
+        function renderList() {
+            const container = document.getElementById('studentContainer');
+            const term = document.getElementById('searchInput')?.value.toLowerCase() || '';
+            
+            const filtered = allStudents.filter(s => 
+                s.name.toLowerCase().includes(term) || 
+                s.studentId?.toLowerCase().includes(term) ||
+                s.phone.includes(term)
+            );
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="p-10 text-center text-slate-600 text-xs font-bold uppercase italic">No records found</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(s => {
+                const due = (s.totalFee || 0) - (s.paid || 0);
+                return `
+                <div class="premium-card p-5 rounded-[2rem] flex justify-between items-center group animate-slide-in">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-black text-indigo-400 text-lg">
+                            ${s.name.charAt(0)}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">${s.name}</h4>
+                            <p class="text-[10px] text-indigo-400 font-mono font-bold">${s.studentId || 'N/A'}</p>
+                            <p class="text-[10px] text-slate-500">${s.phone}</p>
+                            <p class="text-[10px] ${due > 0 ? 'text-rose-400' : 'text-emerald-400'} mt-1">
+                                ₹${s.paid || 0} / ₹${s.totalFee || 0} ${due > 0 ? `(Due: ₹${due})` : '(Paid)'}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        ${due > 0 ? `
+                        <button onclick="sendWhatsApp('${s.phone}', '${s.name}', '${due}')" 
+                            class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all" title="Send Reminder">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                        ` : ''}
+                        <button onclick="deleteStudent('${s.id}')" 
+                            class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        window.deleteStudent = async (id) => {
+            if (!confirm('Delete this member? This action cannot be undone.')) return;
+            
+            try {
+                await db.collection('students').doc(id).delete();
+                alert('Student deleted successfully');
+            } catch (err) {
+                alert('Error deleting student: ' + err.message);
+            }
+        };
+
+        window.sendWhatsApp = (num, name, amt) => {
+            const msg = `Namaste ${name}, Savitri Success Library mein aapki fees ₹${amt} baki hai. Kripya jald payment karein. Dhanyawad!`;
+            window.open(`https://wa.me/91${num}?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        // ==========================================
+        // SEAT MANAGEMENT
+        // ==========================================
+        
         function initializeSeats() {
             const batch = db.batch();
             for (let i = 1; i <= 20; i++) {
@@ -808,54 +1095,18 @@
                     number: i,
                     status: 'available',
                     occupiedBy: null,
+                    occupiedByName: null,
                     occupiedAt: null
                 });
             }
-            batch.commit();
-        }
-
-        // Render Functions
-        function renderList() {
-            const container = document.getElementById('studentContainer');
-            const term = document.getElementById('searchInput')?.value.toLowerCase() || '';
-            const filtered = allStudents.filter(s => 
-                s.name.toLowerCase().includes(term) || s.phone.includes(term)
-            );
-
-            if (filtered.length === 0) {
-                container.innerHTML = `<div class="p-10 text-center text-slate-600 text-xs font-bold uppercase italic">No records found</div>`;
-                return;
-            }
-
-            container.innerHTML = filtered.map(s => `
-                <div class="premium-card p-5 rounded-[2rem] flex justify-between items-center group animate-slide-in">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-black text-indigo-400">
-                            ${s.name.charAt(0)}
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-white text-sm">${s.name}</h4>
-                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">${s.phone}</p>
-                            <p class="text-[10px] text-emerald-400 mt-1">₹${s.paid || 0} / ₹${s.totalFee || s.amount || 0}</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="sendWhatsApp('${s.phone}', '${s.name}', '${(s.totalFee || s.amount) - (s.paid || 0)}')" 
-                            class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all">
-                            <i class="fab fa-whatsapp"></i>
-                        </button>
-                        <button onclick="deleteStudent('${s.id}')" 
-                            class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+            batch.commit().then(() => {
+                alert('20 seats initialized successfully');
+            });
         }
 
         function renderSeatGrid() {
             const grid = document.getElementById('seatGrid');
-            if (!allSeats.length) return;
+            if (!allSeats.length || !grid) return;
             
             grid.innerHTML = allSeats.sort((a, b) => a.number - b.number).map(seat => `
                 <div class="seat ${seat.status} ${selectedSeat === seat.id ? 'selected' : ''}" 
@@ -867,56 +1118,78 @@
         }
 
         let selectedSeat = null;
-        function selectSeat(seatId) {
+        window.selectSeat = function(seatId) {
             selectedSeat = seatId;
             const seat = allSeats.find(s => s.id === seatId);
             const details = document.getElementById('seatDetails');
             
+            if (!seat || !details) return;
+            
             if (seat.status === 'occupied' && seat.occupiedBy) {
-                const student = allStudents.find(s => s.id === seat.occupiedBy);
                 details.innerHTML = `
                     <p class="text-white font-bold">Seat #${seat.number}</p>
-                    <p class="text-rose-400 mt-1">Occupied by: ${student?.name || 'Unknown'}</p>
-                    <p class="text-slate-500">Since: ${seat.occupiedAt?.toDate?.() || 'Recently'}</p>
-                    <button onclick="vacateSeat('${seatId}')" class="mt-3 px-4 py-2 bg-rose-500/20 text-rose-400 rounded-lg text-xs font-bold">Vacate Seat</button>
+                    <p class="text-rose-400 mt-1">Occupied by: ${seat.occupiedByName || 'Unknown'}</p>
+                    <p class="text-slate-500">Since: ${seat.occupiedAt ? new Date(seat.occupiedAt.toDate()).toLocaleString() : 'Recently'}</p>
+                    <button onclick="vacateSeat('${seatId}')" class="mt-3 px-4 py-2 bg-rose-500/20 text-rose-400 rounded-lg text-xs font-bold hover:bg-rose-500 hover:text-white transition-all">Vacate Seat</button>
                 `;
             } else {
+                const studentOptions = allStudents.map(s => 
+                    `<option value="${s.id}" data-name="${s.name}">${s.name} (${s.studentId || 'N/A'})</option>`
+                ).join('');
+                
                 details.innerHTML = `
                     <p class="text-white font-bold">Seat #${seat.number}</p>
                     <p class="text-green-400 mt-1">Available</p>
                     <select id="assignStudent" class="w-full mt-3 bg-slate-900 border border-white/10 rounded-lg p-2 text-xs text-white">
                         <option value="">Select Student to Assign</option>
-                        ${allStudents.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}
+                        ${studentOptions}
                     </select>
-                    <button onclick="assignSeat('${seatId}')" class="mt-2 w-full py-2 bg-indigo-600 rounded-lg text-xs font-bold">Assign Seat</button>
+                    <button onclick="assignSeat('${seatId}')" class="mt-2 w-full py-2 bg-indigo-600 rounded-lg text-xs font-bold hover:bg-indigo-500 transition-all">Assign Seat</button>
                 `;
             }
             renderSeatGrid();
-        }
+        };
 
-        function assignSeat(seatId) {
-            const studentId = document.getElementById('assignStudent').value;
+        window.assignSeat = function(seatId) {
+            const select = document.getElementById('assignStudent');
+            const studentId = select.value;
+            const studentName = select.options[select.selectedIndex].dataset.name;
+            
             if (!studentId) return alert('Please select a student');
             
             db.collection('seats').doc(seatId).update({
                 status: 'occupied',
                 occupiedBy: studentId,
+                occupiedByName: studentName,
                 occupiedAt: new Date()
+            }).then(() => {
+                alert('Seat assigned successfully');
+            }).catch(err => {
+                alert('Error: ' + err.message);
             });
-        }
+        };
 
-        function vacateSeat(seatId) {
+        window.vacateSeat = function(seatId) {
             db.collection('seats').doc(seatId).update({
                 status: 'available',
                 occupiedBy: null,
+                occupiedByName: null,
                 occupiedAt: null
+            }).then(() => {
+                selectedSeat = null;
+                alert('Seat vacated successfully');
             });
-            selectedSeat = null;
-        }
+        };
 
+        // ==========================================
+        // ATTENDANCE SYSTEM
+        // ==========================================
+        
         function renderAttendanceLogs() {
             const container = document.getElementById('attendanceLogsContainer');
-            const logs = attendanceLogs.slice(0, 50); // Last 50 records
+            if (!container) return;
+            
+            const logs = attendanceLogs.slice(0, 50);
             
             if (!logs.length) {
                 container.innerHTML = '<p class="text-center text-slate-500 py-8">No attendance records yet</p>';
@@ -925,20 +1198,22 @@
 
             container.innerHTML = logs.map(log => {
                 const student = allStudents.find(s => s.id === log.studentId);
+                const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleString() : 'Just now';
+                
                 return `
                     <div class="timeline-item pb-4 animate-slide-in">
                         <div class="glass p-4 rounded-2xl">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <h4 class="font-bold text-sm text-white">${student?.name || 'Unknown'}</h4>
-                                    <p class="text-[10px] text-slate-500">${log.type === 'checkin' ? 'Check In' : 'Check Out'}</p>
+                                    <h4 class="font-bold text-sm text-white">${student?.name || log.studentName || 'Unknown'}</h4>
+                                    <p class="text-[10px] text-indigo-400 font-mono">${student?.studentId || 'N/A'}</p>
                                 </div>
-                                <span class="text-[10px] ${log.type === 'checkin' ? 'text-green-400' : 'text-amber-400'} font-bold uppercase">
-                                    ${log.type === 'checkin' ? 'IN' : 'OUT'}
+                                <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase ${log.type === 'checkin' ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'}">
+                                    ${log.type === 'checkin' ? 'CHECK IN' : 'CHECK OUT'}
                                 </span>
                             </div>
                             <p class="text-[10px] text-slate-500 mt-2">
-                                ${log.timestamp?.toDate?.().toLocaleString() || 'Just now'}
+                                <i class="far fa-clock mr-1"></i> ${time}
                             </p>
                         </div>
                     </div>
@@ -946,30 +1221,93 @@
             }).join('');
         }
 
-        function filterAttendance(period) {
+        window.filterAttendance = function(period) {
             // Update button styles
-            event.target.parentElement.querySelectorAll('button').forEach(btn => {
+            const buttons = event.target.parentElement.querySelectorAll('button');
+            buttons.forEach(btn => {
                 btn.className = 'px-4 py-2 rounded-xl bg-slate-800 text-slate-400 text-xs font-bold whitespace-nowrap';
             });
             event.target.className = 'px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold whitespace-nowrap';
             
-            // Filter logic would go here
+            // Filter logic (simplified - shows all for now)
             renderAttendanceLogs();
+        };
+
+        function markAttendance(type) {
+            if (!currentStudentId) return;
+
+            const data = {
+                studentId: currentStudentId,
+                studentName: currentUser.name,
+                studentIdCode: currentUser.studentId,
+                type: type,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            db.collection('attendance').add(data)
+                .then(() => {
+                    alert(`${type === 'checkin' ? 'Check In' : 'Check Out'} successful!`);
+                    loadTodayAttendance();
+                })
+                .catch(err => {
+                    alert('Error: ' + err.message);
+                });
         }
 
+        function loadTodayAttendance() {
+            if (!currentStudentId) return;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            db.collection('attendance')
+                .where('studentId', '==', currentStudentId)
+                .where('timestamp', '>=', today)
+                .orderBy('timestamp', 'desc')
+                .get()
+                .then(snapshot => {
+                    const container = document.getElementById('todayAttendance');
+                    if (!container) return;
+                    
+                    if (snapshot.empty) {
+                        container.innerHTML = 'No attendance marked today';
+                        return;
+                    }
+                    
+                    container.innerHTML = snapshot.docs.map(doc => {
+                        const log = doc.data();
+                        const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString() : 'Just now';
+                        return `
+                            <div class="flex justify-between items-center py-2 border-b border-white/5">
+                                <span class="${log.type === 'checkin' ? 'text-green-400' : 'text-amber-400'} font-bold uppercase text-xs">
+                                    ${log.type === 'checkin' ? 'Check In' : 'Check Out'}
+                                </span>
+                                <span class="text-slate-500 text-xs">${time}</span>
+                            </div>
+                        `;
+                    }).join('');
+                });
+        }
+
+        // ==========================================
+        // PAYMENT SYSTEM
+        // ==========================================
+        
         function loadStudentSelect() {
             const select = document.getElementById('paymentStudent');
+            if (!select) return;
+            
             select.innerHTML = '<option value="">Select Student</option>' + 
-                allStudents.map(s => `<option value="${s.id}">${s.name} (${s.phone})</option>`).join('');
+                allStudents.map(s => `<option value="${s.id}">${s.name} (${s.studentId || 'N/A'}) - Due: ₹${(s.totalFee || 0) - (s.paid || 0)}</option>`).join('');
         }
 
-        function selectPaymentMethod(method) {
+        window.selectPaymentMethod = function(method) {
             selectedPaymentMethod = method;
-            document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('#view-fees .payment-method').forEach(el => el.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
-        }
+        };
 
-        function addPayment() {
+        window.addPayment = function() {
             const studentId = document.getElementById('paymentStudent').value;
             const amount = parseFloat(document.getElementById('paymentAmount').value);
             const note = document.getElementById('paymentNote').value;
@@ -986,55 +1324,67 @@
             db.collection('payments').add({
                 studentId,
                 studentName: student.name,
+                studentIdCode: student.studentId,
                 amount,
                 method: selectedPaymentMethod,
                 note,
-                timestamp: new Date(),
-                type: 'income'
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                type: 'income',
+                collectedBy: 'admin'
+            }).then(() => {
+                // Update student paid amount
+                return db.collection('students').doc(studentId).update({
+                    paid: newPaid
+                });
+            }).then(() => {
+                alert('Payment added successfully!');
+                document.getElementById('paymentAmount').value = '';
+                document.getElementById('paymentNote').value = '';
+                selectedPaymentMethod = '';
+                document.querySelectorAll('#view-fees .payment-method').forEach(el => el.classList.remove('selected'));
+            }).catch(err => {
+                alert('Error: ' + err.message);
             });
-
-            // Update student paid amount
-            db.collection('students').doc(studentId).update({
-                paid: newPaid
-            });
-
-            // Reset form
-            document.getElementById('paymentAmount').value = '';
-            document.getElementById('paymentNote').value = '';
-            selectedPaymentMethod = '';
-            document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('selected'));
-            
-            alert('Payment added successfully!');
-        }
+        };
 
         function renderPaymentsList() {
             const container = document.getElementById('paymentsList');
+            if (!container) return;
             
-            db.collection('payments').orderBy('timestamp', 'desc').limit(20).get().then(snapshot => {
-                const payments = snapshot.docs.map(doc => doc.data());
-                
-                container.innerHTML = payments.map(p => `
-                    <div class="glass p-4 rounded-2xl flex justify-between items-center animate-slide-in">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl ${getPaymentMethodColor(p.method)} flex items-center justify-center">
-                                <i class="fas ${getPaymentMethodIcon(p.method)}"></i>
+            db.collection('payments').orderBy('timestamp', 'desc').limit(20).get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        container.innerHTML = '<p class="text-center text-slate-500 py-4">No payments yet</p>';
+                        return;
+                    }
+                    
+                    container.innerHTML = snapshot.docs.map(doc => {
+                        const p = doc.data();
+                        const time = p.timestamp ? new Date(p.timestamp.toDate()).toLocaleString() : 'Just now';
+                        return `
+                            <div class="glass p-4 rounded-2xl flex justify-between items-center animate-slide-in">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl ${getPaymentMethodColor(p.method)} flex items-center justify-center">
+                                        <i class="fas ${getPaymentMethodIcon(p.method)}"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-white">${p.studentName}</p>
+                                        <p class="text-[10px] text-slate-500 uppercase">${p.method} • ${time}</p>
+                                    </div>
+                                </div>
+                                <p class="text-emerald-400 font-bold">+₹${p.amount}</p>
                             </div>
-                            <div>
-                                <p class="text-sm font-bold text-white">${p.studentName}</p>
-                                <p class="text-[10px] text-slate-500 uppercase">${p.method} • ${p.timestamp?.toDate?.().toLocaleDateString() || 'Today'}</p>
-                            </div>
-                        </div>
-                        <p class="text-emerald-400 font-bold">+₹${p.amount}</p>
-                    </div>
-                `).join('');
-            });
+                        `;
+                    }).join('');
+                });
         }
 
         function getPaymentMethodColor(method) {
             const colors = {
                 'cash': 'bg-green-500/20 text-green-400',
                 'upi': 'bg-blue-500/20 text-blue-400',
-                'card': 'bg-purple-500/20 text-purple-400'
+                'card': 'bg-purple-500/20 text-purple-400',
+                'netbanking': 'bg-amber-500/20 text-amber-400'
             };
             return colors[method] || 'bg-slate-500/20 text-slate-400';
         }
@@ -1043,70 +1393,32 @@
             const icons = {
                 'cash': 'fa-money-bill-wave',
                 'upi': 'fa-mobile-alt',
-                'card': 'fa-credit-card'
+                'card': 'fa-credit-card',
+                'netbanking': 'fa-university'
             };
             return icons[method] || 'fa-wallet';
         }
 
-        // Student Functions
-        function markAttendance(type) {
-            if (!currentStudentId) return;
-
-            db.collection('attendance').add({
-                studentId: currentStudentId,
-                studentName: currentUser.name,
-                type,
-                timestamp: new Date()
-            }).then(() => {
-                alert(`${type === 'checkin' ? 'Check In' : 'Check Out'} successful!`);
-                loadTodayAttendance();
-            });
-        }
-
-        function loadTodayAttendance() {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            db.collection('attendance')
-                .where('studentId', '==', currentStudentId)
-                .where('timestamp', '>=', today)
-                .orderBy('timestamp', 'desc')
-                .get()
-                .then(snapshot => {
-                    const todayLogs = snapshot.docs.map(doc => doc.data());
-                    const container = document.getElementById('todayAttendance');
-                    
-                    if (!todayLogs.length) {
-                        container.innerHTML = 'Aaj koi attendance marked nahi hai';
-                        return;
-                    }
-                    
-                    container.innerHTML = todayLogs.map(log => `
-                        <div class="flex justify-between items-center py-2 border-b border-white/5">
-                            <span class="${log.type === 'checkin' ? 'text-green-400' : 'text-amber-400'}">
-                                ${log.type === 'checkin' ? 'Check In' : 'Check Out'}
-                            </span>
-                            <span class="text-slate-500">${log.timestamp?.toDate?.().toLocaleTimeString() || 'Just now'}</span>
-                        </div>
-                    `).join('');
-                });
-        }
-
-        function selectStudentPaymentMethod(method) {
+        // ==========================================
+        // STUDENT PANEL FUNCTIONS
+        // ==========================================
+        
+        window.selectStudentPaymentMethod = function(method) {
             selectedPaymentMethod = method;
             document.querySelectorAll('#view-pay-fees .payment-method').forEach(el => el.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
-        }
+        };
 
         function loadStudentPaymentInfo() {
             const student = allStudents.find(s => s.id === currentStudentId);
-            if (student) {
-                const due = (student.totalFee || student.amount || 0) - (student.paid || 0);
-                document.getElementById('studentDueAmount').innerText = `₹${due}`;
-            }
+            if (!student) return;
+            
+            const due = (student.totalFee || 0) - (student.paid || 0);
+            const el = document.getElementById('studentDueAmount');
+            if (el) el.innerText = `₹${due}`;
         }
 
-        function processStudentPayment() {
+        window.processStudentPayment = function() {
             const amount = parseFloat(document.getElementById('studentPaymentAmount').value);
             if (!amount || !selectedPaymentMethod) {
                 alert('Please enter amount and select payment method');
@@ -1119,31 +1431,38 @@
             db.collection('payments').add({
                 studentId: currentStudentId,
                 studentName: student.name,
+                studentIdCode: student.studentId,
                 amount,
                 method: selectedPaymentMethod,
-                note: 'Self Payment',
-                timestamp: new Date(),
-                type: 'income'
-            });
-
-            db.collection('students').doc(currentStudentId).update({
-                paid: newPaid
+                note: 'Self Payment via Portal',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                type: 'income',
+                collectedBy: 'student'
+            }).then(() => {
+                return db.collection('students').doc(currentStudentId).update({
+                    paid: newPaid
+                });
             }).then(() => {
                 alert('Payment successful! Thank you.');
                 document.getElementById('studentPaymentAmount').value = '';
+                selectedPaymentMethod = '';
+                document.querySelectorAll('#view-pay-fees .payment-method').forEach(el => el.classList.remove('selected'));
                 showView('dashboard');
+            }).catch(err => {
+                alert('Error: ' + err.message);
             });
-        }
+        };
 
         function loadProfile() {
             const student = allStudents.find(s => s.id === currentStudentId);
             if (!student) return;
 
-            document.getElementById('profileInitial').innerText = student.name.charAt(0);
+            document.getElementById('profileInitial').innerText = student.name.charAt(0).toUpperCase();
             document.getElementById('profileName').innerText = student.name;
             document.getElementById('profilePhone').innerText = student.phone;
+            document.getElementById('profileId').innerText = 'ID: ' + (student.studentId || 'N/A');
             
-            const total = student.totalFee || student.amount || 0;
+            const total = student.totalFee || 0;
             const paid = student.paid || 0;
             
             document.getElementById('profileTotalFees').innerText = `₹${total}`;
@@ -1153,85 +1472,56 @@
 
         function renderStudentPayments() {
             const container = document.getElementById('studentPaymentsList');
+            if (!container) return;
             
             db.collection('payments')
                 .where('studentId', '==', currentStudentId)
                 .orderBy('timestamp', 'desc')
                 .get()
                 .then(snapshot => {
-                    const payments = snapshot.docs.map(doc => doc.data());
-                    
-                    if (!payments.length) {
+                    if (snapshot.empty) {
                         container.innerHTML = '<p class="text-center text-slate-500 py-8">No payments yet</p>';
                         return;
                     }
                     
-                    container.innerHTML = payments.map(p => `
-                        <div class="glass p-4 rounded-2xl flex justify-between items-center animate-slide-in">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl ${getPaymentMethodColor(p.method)} flex items-center justify-center">
-                                    <i class="fas ${getPaymentMethodIcon(p.method)}"></i>
+                    container.innerHTML = snapshot.docs.map(doc => {
+                        const p = doc.data();
+                        const time = p.timestamp ? new Date(p.timestamp.toDate()).toLocaleString() : 'Just now';
+                        return `
+                            <div class="glass p-4 rounded-2xl flex justify-between items-center animate-slide-in">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl ${getPaymentMethodColor(p.method)} flex items-center justify-center">
+                                        <i class="fas ${getPaymentMethodIcon(p.method)}"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-white">Payment</p>
+                                        <p class="text-[10px] text-slate-500">${p.method} • ${time}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p class="text-sm font-bold text-white">Payment</p>
-                                    <p class="text-[10px] text-slate-500">${p.method} • ${p.timestamp?.toDate?.().toLocaleDateString() || 'Today'}</p>
-                                </div>
+                                <p class="text-emerald-400 font-bold">₹${p.amount}</p>
                             </div>
-                            <p class="text-emerald-400 font-bold">₹${p.amount}</p>
-                        </div>
-                    `).join('');
+                        `;
+                    }).join('');
                 });
         }
 
-        // Stats Update
+        // ==========================================
+        // STATS & UTILITIES
+        // ==========================================
+        
         function updateStats() {
-            document.getElementById('stat-count').innerText = `${allStudents.length} Members`;
+            const countEl = document.getElementById('stat-count');
+            const feesEl = document.getElementById('stat-fees');
+            const seatsEl = document.getElementById('stat-seats');
+            
+            if (countEl) countEl.innerText = `${allStudents.length} Members`;
+            
             const rev = allStudents.reduce((sum, s) => sum + (s.paid || 0), 0);
-            document.getElementById('stat-fees').innerText = '₹' + rev.toLocaleString('en-IN');
+            if (feesEl) feesEl.innerText = '₹' + rev.toLocaleString('en-IN');
             
             const occupied = allSeats.filter(s => s.status === 'occupied').length;
-            document.getElementById('stat-seats').innerText = `${occupied}/${allSeats.length} Filled`;
+            if (seatsEl) seatsEl.innerText = `${occupied}/${allSeats.length} Filled`;
         }
-
-        // Form Handler
-        document.getElementById('studentForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('saveBtn');
-            btn.innerText = "Processing...";
-            btn.disabled = true;
-
-            const data = {
-                name: document.getElementById('mName').value,
-                phone: document.getElementById('mPhone').value,
-                totalFee: parseFloat(document.getElementById('mFee').value),
-                paid: 0,
-                password: document.getElementById('mPhone').value, // Default password = phone
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
-            try {
-                await db.collection('students').add(data);
-                toggleModal(false);
-                e.target.reset();
-            } catch (err) {
-                console.error("Save Error:", err);
-                alert('Error saving student');
-            } finally {
-                btn.innerText = "Confirm & Save";
-                btn.disabled = false;
-            }
-        });
-
-        // Actions
-        window.deleteStudent = async (id) => {
-            if (!confirm('Delete this member?')) return;
-            await db.collection('students').doc(id).delete();
-        };
-
-        window.sendWhatsApp = (num, name, amt) => {
-            const msg = `Namaste ${name}, Savitri Success Library mein aapki fees ₹${amt} baki hai. Kripya jald se jald payment karne ki kripa karein. Dhanyawad!`;
-            window.open(`https://wa.me/91${num}?text=${encodeURIComponent(msg)}`, '_blank');
-        };
 
         function toggleModal(show) {
             const m = document.getElementById('modal');
@@ -1248,8 +1538,6 @@
                 }, 300);
             }
         }
-
-        window.onload = init;
     </script>
 </body>
 </html>
