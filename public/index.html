@@ -49,7 +49,6 @@
 
         .hidden-view { display: none; }
         
-        /* Login specific styles */
         .login-input {
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -61,7 +60,6 @@
             box-shadow: 0 0 15px rgba(99, 102, 241, 0.1);
         }
 
-        /* Seat Grid Styles */
         .seat {
             width: 40px;
             height: 40px;
@@ -91,7 +89,6 @@
             transform: scale(1.1);
         }
 
-        /* Attendance Timeline */
         .timeline-item {
             position: relative;
             padding-left: 30px;
@@ -108,7 +105,6 @@
             background: #6366f1;
         }
 
-        /* Payment Method Cards */
         .payment-method {
             border: 2px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
@@ -118,7 +114,6 @@
             background: rgba(99, 102, 241, 0.1);
         }
 
-        /* Animations */
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -127,7 +122,6 @@
             animation: slideIn 0.5s ease-out;
         }
 
-        /* QR Scanner Animation */
         @keyframes scan {
             0% { top: 0; }
             50% { top: 100%; }
@@ -142,7 +136,6 @@
             animation: scan 2s linear infinite;
         }
 
-        /* Founder Text - Normal Font */
         .founder-text {
             font-family: system-ui, -apple-system, sans-serif;
             font-weight: 400;
@@ -152,7 +145,7 @@
 </head>
 <body class="pb-24">
 
-    <!-- Login Screen (Visible by default) -->
+    <!-- Login Screen -->
     <div id="login-screen" class="fixed inset-0 z-[200] bg-[#020617] flex items-center justify-center p-6">
         <div class="w-full max-w-sm space-y-6 text-center">
             <div class="inline-block bg-indigo-600 p-4 rounded-3xl shadow-2xl shadow-indigo-600/20 mb-4">
@@ -164,13 +157,11 @@
             </div>
             
             <div class="glass p-6 rounded-[2rem] space-y-4">
-                <!-- Login Mode Toggle -->
                 <div class="flex gap-2 mb-4">
                     <button onclick="setLoginMode('admin')" id="btn-admin" class="flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white transition-all">Admin</button>
                     <button onclick="setLoginMode('student')" id="btn-student" class="flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400 transition-all">Student</button>
                 </div>
 
-                <!-- Admin Login Form -->
                 <div id="admin-login-form" class="space-y-3">
                     <div class="space-y-1 text-left">
                         <label class="text-[10px] font-bold text-slate-500 uppercase ml-2">Admin Username</label>
@@ -184,7 +175,6 @@
                     </div>
                 </div>
 
-                <!-- Student Login Form (Hidden by default) -->
                 <div id="student-login-form" class="space-y-3 hidden">
                     <div class="space-y-1 text-left">
                         <label class="text-[10px] font-bold text-slate-500 uppercase ml-2">Student ID</label>
@@ -192,7 +182,7 @@
                             class="w-full login-input rounded-xl p-3 text-white outline-none text-sm">
                     </div>
                     <div class="space-y-1 text-left">
-                        <label class="text-[10px] font-bold text-slate-500 uppercase ml-2">Password (Phone Number)</label>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase ml-2">Password (Phone)</label>
                         <input type="password" id="student-password" placeholder="Enter phone number" 
                             class="w-full login-input rounded-xl p-3 text-white outline-none text-sm">
                     </div>
@@ -209,16 +199,14 @@
                 </p>
             </div>
 
-            <!-- Founder Credit -->
             <div class="mt-8">
                 <p class="founder-text text-sm text-slate-400 tracking-wide">Founder - Rahul Chauhan</p>
             </div>
         </div>
     </div>
 
-    <!-- Main App Layout (Hidden until login) -->
+    <!-- Main App -->
     <div id="main-app" class="hidden">
-        <!-- Header -->
         <header class="glass sticky top-0 z-50 p-4 border-b border-white/5 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="bg-indigo-600 p-2 rounded-xl shadow-lg shadow-indigo-600/30">
@@ -241,25 +229,22 @@
 
         <main class="p-5 max-w-2xl mx-auto space-y-6">
             
-            <!-- ADMIN DASHBOARD -->
+            <!-- Admin Dashboard -->
             <div id="admin-dashboard" class="hidden-view space-y-6">
                 <div class="mb-2">
                     <h2 class="text-2xl font-black italic tracking-tight uppercase">Admin Dashboard</h2>
                     <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Welcome Back, <span id="admin-name">Admin</span></p>
                 </div>
 
-                <!-- Stats Cards -->
                 <div class="grid grid-cols-2 gap-4">
-                    <!-- Card 1: Members -->
                     <div onclick="showView('members')" class="premium-card p-6 rounded-[2.5rem] text-center flex flex-col items-center justify-center min-h-[160px]">
                         <div class="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-users text-indigo-400 text-xl"></i>
                         </div>
                         <h3 class="text-sm font-black uppercase tracking-widest">Members</h3>
-                        <p class="text-[10px] text-slate-500 mt-1" id="stat-count">Loading...</p>
+                        <p class="text-[10px] text-slate-500 mt-1" id="stat-count">0</p>
                     </div>
 
-                    <!-- Card 2: Attendance Logs -->
                     <div onclick="showView('attendance-logs')" class="premium-card p-6 rounded-[2.5rem] text-center flex flex-col items-center justify-center min-h-[160px]">
                         <div class="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-clipboard-list text-amber-400 text-xl"></i>
@@ -268,7 +253,6 @@
                         <p class="text-[10px] text-slate-500 mt-1">View Logs</p>
                     </div>
 
-                    <!-- Card 3: Fees -->
                     <div onclick="showView('fees')" class="premium-card p-6 rounded-[2.5rem] text-center flex flex-col items-center justify-center min-h-[160px]">
                         <div class="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-wallet text-emerald-400 text-xl"></i>
@@ -277,16 +261,14 @@
                         <p class="text-[10px] text-slate-500 mt-1" id="stat-fees">₹0</p>
                     </div>
 
-                    <!-- Card 4: Seat Management -->
                     <div onclick="showView('seats')" class="premium-card p-6 rounded-[2.5rem] text-center flex flex-col items-center justify-center min-h-[160px]">
                         <div class="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-chair text-purple-400 text-xl"></i>
                         </div>
                         <h3 class="text-sm font-black uppercase tracking-widest">Seats</h3>
-                        <p class="text-[10px] text-slate-500 mt-1" id="stat-seats">View Layout</p>
+                        <p class="text-[10px] text-slate-500 mt-1">View Layout</p>
                     </div>
 
-                    <!-- Card 5: New Entry -->
                     <div onclick="toggleModal(true)" class="premium-card p-6 rounded-[2.5rem] text-center flex flex-col items-center justify-center min-h-[160px] border-dashed border-indigo-500/40 col-span-2">
                         <div class="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center mb-3 shadow-lg shadow-indigo-600/20">
                             <i class="fas fa-plus text-white text-xl"></i>
@@ -297,7 +279,7 @@
                 </div>
             </div>
 
-            <!-- STUDENT DASHBOARD -->
+            <!-- Student Dashboard -->
             <div id="student-dashboard" class="hidden-view space-y-6">
                 <div class="mb-2">
                     <h2 class="text-2xl font-black italic tracking-tight uppercase">Student Panel</h2>
@@ -306,9 +288,7 @@
 
                 <div class="glass p-4 rounded-2xl mb-4">
                     <div class="flex items-center gap-4">
-                        <div class="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center text-2xl font-black text-white" id="student-avatar">
-                            S
-                        </div>
+                        <div class="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center text-2xl font-black text-white" id="student-avatar">S</div>
                         <div>
                             <h3 class="text-lg font-bold text-white" id="student-dashboard-name">Student Name</h3>
                             <p class="text-xs text-slate-400" id="student-dashboard-phone">+91 9876543210</p>
@@ -320,7 +300,6 @@
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <!-- Mark Attendance -->
                     <div onclick="showView('mark-attendance')" class="premium-card p-6 rounded-[2.5rem] text-center flex flex-col items-center justify-center min-h-[160px]">
                         <div class="w-12 h-12 bg-green-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-qrcode text-green-400 text-xl"></i>
@@ -329,7 +308,6 @@
                         <p class="text-[10px] text-slate-500 mt-1">Check In/Out</p>
                     </div>
 
-                    <!-- Pay Fees -->
                     <div onclick="showView('pay-fees')" class="premium-card p-6 rounded-[2.5rem] text-center flex flex-col items-center justify-center min-h-[160px]">
                         <div class="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-credit-card text-blue-400 text-xl"></i>
@@ -338,7 +316,6 @@
                         <p class="text-[10px] text-slate-500 mt-1">Online Payment</p>
                     </div>
 
-                    <!-- My Profile -->
                     <div onclick="showView('my-profile')" class="premium-card p-6 rounded-[2.5rem] text-center flex flex-col items-center justify-center min-h-[160px]">
                         <div class="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-user text-purple-400 text-xl"></i>
@@ -347,7 +324,6 @@
                         <p class="text-[10px] text-slate-500 mt-1">View Details</p>
                     </div>
 
-                    <!-- Payment History -->
                     <div onclick="showView('my-payments')" class="premium-card p-6 rounded-[2.5rem] text-center flex flex-col items-center justify-center min-h-[160px]">
                         <div class="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-3">
                             <i class="fas fa-history text-amber-400 text-xl"></i>
@@ -358,7 +334,7 @@
                 </div>
             </div>
 
-            <!-- View: Member List (Admin) -->
+            <!-- Other Views (Members, Attendance, Fees, Seats, etc.) -->
             <div id="view-members" class="hidden-view space-y-6">
                 <div class="flex justify-between items-end">
                     <div>
@@ -367,328 +343,77 @@
                     </div>
                     <button onclick="showView('dashboard')" class="text-[10px] font-black text-indigo-400 border border-indigo-500/30 px-4 py-2 rounded-xl uppercase">Back</button>
                 </div>
-
                 <div class="relative group">
                     <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"></i>
                     <input type="text" id="searchInput" oninput="renderList()" placeholder="Search by name or ID..." 
                         class="w-full bg-slate-900/50 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-sm focus:outline-none focus:border-indigo-500 transition-all">
                 </div>
-
-                <div id="studentContainer" class="space-y-4">
-                    <!-- List loads here -->
-                </div>
+                <div id="studentContainer" class="space-y-4"></div>
             </div>
 
-            <!-- View: Attendance Logs (Admin) -->
-            <div id="view-attendance-logs" class="hidden-view space-y-6">
-                <div class="flex justify-between items-end mb-4">
-                    <div>
-                        <h2 class="text-2xl font-black italic tracking-tight uppercase">Attendance Logs</h2>
-                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Real-time Records</p>
+            <!-- Add Student Modal -->
+            <div id="modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-6">
+                <div class="modal-content glass w-full max-w-sm rounded-[2.5rem] p-8 scale-90 opacity-0 transform transition-all duration-300">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-black italic uppercase">New Student Entry</h2>
+                        <button onclick="toggleModal(false)" class="text-slate-500 hover:text-white"><i class="fas fa-times"></i></button>
                     </div>
-                    <button onclick="showView('dashboard')" class="text-[10px] font-black text-indigo-400 border border-indigo-500/30 px-4 py-2 rounded-xl uppercase">Back</button>
-                </div>
-
-                <div class="glass p-4 rounded-2xl mb-4">
-                    <div class="flex gap-2 overflow-x-auto pb-2">
-                        <button onclick="filterAttendance('today')" class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold whitespace-nowrap">Today</button>
-                        <button onclick="filterAttendance('week')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-400 text-xs font-bold whitespace-nowrap">This Week</button>
-                        <button onclick="filterAttendance('month')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-400 text-xs font-bold whitespace-nowrap">This Month</button>
-                    </div>
-                </div>
-
-                <div id="attendanceLogsContainer" class="space-y-3 max-h-[60vh] overflow-y-auto">
-                    <!-- Logs load here -->
-                </div>
-            </div>
-
-            <!-- View: Seat Management (Admin) -->
-            <div id="view-seats" class="hidden-view space-y-6">
-                <div class="flex justify-between items-end mb-4">
-                    <div>
-                        <h2 class="text-2xl font-black italic tracking-tight uppercase">Seat Management</h2>
-                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Library Layout</p>
-                    </div>
-                    <button onclick="showView('dashboard')" class="text-[10px] font-black text-indigo-400 border border-indigo-500/30 px-4 py-2 rounded-xl uppercase">Back</button>
-                </div>
-
-                <div class="glass p-4 rounded-2xl">
-                    <div class="flex justify-between items-center mb-4">
-                        <div class="flex gap-4 text-xs">
-                            <div class="flex items-center gap-2">
-                                <div class="w-4 h-4 rounded bg-green-500/20 border border-green-500"></div>
-                                <span class="text-slate-400">Available</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <div class="w-4 h-4 rounded bg-red-500/20 border border-red-500"></div>
-                                <span class="text-slate-400">Occupied</span>
-                            </div>
+                    <form id="studentForm" class="space-y-4">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase ml-1">Student Name *</label>
+                            <input type="text" id="mName" required placeholder="Full Name"
+                                class="w-full bg-slate-900 border border-white/5 rounded-xl p-4 text-white outline-none focus:border-indigo-500">
                         </div>
-                        <button onclick="initializeSeats()" class="text-xs bg-indigo-600 px-3 py-1 rounded-lg">Reset All</button>
-                    </div>
-                    
-                    <div id="seatGrid" class="grid grid-cols-5 gap-3 justify-items-center">
-                        <!-- Seats generated here -->
-                    </div>
-
-                    <div class="mt-6 p-4 bg-slate-900/50 rounded-xl">
-                        <h4 class="text-sm font-bold mb-2">Seat Details</h4>
-                        <div id="seatDetails" class="text-xs text-slate-400">
-                            Click on a seat to view details
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase ml-1">Mobile Number *</label>
+                            <input type="tel" id="mPhone" required maxlength="10" placeholder="10 Digit Number"
+                                class="w-full bg-slate-900 border border-white/5 rounded-xl p-4 text-white outline-none focus:border-indigo-500">
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- View: Fees & Payments (Admin) -->
-            <div id="view-fees" class="hidden-view space-y-6">
-                <div class="flex justify-between items-end mb-4">
-                    <div>
-                        <h2 class="text-2xl font-black italic tracking-tight uppercase">Fees & Payments</h2>
-                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Manage Transactions</p>
-                    </div>
-                    <button onclick="showView('dashboard')" class="text-[10px] font-black text-indigo-400 border border-indigo-500/30 px-4 py-2 rounded-xl uppercase">Back</button>
-                </div>
-
-                <div class="glass p-6 rounded-2xl space-y-4">
-                    <h3 class="text-lg font-bold">Add Payment</h3>
-                    <div class="space-y-3">
-                        <select id="paymentStudent" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm text-white">
-                            <option value="">Select Student</option>
-                        </select>
-                        <input type="number" id="paymentAmount" placeholder="Amount (₹)" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm text-white">
-                        
-                        <div class="grid grid-cols-3 gap-2">
-                            <div class="payment-method p-3 rounded-xl text-center cursor-pointer" onclick="selectPaymentMethod('cash')">
-                                <i class="fas fa-money-bill-wave text-green-400 mb-1"></i>
-                                <p class="text-[10px] font-bold">Cash</p>
-                            </div>
-                            <div class="payment-method p-3 rounded-xl text-center cursor-pointer" onclick="selectPaymentMethod('upi')">
-                                <i class="fas fa-mobile-alt text-blue-400 mb-1"></i>
-                                <p class="text-[10px] font-bold">UPI</p>
-                            </div>
-                            <div class="payment-method p-3 rounded-xl text-center cursor-pointer" onclick="selectPaymentMethod('card')">
-                                <i class="fas fa-credit-card text-purple-400 mb-1"></i>
-                                <p class="text-[10px] font-bold">Card</p>
-                            </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase ml-1">Total Fee (₹) *</label>
+                            <input type="number" id="mFee" required placeholder="Total Amount"
+                                class="w-full bg-slate-900 border border-white/5 rounded-xl p-4 text-white outline-none focus:border-indigo-500">
                         </div>
-                        
-                        <input type="text" id="paymentNote" placeholder="Note (Optional)" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm text-white">
-                        <button onclick="addPayment()" class="btn-primary w-full py-3 rounded-xl text-white font-bold text-xs uppercase">Add Payment</button>
-                    </div>
-                </div>
-
-                <div class="space-y-3">
-                    <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Recent Payments</h3>
-                    <div id="paymentsList" class="space-y-3">
-                        <!-- Payments load here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- View: Mark Attendance (Student) -->
-            <div id="view-mark-attendance" class="hidden-view space-y-6">
-                <div class="flex justify-between items-end mb-4">
-                    <div>
-                        <h2 class="text-2xl font-black italic tracking-tight uppercase">Mark Attendance</h2>
-                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Check In / Check Out</p>
-                    </div>
-                    <button onclick="showView('dashboard')" class="text-[10px] font-black text-indigo-400 border border-indigo-500/30 px-4 py-2 rounded-xl uppercase">Back</button>
-                </div>
-
-                <div class="glass p-8 rounded-[2.5rem] text-center relative overflow-hidden">
-                    <div class="scanner-line"></div>
-                    <div class="w-32 h-32 mx-auto bg-slate-900 rounded-2xl flex items-center justify-center mb-4 border-2 border-indigo-500/30">
-                        <i class="fas fa-qrcode text-4xl text-indigo-400"></i>
-                    </div>
-                    <p class="text-sm text-slate-400 mb-6">Scan QR or mark manually</p>
-                    
-                    <div class="space-y-3">
-                        <button onclick="markAttendance('checkin')" class="w-full py-4 rounded-2xl bg-green-500/20 border border-green-500 text-green-400 font-bold uppercase tracking-wider hover:bg-green-500 hover:text-white transition-all">
-                            <i class="fas fa-sign-in-alt mr-2"></i> Check In
+                        <div class="bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-3">
+                            <p class="text-[10px] text-indigo-300">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Student ID auto-generated: <span class="font-bold">SSLXXXX</span>
+                            </p>
+                        </div>
+                        <button type="submit" id="saveBtn" class="btn-primary w-full py-4 rounded-xl text-white font-black uppercase tracking-widest text-xs mt-4">
+                            Confirm & Save
                         </button>
-                        <button onclick="markAttendance('checkout')" class="w-full py-4 rounded-2xl bg-amber-500/20 border border-amber-500 text-amber-400 font-bold uppercase tracking-wider hover:bg-amber-500 hover:text-white transition-all">
-                            <i class="fas fa-sign-out-alt mr-2"></i> Check Out
-                        </button>
-                    </div>
-                </div>
-
-                <div class="glass p-6 rounded-2xl">
-                    <h3 class="text-sm font-bold mb-3">Today's Status</h3>
-                    <div id="todayAttendance" class="text-xs text-slate-400">
-                        No attendance marked today
-                    </div>
-                </div>
-            </div>
-
-            <!-- View: Pay Fees (Student) -->
-            <div id="view-pay-fees" class="hidden-view space-y-6">
-                <div class="flex justify-between items-end mb-4">
-                    <div>
-                        <h2 class="text-2xl font-black italic tracking-tight uppercase">Pay Fees</h2>
-                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Secure Payment</p>
-                    </div>
-                    <button onclick="showView('dashboard')" class="text-[10px] font-black text-indigo-400 border border-indigo-500/30 px-4 py-2 rounded-xl uppercase">Back</button>
-                </div>
-
-                <div class="glass p-6 rounded-2xl">
-                    <div class="text-center mb-6">
-                        <p class="text-xs text-slate-400 uppercase">Total Due Amount</p>
-                        <h3 class="text-3xl font-black text-white mt-1" id="studentDueAmount">₹0</h3>
-                    </div>
-
-                    <div class="space-y-3 mb-6">
-                        <p class="text-xs font-bold uppercase text-slate-500">Select Payment Method</p>
-                        <div class="grid grid-cols-3 gap-3">
-                            <div class="payment-method p-4 rounded-xl text-center cursor-pointer" onclick="selectStudentPaymentMethod('upi')">
-                                <i class="fas fa-mobile-alt text-2xl text-blue-400 mb-2"></i>
-                                <p class="text-[10px] font-bold">UPI</p>
-                            </div>
-                            <div class="payment-method p-4 rounded-xl text-center cursor-pointer" onclick="selectStudentPaymentMethod('card')">
-                                <i class="fas fa-credit-card text-2xl text-purple-400 mb-2"></i>
-                                <p class="text-[10px] font-bold">Card</p>
-                            </div>
-                            <div class="payment-method p-4 rounded-xl text-center cursor-pointer" onclick="selectStudentPaymentMethod('netbanking')">
-                                <i class="fas fa-university text-2xl text-green-400 mb-2"></i>
-                                <p class="text-[10px] font-bold">Net Banking</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <input type="number" id="studentPaymentAmount" placeholder="Enter Amount (₹)" class="w-full bg-slate-900 border border-white/10 rounded-xl p-4 text-white mb-4">
-                    
-                    <button onclick="processStudentPayment()" class="btn-primary w-full py-4 rounded-xl text-white font-black uppercase tracking-widest text-xs">
-                        Pay Now
-                    </button>
-                </div>
-            </div>
-
-            <!-- View: My Profile (Student) -->
-            <div id="view-my-profile" class="hidden-view space-y-6">
-                <div class="flex justify-between items-end mb-4">
-                    <div>
-                        <h2 class="text-2xl font-black italic tracking-tight uppercase">My Profile</h2>
-                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Personal Details</p>
-                    </div>
-                    <button onclick="showView('dashboard')" class="text-[10px] font-black text-indigo-400 border border-indigo-500/30 px-4 py-2 rounded-xl uppercase">Back</button>
-                </div>
-
-                <div class="glass p-6 rounded-[2.5rem] text-center">
-                    <div class="w-20 h-20 mx-auto bg-indigo-600 rounded-full flex items-center justify-center mb-4 text-2xl font-black text-white" id="profileInitial">
-                        S
-                    </div>
-                    <h3 class="text-xl font-bold" id="profileName">Student Name</h3>
-                    <p class="text-sm text-slate-400 mt-1" id="profilePhone">+91 9876543210</p>
-                    <p class="text-xs text-indigo-400 mt-1 font-mono" id="profileId">ID: SSL0001</p>
-                    
-                    <div class="grid grid-cols-2 gap-4 mt-6">
-                        <div class="bg-slate-900/50 p-4 rounded-2xl">
-                            <p class="text-[10px] text-slate-500 uppercase">Total Fees</p>
-                            <p class="text-lg font-bold text-emerald-400" id="profileTotalFees">₹0</p>
-                        </div>
-                        <div class="bg-slate-900/50 p-4 rounded-2xl">
-                            <p class="text-[10px] text-slate-500 uppercase">Paid</p>
-                            <p class="text-lg font-bold text-indigo-400" id="profilePaidFees">₹0</p>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4 bg-slate-900/50 p-4 rounded-2xl">
-                        <p class="text-[10px] text-slate-500 uppercase">Remaining</p>
-                        <p class="text-lg font-bold text-rose-400" id="profileRemainingFees">₹0</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- View: My Payments (Student) -->
-            <div id="view-my-payments" class="hidden-view space-y-6">
-                <div class="flex justify-between items-end mb-4">
-                    <div>
-                        <h2 class="text-2xl font-black italic tracking-tight uppercase">My Payments</h2>
-                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Transaction History</p>
-                    </div>
-                    <button onclick="showView('dashboard')" class="text-[10px] font-black text-indigo-400 border border-indigo-500/30 px-4 py-2 rounded-xl uppercase">Back</button>
-                </div>
-
-                <div id="studentPaymentsList" class="space-y-3">
-                    <!-- Student payments load here -->
+                    </form>
                 </div>
             </div>
 
         </main>
     </div>
 
-    <!-- Registration Modal -->
-    <div id="modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-6">
-        <div class="modal-content glass w-full max-w-sm rounded-[2.5rem] p-8 scale-90 opacity-0 transform transition-all duration-300">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-black italic uppercase">New Student Entry</h2>
-                <button onclick="toggleModal(false)" class="text-slate-500 hover:text-white"><i class="fas fa-times"></i></button>
-            </div>
-            <form id="studentForm" class="space-y-4">
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase ml-1">Student Name *</label>
-                    <input type="text" id="mName" required placeholder="Full Name"
-                        class="w-full bg-slate-900 border border-white/5 rounded-xl p-4 text-white outline-none focus:border-indigo-500">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase ml-1">Mobile Number *</label>
-                    <input type="tel" id="mPhone" required maxlength="10" placeholder="10 Digit Number"
-                        class="w-full bg-slate-900 border border-white/5 rounded-xl p-4 text-white outline-none focus:border-indigo-500">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase ml-1">Total Fee (₹) *</label>
-                    <input type="number" id="mFee" required placeholder="Total Amount"
-                        class="w-full bg-slate-900 border border-white/5 rounded-xl p-4 text-white outline-none focus:border-indigo-500">
-                </div>
-                <div class="bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-3">
-                    <p class="text-[10px] text-indigo-300">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        Student ID auto-generate hoga: <span class="font-bold">SSLXXXX</span>
-                    </p>
-                </div>
-                <button type="submit" id="saveBtn" class="btn-primary w-full py-4 rounded-xl text-white font-black uppercase tracking-widest text-xs mt-4">
-                    Confirm & Save
-                </button>
-            </form>
-        </div>
-    </div>
-
     <script>
         // ==========================================
-        // FIREBASE CONFIGURATION
+        // FIREBASE CONFIG - YEH APNA CONFIG DAALEN
         // ==========================================
-        // YEH CONFIG APNE FIREBASE CONSOLE SE COPY KAREIN
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY_HERE",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
             messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef123456"
+            appId: "1:123456789:web:abc123"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // ==========================================
-        // GLOBAL VARIABLES
-        // ==========================================
         let currentUser = null;
         let userRole = 'admin';
         let allStudents = [];
         let allSeats = [];
-        let selectedPaymentMethod = '';
-        let currentStudentId = null;
-        let attendanceLogs = [];
         let nextStudentId = 1;
 
-        // ==========================================
-        // INITIALIZATION & PERSISTENCE
-        // ==========================================
-        
-        // Check if user is already logged in (from localStorage)
+        // Persistence check
         window.onload = function() {
             const savedUser = localStorage.getItem('ssl_user');
             const savedRole = localStorage.getItem('ssl_role');
@@ -696,69 +421,23 @@
             if (savedUser && savedRole) {
                 currentUser = JSON.parse(savedUser);
                 userRole = savedRole;
-                
-                // Verify student still exists in DB
-                if (userRole === 'student' && currentUser.studentId) {
-                    verifyAndLoginStudent(currentUser.studentId, currentUser.password);
-                } else if (userRole === 'admin') {
-                    showMainApp();
-                }
+                showMainApp();
             }
             
-            // Initialize Firebase Auth persistence
-            auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-                .then(() => {
-                    console.log("Auth persistence set to LOCAL");
-                })
-                .catch((error) => {
-                    console.error("Persistence error:", error);
-                });
-                
-            // Load initial data
             loadData();
         };
 
-        // Verify student exists before auto-login
-        function verifyAndLoginStudent(studentId, password) {
-            db.collection('students').where('studentId', '==', studentId).get()
-                .then(snapshot => {
-                    if (!snapshot.empty) {
-                        const student = snapshot.docs[0].data();
-                        if (student.phone === password) {
-                            currentUser = { role: 'student', id: snapshot.docs[0].id, ...student };
-                            currentStudentId = snapshot.docs[0].id;
-                            showMainApp();
-                        } else {
-                            clearLoginData();
-                        }
-                    } else {
-                        clearLoginData();
-                    }
-                });
-        }
-
-        // ==========================================
-        // LOGIN SYSTEM
-        // ==========================================
-        
         function setLoginMode(mode) {
             userRole = mode;
-            const btnAdmin = document.getElementById('btn-admin');
-            const btnStudent = document.getElementById('btn-student');
-            const adminForm = document.getElementById('admin-login-form');
-            const studentForm = document.getElementById('student-login-form');
+            document.getElementById('btn-admin').className = mode === 'admin' 
+                ? 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white transition-all'
+                : 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400 transition-all';
+            document.getElementById('btn-student').className = mode === 'student'
+                ? 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white transition-all'
+                : 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400 transition-all';
             
-            if (mode === 'admin') {
-                btnAdmin.className = 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white transition-all';
-                btnStudent.className = 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400 transition-all';
-                adminForm.classList.remove('hidden');
-                studentForm.classList.add('hidden');
-            } else {
-                btnStudent.className = 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white transition-all';
-                btnAdmin.className = 'flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400 transition-all';
-                studentForm.classList.remove('hidden');
-                adminForm.classList.add('hidden');
-            }
+            document.getElementById('admin-login-form').classList.toggle('hidden', mode !== 'admin');
+            document.getElementById('student-login-form').classList.toggle('hidden', mode !== 'student');
         }
 
         function handleLogin() {
@@ -768,9 +447,8 @@
             if (userRole === 'admin') {
                 const u = document.getElementById('admin-username').value;
                 const p = document.getElementById('admin-password').value;
-
                 if (u === 'admin' && p === '1234') {
-                    currentUser = { role: 'admin', name: 'Admin', username: u };
+                    currentUser = { role: 'admin', name: 'Admin' };
                     saveLoginData();
                     showMainApp();
                 } else {
@@ -778,42 +456,18 @@
                     err.classList.remove('hidden');
                 }
             } else {
-                const studentId = document.getElementById('student-id').value.trim().toUpperCase();
-                const password = document.getElementById('student-password').value;
-
-                if (!studentId || !password) {
-                    err.innerText = 'Please enter Student ID and Password!';
+                const sid = document.getElementById('student-id').value.trim().toUpperCase();
+                const pass = document.getElementById('student-password').value;
+                
+                const student = allStudents.find(s => s.studentId === sid && s.phone === pass);
+                if (student) {
+                    currentUser = { role: 'student', ...student };
+                    saveLoginData();
+                    showMainApp();
+                } else {
+                    err.innerText = 'Invalid Student ID or Password!';
                     err.classList.remove('hidden');
-                    return;
                 }
-
-                // Verify from Firestore
-                db.collection('students').where('studentId', '==', studentId).get()
-                    .then(snapshot => {
-                        if (snapshot.empty) {
-                            err.innerText = 'Student ID not found!';
-                            err.classList.remove('hidden');
-                            return;
-                        }
-
-                        const studentDoc = snapshot.docs[0];
-                        const studentData = studentDoc.data();
-
-                        // Password is phone number
-                        if (studentData.phone === password) {
-                            currentUser = { role: 'student', id: studentDoc.id, ...studentData };
-                            currentStudentId = studentDoc.id;
-                            saveLoginData();
-                            showMainApp();
-                        } else {
-                            err.innerText = 'Invalid password!';
-                            err.classList.remove('hidden');
-                        }
-                    })
-                    .catch(error => {
-                        err.innerText = 'Error: ' + error.message;
-                        err.classList.remove('hidden');
-                    });
             }
         }
 
@@ -822,172 +476,72 @@
             localStorage.setItem('ssl_role', userRole);
         }
 
-        function clearLoginData() {
-            localStorage.removeItem('ssl_user');
-            localStorage.removeItem('ssl_role');
-        }
-
         function showMainApp() {
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('main-app').classList.remove('hidden');
-            document.getElementById('user-role-display').innerText = 
-                currentUser.role === 'admin' ? 'Admin Panel' : 'Student Panel';
             
             if (currentUser.role === 'admin') {
                 document.getElementById('admin-dashboard').classList.remove('hidden-view');
                 document.getElementById('student-dashboard').classList.add('hidden-view');
-                document.getElementById('admin-name').innerText = currentUser.name || 'Admin';
             } else {
                 document.getElementById('admin-dashboard').classList.add('hidden-view');
                 document.getElementById('student-dashboard').classList.remove('hidden-view');
-                
-                // Update student dashboard info
-                document.getElementById('student-id-display').innerText = currentUser.studentId || 'SSL0000';
+                document.getElementById('student-id-display').innerText = currentUser.studentId;
                 document.getElementById('student-dashboard-name').innerText = currentUser.name;
                 document.getElementById('student-dashboard-phone').innerText = currentUser.phone;
                 document.getElementById('student-avatar').innerText = currentUser.name.charAt(0).toUpperCase();
-                
-                loadStudentData();
             }
         }
 
         function logout() {
-            clearLoginData();
-            auth.signOut().then(() => {
-                location.reload();
-            });
+            localStorage.removeItem('ssl_user');
+            localStorage.removeItem('ssl_role');
+            location.reload();
         }
 
-        // ==========================================
-        // NAVIGATION & VIEWS
-        // ==========================================
-        
-        function showView(viewName) {
-            // Hide all views
-            const views = ['view-members', 'view-attendance-logs', 'view-fees', 'view-seats',
-                          'view-mark-attendance', 'view-pay-fees', 'view-my-profile', 'view-my-payments'];
-            views.forEach(v => {
-                const el = document.getElementById(v);
+        function showView(view) {
+            ['admin-dashboard', 'student-dashboard', 'view-members'].forEach(id => {
+                const el = document.getElementById(id);
                 if (el) el.classList.add('hidden-view');
             });
             
-            // Hide dashboards
-            const adminDash = document.getElementById('admin-dashboard');
-            const studentDash = document.getElementById('student-dashboard');
-            if (adminDash) adminDash.classList.add('hidden-view');
-            if (studentDash) studentDash.classList.add('hidden-view');
-
-            if (viewName === 'dashboard') {
+            if (view === 'dashboard') {
                 if (currentUser.role === 'admin') {
-                    if (adminDash) adminDash.classList.remove('hidden-view');
+                    document.getElementById('admin-dashboard').classList.remove('hidden-view');
                 } else {
-                    if (studentDash) studentDash.classList.remove('hidden-view');
+                    document.getElementById('student-dashboard').classList.remove('hidden-view');
                 }
-            } else if (viewName === 'members') {
+            } else if (view === 'members') {
                 document.getElementById('view-members').classList.remove('hidden-view');
                 renderList();
-            } else if (viewName === 'attendance-logs') {
-                document.getElementById('view-attendance-logs').classList.remove('hidden-view');
-                renderAttendanceLogs();
-            } else if (viewName === 'fees') {
-                document.getElementById('view-fees').classList.remove('hidden-view');
-                renderPaymentsList();
-                loadStudentSelect();
-            } else if (viewName === 'seats') {
-                document.getElementById('view-seats').classList.remove('hidden-view');
-                renderSeatGrid();
-            } else if (viewName === 'mark-attendance') {
-                document.getElementById('view-mark-attendance').classList.remove('hidden-view');
-                loadTodayAttendance();
-            } else if (viewName === 'pay-fees') {
-                document.getElementById('view-pay-fees').classList.remove('hidden-view');
-                loadStudentPaymentInfo();
-            } else if (viewName === 'my-profile') {
-                document.getElementById('view-my-profile').classList.remove('hidden-view');
-                loadProfile();
-            } else if (viewName === 'my-payments') {
-                document.getElementById('view-my-payments').classList.remove('hidden-view');
-                renderStudentPayments();
             }
-            
-            window.scrollTo(0, 0);
         }
 
-        // ==========================================
-        // DATA LOADING
-        // ==========================================
-        
         function loadData() {
-            // Get next student ID
-            db.collection('students').orderBy('createdAt', 'desc').limit(1).onSnapshot(snapshot => {
-                if (!snapshot.empty) {
-                    const lastStudent = snapshot.docs[0].data();
-                    if (lastStudent.studentId) {
-                        const num = parseInt(lastStudent.studentId.replace('SSL', ''));
-                        if (!isNaN(num)) nextStudentId = num + 1;
-                    }
-                }
-            });
-
-            // Load all students
-            db.collection('students').onSnapshot((snapshot) => {
+            db.collection('students').onSnapshot(snapshot => {
                 allStudents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if (!snapshot.empty) {
+                    const last = allStudents.sort((a,b) => {
+                        const na = parseInt(a.studentId?.replace('SSL','') || 0);
+                        const nb = parseInt(b.studentId?.replace('SSL','') || 0);
+                        return nb - na;
+                    })[0];
+                    if (last?.studentId) {
+                        nextStudentId = parseInt(last.studentId.replace('SSL','')) + 1;
+                    }
+                }
                 updateStats();
-                if (currentUser && currentUser.role === 'admin' && 
-                    !document.getElementById('view-members').classList.contains('hidden-view')) {
-                    renderList();
-                }
-            });
-
-            // Load seats
-            db.collection('seats').onSnapshot((snapshot) => {
-                if (snapshot.empty) {
-                    initializeSeats();
-                } else {
-                    allSeats = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    if (!document.getElementById('view-seats')?.classList.contains('hidden-view')) {
-                        renderSeatGrid();
-                    }
-                }
-            });
-
-            // Load attendance
-            db.collection('attendance').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
-                attendanceLogs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             });
         }
 
-        function loadStudentData() {
-            if (!currentStudentId) return;
-            
-            db.collection('students').doc(currentStudentId).onSnapshot((doc) => {
-                if (doc.exists) {
-                    const data = doc.data();
-                    currentUser = { ...currentUser, ...data };
-                    // Update UI if on profile page
-                    if (!document.getElementById('view-my-profile').classList.contains('hidden-view')) {
-                        loadProfile();
-                    }
-                }
-            });
-        }
-
-        // ==========================================
-        // STUDENT MANAGEMENT (ADMIN)
-        // ==========================================
-        
-        // Generate Unique Student ID
         function generateStudentId() {
-            const id = 'SSL' + String(nextStudentId).padStart(4, '0');
-            nextStudentId++;
-            return id;
+            return 'SSL' + String(nextStudentId).padStart(4, '0');
         }
 
-        // Add Student Form Handler
         document.getElementById('studentForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('saveBtn');
-            btn.innerText = "Processing...";
+            btn.innerText = "Saving...";
             btn.disabled = true;
 
             const studentId = generateStudentId();
@@ -997,22 +551,16 @@
                 phone: document.getElementById('mPhone').value.trim(),
                 totalFee: parseFloat(document.getElementById('mFee').value) || 0,
                 paid: 0,
-                password: document.getElementById('mPhone').value.trim(), // Default password = phone
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                status: 'active'
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
             try {
                 await db.collection('students').add(data);
-                
-                // Show success with ID
-                alert(`Student added successfully!\n\nStudent ID: ${studentId}\nPassword: ${data.phone}\n\nStudent can login using these credentials.`);
-                
+                alert(`Student Added!\nID: ${studentId}\nPassword: ${data.phone}`);
                 toggleModal(false);
                 e.target.reset();
             } catch (err) {
-                console.error("Save Error:", err);
-                alert('Error saving student: ' + err.message);
+                alert('Error: ' + err.message);
             } finally {
                 btn.innerText = "Confirm & Save";
                 btn.disabled = false;
@@ -1022,505 +570,39 @@
         function renderList() {
             const container = document.getElementById('studentContainer');
             const term = document.getElementById('searchInput')?.value.toLowerCase() || '';
-            
             const filtered = allStudents.filter(s => 
                 s.name.toLowerCase().includes(term) || 
-                s.studentId?.toLowerCase().includes(term) ||
-                s.phone.includes(term)
+                s.studentId?.toLowerCase().includes(term)
             );
 
-            if (filtered.length === 0) {
-                container.innerHTML = `<div class="p-10 text-center text-slate-600 text-xs font-bold uppercase italic">No records found</div>`;
-                return;
-            }
-
-            container.innerHTML = filtered.map(s => {
-                const due = (s.totalFee || 0) - (s.paid || 0);
-                return `
-                <div class="premium-card p-5 rounded-[2rem] flex justify-between items-center group animate-slide-in">
+            container.innerHTML = filtered.map(s => `
+                <div class="premium-card p-5 rounded-[2rem] flex justify-between items-center animate-slide-in">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-black text-indigo-400 text-lg">
                             ${s.name.charAt(0)}
                         </div>
                         <div>
                             <h4 class="font-bold text-white text-sm">${s.name}</h4>
-                            <p class="text-[10px] text-indigo-400 font-mono font-bold">${s.studentId || 'N/A'}</p>
+                            <p class="text-[10px] text-indigo-400 font-mono font-bold">${s.studentId}</p>
                             <p class="text-[10px] text-slate-500">${s.phone}</p>
-                            <p class="text-[10px] ${due > 0 ? 'text-rose-400' : 'text-emerald-400'} mt-1">
-                                ₹${s.paid || 0} / ₹${s.totalFee || 0} ${due > 0 ? `(Due: ₹${due})` : '(Paid)'}
-                            </p>
                         </div>
                     </div>
-                    <div class="flex gap-2">
-                        ${due > 0 ? `
-                        <button onclick="sendWhatsApp('${s.phone}', '${s.name}', '${due}')" 
-                            class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all" title="Send Reminder">
-                            <i class="fab fa-whatsapp"></i>
-                        </button>
-                        ` : ''}
-                        <button onclick="deleteStudent('${s.id}')" 
-                            class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all" title="Delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `}).join('');
-        }
-
-        window.deleteStudent = async (id) => {
-            if (!confirm('Delete this member? This action cannot be undone.')) return;
-            
-            try {
-                await db.collection('students').doc(id).delete();
-                alert('Student deleted successfully');
-            } catch (err) {
-                alert('Error deleting student: ' + err.message);
-            }
-        };
-
-        window.sendWhatsApp = (num, name, amt) => {
-            const msg = `Namaste ${name}, Savitri Success Library mein aapki fees ₹${amt} baki hai. Kripya jald payment karein. Dhanyawad!`;
-            window.open(`https://wa.me/91${num}?text=${encodeURIComponent(msg)}`, '_blank');
-        };
-
-        // ==========================================
-        // SEAT MANAGEMENT
-        // ==========================================
-        
-        function initializeSeats() {
-            const batch = db.batch();
-            for (let i = 1; i <= 20; i++) {
-                const seatRef = db.collection('seats').doc(`seat_${i}`);
-                batch.set(seatRef, {
-                    number: i,
-                    status: 'available',
-                    occupiedBy: null,
-                    occupiedByName: null,
-                    occupiedAt: null
-                });
-            }
-            batch.commit().then(() => {
-                alert('20 seats initialized successfully');
-            });
-        }
-
-        function renderSeatGrid() {
-            const grid = document.getElementById('seatGrid');
-            if (!allSeats.length || !grid) return;
-            
-            grid.innerHTML = allSeats.sort((a, b) => a.number - b.number).map(seat => `
-                <div class="seat ${seat.status} ${selectedSeat === seat.id ? 'selected' : ''}" 
-                     onclick="selectSeat('${seat.id}')"
-                     title="Seat ${seat.number}">
-                    ${seat.number}
+                    <button onclick="deleteStudent('${s.id}')" class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </div>
             `).join('');
         }
 
-        let selectedSeat = null;
-        window.selectSeat = function(seatId) {
-            selectedSeat = seatId;
-            const seat = allSeats.find(s => s.id === seatId);
-            const details = document.getElementById('seatDetails');
-            
-            if (!seat || !details) return;
-            
-            if (seat.status === 'occupied' && seat.occupiedBy) {
-                details.innerHTML = `
-                    <p class="text-white font-bold">Seat #${seat.number}</p>
-                    <p class="text-rose-400 mt-1">Occupied by: ${seat.occupiedByName || 'Unknown'}</p>
-                    <p class="text-slate-500">Since: ${seat.occupiedAt ? new Date(seat.occupiedAt.toDate()).toLocaleString() : 'Recently'}</p>
-                    <button onclick="vacateSeat('${seatId}')" class="mt-3 px-4 py-2 bg-rose-500/20 text-rose-400 rounded-lg text-xs font-bold hover:bg-rose-500 hover:text-white transition-all">Vacate Seat</button>
-                `;
-            } else {
-                const studentOptions = allStudents.map(s => 
-                    `<option value="${s.id}" data-name="${s.name}">${s.name} (${s.studentId || 'N/A'})</option>`
-                ).join('');
-                
-                details.innerHTML = `
-                    <p class="text-white font-bold">Seat #${seat.number}</p>
-                    <p class="text-green-400 mt-1">Available</p>
-                    <select id="assignStudent" class="w-full mt-3 bg-slate-900 border border-white/10 rounded-lg p-2 text-xs text-white">
-                        <option value="">Select Student to Assign</option>
-                        ${studentOptions}
-                    </select>
-                    <button onclick="assignSeat('${seatId}')" class="mt-2 w-full py-2 bg-indigo-600 rounded-lg text-xs font-bold hover:bg-indigo-500 transition-all">Assign Seat</button>
-                `;
-            }
-            renderSeatGrid();
+        window.deleteStudent = async (id) => {
+            if (!confirm('Delete this student?')) return;
+            await db.collection('students').doc(id).delete();
         };
 
-        window.assignSeat = function(seatId) {
-            const select = document.getElementById('assignStudent');
-            const studentId = select.value;
-            const studentName = select.options[select.selectedIndex].dataset.name;
-            
-            if (!studentId) return alert('Please select a student');
-            
-            db.collection('seats').doc(seatId).update({
-                status: 'occupied',
-                occupiedBy: studentId,
-                occupiedByName: studentName,
-                occupiedAt: new Date()
-            }).then(() => {
-                alert('Seat assigned successfully');
-            }).catch(err => {
-                alert('Error: ' + err.message);
-            });
-        };
-
-        window.vacateSeat = function(seatId) {
-            db.collection('seats').doc(seatId).update({
-                status: 'available',
-                occupiedBy: null,
-                occupiedByName: null,
-                occupiedAt: null
-            }).then(() => {
-                selectedSeat = null;
-                alert('Seat vacated successfully');
-            });
-        };
-
-        // ==========================================
-        // ATTENDANCE SYSTEM
-        // ==========================================
-        
-        function renderAttendanceLogs() {
-            const container = document.getElementById('attendanceLogsContainer');
-            if (!container) return;
-            
-            const logs = attendanceLogs.slice(0, 50);
-            
-            if (!logs.length) {
-                container.innerHTML = '<p class="text-center text-slate-500 py-8">No attendance records yet</p>';
-                return;
-            }
-
-            container.innerHTML = logs.map(log => {
-                const student = allStudents.find(s => s.id === log.studentId);
-                const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleString() : 'Just now';
-                
-                return `
-                    <div class="timeline-item pb-4 animate-slide-in">
-                        <div class="glass p-4 rounded-2xl">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h4 class="font-bold text-sm text-white">${student?.name || log.studentName || 'Unknown'}</h4>
-                                    <p class="text-[10px] text-indigo-400 font-mono">${student?.studentId || 'N/A'}</p>
-                                </div>
-                                <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase ${log.type === 'checkin' ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'}">
-                                    ${log.type === 'checkin' ? 'CHECK IN' : 'CHECK OUT'}
-                                </span>
-                            </div>
-                            <p class="text-[10px] text-slate-500 mt-2">
-                                <i class="far fa-clock mr-1"></i> ${time}
-                            </p>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        window.filterAttendance = function(period) {
-            // Update button styles
-            const buttons = event.target.parentElement.querySelectorAll('button');
-            buttons.forEach(btn => {
-                btn.className = 'px-4 py-2 rounded-xl bg-slate-800 text-slate-400 text-xs font-bold whitespace-nowrap';
-            });
-            event.target.className = 'px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold whitespace-nowrap';
-            
-            // Filter logic (simplified - shows all for now)
-            renderAttendanceLogs();
-        };
-
-        function markAttendance(type) {
-            if (!currentStudentId) return;
-
-            const data = {
-                studentId: currentStudentId,
-                studentName: currentUser.name,
-                studentIdCode: currentUser.studentId,
-                type: type,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
-            db.collection('attendance').add(data)
-                .then(() => {
-                    alert(`${type === 'checkin' ? 'Check In' : 'Check Out'} successful!`);
-                    loadTodayAttendance();
-                })
-                .catch(err => {
-                    alert('Error: ' + err.message);
-                });
-        }
-
-        function loadTodayAttendance() {
-            if (!currentStudentId) return;
-            
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            db.collection('attendance')
-                .where('studentId', '==', currentStudentId)
-                .where('timestamp', '>=', today)
-                .orderBy('timestamp', 'desc')
-                .get()
-                .then(snapshot => {
-                    const container = document.getElementById('todayAttendance');
-                    if (!container) return;
-                    
-                    if (snapshot.empty) {
-                        container.innerHTML = 'No attendance marked today';
-                        return;
-                    }
-                    
-                    container.innerHTML = snapshot.docs.map(doc => {
-                        const log = doc.data();
-                        const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString() : 'Just now';
-                        return `
-                            <div class="flex justify-between items-center py-2 border-b border-white/5">
-                                <span class="${log.type === 'checkin' ? 'text-green-400' : 'text-amber-400'} font-bold uppercase text-xs">
-                                    ${log.type === 'checkin' ? 'Check In' : 'Check Out'}
-                                </span>
-                                <span class="text-slate-500 text-xs">${time}</span>
-                            </div>
-                        `;
-                    }).join('');
-                });
-        }
-
-        // ==========================================
-        // PAYMENT SYSTEM
-        // ==========================================
-        
-        function loadStudentSelect() {
-            const select = document.getElementById('paymentStudent');
-            if (!select) return;
-            
-            select.innerHTML = '<option value="">Select Student</option>' + 
-                allStudents.map(s => `<option value="${s.id}">${s.name} (${s.studentId || 'N/A'}) - Due: ₹${(s.totalFee || 0) - (s.paid || 0)}</option>`).join('');
-        }
-
-        window.selectPaymentMethod = function(method) {
-            selectedPaymentMethod = method;
-            document.querySelectorAll('#view-fees .payment-method').forEach(el => el.classList.remove('selected'));
-            event.currentTarget.classList.add('selected');
-        };
-
-        window.addPayment = function() {
-            const studentId = document.getElementById('paymentStudent').value;
-            const amount = parseFloat(document.getElementById('paymentAmount').value);
-            const note = document.getElementById('paymentNote').value;
-
-            if (!studentId || !amount || !selectedPaymentMethod) {
-                alert('Please fill all fields and select payment method');
-                return;
-            }
-
-            const student = allStudents.find(s => s.id === studentId);
-            const newPaid = (student.paid || 0) + amount;
-
-            // Add payment record
-            db.collection('payments').add({
-                studentId,
-                studentName: student.name,
-                studentIdCode: student.studentId,
-                amount,
-                method: selectedPaymentMethod,
-                note,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                type: 'income',
-                collectedBy: 'admin'
-            }).then(() => {
-                // Update student paid amount
-                return db.collection('students').doc(studentId).update({
-                    paid: newPaid
-                });
-            }).then(() => {
-                alert('Payment added successfully!');
-                document.getElementById('paymentAmount').value = '';
-                document.getElementById('paymentNote').value = '';
-                selectedPaymentMethod = '';
-                document.querySelectorAll('#view-fees .payment-method').forEach(el => el.classList.remove('selected'));
-            }).catch(err => {
-                alert('Error: ' + err.message);
-            });
-        };
-
-        function renderPaymentsList() {
-            const container = document.getElementById('paymentsList');
-            if (!container) return;
-            
-            db.collection('payments').orderBy('timestamp', 'desc').limit(20).get()
-                .then(snapshot => {
-                    if (snapshot.empty) {
-                        container.innerHTML = '<p class="text-center text-slate-500 py-4">No payments yet</p>';
-                        return;
-                    }
-                    
-                    container.innerHTML = snapshot.docs.map(doc => {
-                        const p = doc.data();
-                        const time = p.timestamp ? new Date(p.timestamp.toDate()).toLocaleString() : 'Just now';
-                        return `
-                            <div class="glass p-4 rounded-2xl flex justify-between items-center animate-slide-in">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-xl ${getPaymentMethodColor(p.method)} flex items-center justify-center">
-                                        <i class="fas ${getPaymentMethodIcon(p.method)}"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-bold text-white">${p.studentName}</p>
-                                        <p class="text-[10px] text-slate-500 uppercase">${p.method} • ${time}</p>
-                                    </div>
-                                </div>
-                                <p class="text-emerald-400 font-bold">+₹${p.amount}</p>
-                            </div>
-                        `;
-                    }).join('');
-                });
-        }
-
-        function getPaymentMethodColor(method) {
-            const colors = {
-                'cash': 'bg-green-500/20 text-green-400',
-                'upi': 'bg-blue-500/20 text-blue-400',
-                'card': 'bg-purple-500/20 text-purple-400',
-                'netbanking': 'bg-amber-500/20 text-amber-400'
-            };
-            return colors[method] || 'bg-slate-500/20 text-slate-400';
-        }
-
-        function getPaymentMethodIcon(method) {
-            const icons = {
-                'cash': 'fa-money-bill-wave',
-                'upi': 'fa-mobile-alt',
-                'card': 'fa-credit-card',
-                'netbanking': 'fa-university'
-            };
-            return icons[method] || 'fa-wallet';
-        }
-
-        // ==========================================
-        // STUDENT PANEL FUNCTIONS
-        // ==========================================
-        
-        window.selectStudentPaymentMethod = function(method) {
-            selectedPaymentMethod = method;
-            document.querySelectorAll('#view-pay-fees .payment-method').forEach(el => el.classList.remove('selected'));
-            event.currentTarget.classList.add('selected');
-        };
-
-        function loadStudentPaymentInfo() {
-            const student = allStudents.find(s => s.id === currentStudentId);
-            if (!student) return;
-            
-            const due = (student.totalFee || 0) - (student.paid || 0);
-            const el = document.getElementById('studentDueAmount');
-            if (el) el.innerText = `₹${due}`;
-        }
-
-        window.processStudentPayment = function() {
-            const amount = parseFloat(document.getElementById('studentPaymentAmount').value);
-            if (!amount || !selectedPaymentMethod) {
-                alert('Please enter amount and select payment method');
-                return;
-            }
-
-            const student = allStudents.find(s => s.id === currentStudentId);
-            const newPaid = (student.paid || 0) + amount;
-
-            db.collection('payments').add({
-                studentId: currentStudentId,
-                studentName: student.name,
-                studentIdCode: student.studentId,
-                amount,
-                method: selectedPaymentMethod,
-                note: 'Self Payment via Portal',
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                type: 'income',
-                collectedBy: 'student'
-            }).then(() => {
-                return db.collection('students').doc(currentStudentId).update({
-                    paid: newPaid
-                });
-            }).then(() => {
-                alert('Payment successful! Thank you.');
-                document.getElementById('studentPaymentAmount').value = '';
-                selectedPaymentMethod = '';
-                document.querySelectorAll('#view-pay-fees .payment-method').forEach(el => el.classList.remove('selected'));
-                showView('dashboard');
-            }).catch(err => {
-                alert('Error: ' + err.message);
-            });
-        };
-
-        function loadProfile() {
-            const student = allStudents.find(s => s.id === currentStudentId);
-            if (!student) return;
-
-            document.getElementById('profileInitial').innerText = student.name.charAt(0).toUpperCase();
-            document.getElementById('profileName').innerText = student.name;
-            document.getElementById('profilePhone').innerText = student.phone;
-            document.getElementById('profileId').innerText = 'ID: ' + (student.studentId || 'N/A');
-            
-            const total = student.totalFee || 0;
-            const paid = student.paid || 0;
-            
-            document.getElementById('profileTotalFees').innerText = `₹${total}`;
-            document.getElementById('profilePaidFees').innerText = `₹${paid}`;
-            document.getElementById('profileRemainingFees').innerText = `₹${total - paid}`;
-        }
-
-        function renderStudentPayments() {
-            const container = document.getElementById('studentPaymentsList');
-            if (!container) return;
-            
-            db.collection('payments')
-                .where('studentId', '==', currentStudentId)
-                .orderBy('timestamp', 'desc')
-                .get()
-                .then(snapshot => {
-                    if (snapshot.empty) {
-                        container.innerHTML = '<p class="text-center text-slate-500 py-8">No payments yet</p>';
-                        return;
-                    }
-                    
-                    container.innerHTML = snapshot.docs.map(doc => {
-                        const p = doc.data();
-                        const time = p.timestamp ? new Date(p.timestamp.toDate()).toLocaleString() : 'Just now';
-                        return `
-                            <div class="glass p-4 rounded-2xl flex justify-between items-center animate-slide-in">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-xl ${getPaymentMethodColor(p.method)} flex items-center justify-center">
-                                        <i class="fas ${getPaymentMethodIcon(p.method)}"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-bold text-white">Payment</p>
-                                        <p class="text-[10px] text-slate-500">${p.method} • ${time}</p>
-                                    </div>
-                                </div>
-                                <p class="text-emerald-400 font-bold">₹${p.amount}</p>
-                            </div>
-                        `;
-                    }).join('');
-                });
-        }
-
-        // ==========================================
-        // STATS & UTILITIES
-        // ==========================================
-        
         function updateStats() {
-            const countEl = document.getElementById('stat-count');
-            const feesEl = document.getElementById('stat-fees');
-            const seatsEl = document.getElementById('stat-seats');
-            
-            if (countEl) countEl.innerText = `${allStudents.length} Members`;
-            
+            document.getElementById('stat-count').innerText = allStudents.length + ' Members';
             const rev = allStudents.reduce((sum, s) => sum + (s.paid || 0), 0);
-            if (feesEl) feesEl.innerText = '₹' + rev.toLocaleString('en-IN');
-            
-            const occupied = allSeats.filter(s => s.status === 'occupied').length;
-            if (seatsEl) seatsEl.innerText = `${occupied}/${allSeats.length} Filled`;
+            document.getElementById('stat-fees').innerText = '₹' + rev.toLocaleString();
         }
 
         function toggleModal(show) {
@@ -1528,14 +610,10 @@
             const c = m.querySelector('.modal-content');
             if (show) {
                 m.classList.remove('hidden');
-                setTimeout(() => {
-                    c.classList.remove('scale-90', 'opacity-0');
-                }, 10);
+                setTimeout(() => c.classList.remove('scale-90', 'opacity-0'), 10);
             } else {
                 c.classList.add('scale-90', 'opacity-0');
-                setTimeout(() => {
-                    m.classList.add('hidden');
-                }, 300);
+                setTimeout(() => m.classList.add('hidden'), 300);
             }
         }
     </script>
